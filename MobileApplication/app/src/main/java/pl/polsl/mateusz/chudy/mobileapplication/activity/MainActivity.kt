@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication
+package pl.polsl.mateusz.chudy.mobileapplication.activity
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -10,6 +10,10 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import pl.polsl.mateusz.chudy.mobileapplication.R
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +33,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onBackPressed() {
@@ -58,22 +65,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
+            R.id.nav_profile -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
+            R.id.nav_users -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_rooms -> {
 
             }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_configuration -> {
 
             }
         }

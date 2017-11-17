@@ -44,9 +44,9 @@ class TCPService(Job):
 
     def switch(self, switch_no, state):
         print('switch ' + str(switch_no) + ' ' + str(state))
-        if state:
+        if 1 == int(state):
             self.__connection.send(str.encode('on' + str(switch_no)))
-        else:
+        elif 0 == int(state):
             self.__connection.send(str.encode('off' + str(switch_no)))
 
     def get_state(self):

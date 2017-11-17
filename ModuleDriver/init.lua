@@ -5,7 +5,7 @@ local connection = nil
 
 local SSID = 'WiFi'
 local PASSWORD = '12345678'
-local SERVER_IP = "192.168.43.119"
+local SERVER_IP = "192.168.0.51"
 local SERVER_PORT = 8888
 
 ----------------------------interrupts-----------------------
