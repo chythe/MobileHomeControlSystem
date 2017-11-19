@@ -1,14 +1,14 @@
 
 class SwitchTypeService:
 
-    def create_type_service(self):
+    def create_switch_type(self ):
         pass
 
-    def read_type_service(self):
+    def read_switch_type(self):
         pass
 
-    def update_type_service(self):
+    def update_switch_type(self):
         pass
 
-    def delete_type_service(self):
+    def delete_switch_type(self):
         pass

@@ -6,3 +6,4 @@ class Role(Enum):
     USER = 1
     GUEST = 2
 
+

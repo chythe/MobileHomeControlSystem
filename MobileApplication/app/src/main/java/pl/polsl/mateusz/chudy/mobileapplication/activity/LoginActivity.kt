@@ -23,9 +23,12 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.text.InputFilter
+import android.text.Spanned
 
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import java.util.Locale.filter
 
 /**
  * A login screen that offers login via email/password.
@@ -41,6 +44,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         setContentView(R.layout.activity_login)
         // Set up the login form.
         populateAutoComplete()
+        setIpAddressFilter()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
@@ -49,7 +53,32 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             false
         })
 
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        sign_in_button.setOnClickListener { attemptLogin() }
+    }
+
+    private fun setIpAddressFilter() {
+        val ipAddressFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            var charSequence: CharSequence? = null
+            if (end > start) {
+                val destTxt = dest.toString()
+                val resultingTxt = destTxt.substring(0, dstart) +
+                        source.subSequence(start, end) +
+                        destTxt.substring(dend)
+                if (!resultingTxt
+                        .matches(Regex("^\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3})?)?)?)?)?)?"))) {
+                    charSequence = ""
+                } else {
+                    val splits = resultingTxt.split(".")
+                    for (value: String in splits) {
+                        if (!value.isEmpty() && Integer.valueOf(value) > 255) {
+                            charSequence = ""
+                        }
+                    }
+                }
+            }
+            charSequence
+        }
+        server_ip.filters = arrayOf(ipAddressFilter)
     }
 
     private fun populateAutoComplete() {
