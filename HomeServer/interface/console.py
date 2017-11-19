@@ -2,11 +2,6 @@ from threading import Thread
 from tcp.tcpserver import tcp_server
 from job.jobcommand import JobCommand
 from enums.role import Role
-from dao.userdao import UserDao
-from dao.roomdao import RoomDao, Room
-from dao.moduledao import ModuleDao
-from dao.switchtypedao import SwitchTypeDao
-from dao.moduleconfdao import ModuleConfigurationDao
 
 
 class Console(Thread):
@@ -14,15 +9,10 @@ class Console(Thread):
     def __init__(self):
         super(Console, self).__init__()
         self.__stopped = False
-        self.__user_dao = UserDao()
-        self.__room_dao = RoomDao()
-        self.__module_dao = ModuleDao()
-        self.__switch_type_dao = SwitchTypeDao()
-        self.__module_configuration_dao = ModuleConfigurationDao()
 
     def run(self):
-        self.__module_configuration_dao.create_module_configuration(
-            module_id=3, switch_no=1, room_id=1, switch_type_id=1, name='Light on the left')
+        # self.__module_configuration_dao.create_module_configuration(
+        #     module_id=3, switch_no=1, room_id=1, switch_type_id=1, name='Light on the left')
         # self.__switch_type_dao.create_switch_type('Light')
         # self.__module_dao.create_module('Module Kitchen 1')
         # self.__room_dao.update_room(1, 'Kitchen')

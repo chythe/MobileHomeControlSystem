@@ -1,7 +1,7 @@
 from config.databaseconfig import *
 
 
-class SwitchTypeDao:
+class SwitchTypeDao(object):
 
     @db_session
     def create_switch_type(self, name):

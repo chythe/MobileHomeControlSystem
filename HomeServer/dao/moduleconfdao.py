@@ -1,7 +1,7 @@
 from config.databaseconfig import *
 
 
-class ModuleConfigurationDao:
+class ModuleConfigurationDao(object):
 
     @db_session
     def create_module_configuration(self, module_id, switch_no, room_id, switch_type_id, name):
@@ -22,10 +22,10 @@ class ModuleConfigurationDao:
         return ModuleConfiguration[module_id, switch_no]
 
     @db_session
-    def update_module_configuration(self, mod, switch_no, room, switch_type, name):
-        mc = ModuleConfiguration[mod, switch_no]
-        mc.room = room
-        mc.switch_type = switch_type
+    def update_module_configuration(self, module_id, switch_no, room_id, switch_type_id, name):
+        mc = ModuleConfiguration[Module[module_id], switch_no]
+        mc.room = Room[room_id]
+        mc.switch_type = SwitchType[switch_type_id]
         mc.name = name
 
     @db_session

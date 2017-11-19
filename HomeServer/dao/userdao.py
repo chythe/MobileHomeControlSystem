@@ -1,9 +1,7 @@
 from config.databaseconfig import *
 
 
-class UserDao:
-
-    # TODO TransactionError, OrmError
+class UserDao(object):
 
     @db_session
     def create_user(self, username, password, role):

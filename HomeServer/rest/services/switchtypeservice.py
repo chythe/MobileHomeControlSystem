@@ -1,5 +1,5 @@
 
-class SwitchTypeService:
+class SwitchTypeService(object):
 
     def create_switch_type(self ):
         pass

@@ -1,11 +1,14 @@
 from config.databaseconfig import *
 
 
-class ModuleDao:
+class ModuleDao(object):
 
     @db_session
     def create_module(self, name):
-        Module(name=name)
+        try:
+            return Module(name=name)
+        except ValueError:
+            rollback()
 
     @db_session
     def read_modules(self):
@@ -16,8 +19,10 @@ class ModuleDao:
         return Module[module_id]
 
     @db_session
-    def update_module(self, mod):
-        Module[mod.module_id] = mod
+    def update_module(self, module_id, name):
+        m = Module[module_id]
+        m.name = name
+        return m
 
     @db_session
     def delete_module(self, module_id):

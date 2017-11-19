@@ -1,5 +1,5 @@
 
-class SwitchService:
+class SwitchService(object):
 
     def switch(self):
         pass

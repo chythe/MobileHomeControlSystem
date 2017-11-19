@@ -1,7 +1,7 @@
 from config.databaseconfig import *
 
 
-class RoomDao:
+class RoomDao(object):
 
     @db_session
     def create_room(self, name):

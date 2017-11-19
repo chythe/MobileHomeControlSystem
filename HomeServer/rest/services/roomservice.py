@@ -1,5 +1,5 @@
 
-class RoomService:
+class RoomService(object):
 
     def create_room(self):
         pass
