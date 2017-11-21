@@ -1,5 +1,6 @@
 from flask import Flask
 from threading import Thread
+from enums.jsonenumencoder import JSONWithEnumEncoder
 from .controllers.moduleconfcontroller import module_configuration_controller
 from .controllers.switchtypecontroller import switch_type_controller
 from .controllers.switchcontroller import switch_controller
@@ -16,6 +17,7 @@ flask_server.register_blueprint(module_controller)
 flask_server.register_blueprint(error_controller)
 flask_server.register_blueprint(room_controller)
 flask_server.register_blueprint(user_controller)
+flask_server.json_encoder = JSONWithEnumEncoder
 
 
 class RESTServer(Thread):

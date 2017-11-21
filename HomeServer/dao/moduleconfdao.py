@@ -27,6 +27,7 @@ class ModuleConfigurationDao(object):
         mc.room = Room[room_id]
         mc.switch_type = SwitchType[switch_type_id]
         mc.name = name
+        return mc
 
     @db_session
     def delete_module_configuration(self, module_id, switch_no):

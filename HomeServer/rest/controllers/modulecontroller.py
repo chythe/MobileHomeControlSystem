@@ -29,8 +29,7 @@ def get_module(module_id):
 def create_module():
     try:
         name = request.json['name']
-        mod = module_service.create_module(name)
-        return jsonify(mod.to_dict())
+        return jsonify(module_service.create_module(name).to_dict())
     except (OrmError, KeyError, TypeError) as e:
         print(str(e))
         abort(400)
@@ -44,8 +43,7 @@ def update_module():
     try:
         module_id = request.json['module_id']
         name = request.json['name']
-        mod = module_service.update_module(module_id, name)
-        return jsonify(mod.to_dict())
+        return jsonify(module_service.update_module(module_id, name).to_dict())
     except (OrmError, TypeError) as e:
         print(str(e))
         abort(400)

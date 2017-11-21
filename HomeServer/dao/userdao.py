@@ -5,19 +5,23 @@ class UserDao(object):
 
     @db_session
     def create_user(self, username, password, role):
-        User(username=username, password=password, role=role)
+        return User(username=username, password=password, role=role)
 
     @db_session
     def read_users(self):
         return User.select()[:]
 
     @db_session
-    def read_user(self, room_id):
-        return User[room_id]
+    def read_user(self, user_id):
+        return User[user_id]
 
     @db_session
-    def update_user(self, room):
-        User[room.room_id] = room
+    def update_user(self, user_id, username, password, role):
+        u = User[user_id]
+        u.username = username
+        u.password = password
+        u.role = role
+        return u
 
     @db_session
     def delete_user(self, room_id):

@@ -5,7 +5,7 @@ class RoomDao(object):
 
     @db_session
     def create_room(self, name):
-        Room(name=name)
+        return Room(name=name)
 
     @db_session
     def read_rooms(self):
@@ -17,7 +17,9 @@ class RoomDao(object):
 
     @db_session
     def update_room(self, room_id, name):
-        Room[room_id].name = name
+        r = Room[room_id]
+        r.name = name
+        return r
 
     @db_session
     def delete_room(self, room_id):

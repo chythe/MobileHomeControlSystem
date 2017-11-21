@@ -1,6 +1,5 @@
 from pony.orm import *
 from enums.enumconverter import EnumConverter
-from enums.enumencoder import EnumEncoder
 from enum import Enum
 
 

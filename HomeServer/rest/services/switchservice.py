@@ -9,10 +9,10 @@ class SwitchService(object):
         # For future use
         pass
 
-    def switch(self, module_id, switch_no, state):
-        tcp_server.services_map.get(module_id).add_command(
-            JobCommand(SwitchCommandType.SWITCH, [str(switch_no), str(state)]))
-
     def get_state(self, module_id, switch_no):
         # TODO
         pass
+
+    def switch(self, module_id, switch_no, state):
+        tcp_server.services_map.get(module_id).add_command(
+            JobCommand(SwitchCommandType.SWITCH, [str(switch_no), str(state)]))
