@@ -6,7 +6,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
 /**
  *
  */
-class ModuleConfigurationService {
+class ModuleService {
 
     init {
         FuelManager.instance.apply {
@@ -14,23 +14,23 @@ class ModuleConfigurationService {
         }
     }
 
-    fun getModuleConfigurations() {
+    fun getModules() {
         TODO()
     }
 
-    fun getModuleConfiguration() {
+    fun getModule() {
         TODO()
     }
 
-    fun createModuleConfiguration() {
+    fun createModule() {
         TODO()
     }
 
-    fun updateModuleConfiguration() {
+    fun updateModule() {
         TODO()
     }
 
-    fun deleteModuleConfiguration() {
+    fun deleteModule() {
         TODO()
     }
 }

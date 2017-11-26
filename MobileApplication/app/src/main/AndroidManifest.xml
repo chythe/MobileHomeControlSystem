@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -28,12 +30,11 @@
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
 
-        <service
-            android:name=".services.ModuleConfigurationService"
-            android:exported="false" />
-        <service
-            android:name=".services.RoomService"
-            android:exported="false"></service>
+        <!--<service-->
+            <!--android:name=".services.RoomService"-->
+            <!--android:exported="false" />-->
+
+        <activity android:name=".activity.RegisterActivity"></activity>
     </application>
 
 </manifest>

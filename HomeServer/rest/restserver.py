@@ -26,7 +26,7 @@ class RESTServer(Thread):
         super(RESTServer, self).__init__()
 
     def run(self):
-        flask_server.run()
+        flask_server.run(host='0.0.0.0')
 
 
 rest_server = RESTServer()

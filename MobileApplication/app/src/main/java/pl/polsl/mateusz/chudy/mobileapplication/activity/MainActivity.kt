@@ -12,10 +12,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import android.content.Intent
-
+import android.view.View
+import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+//    private val get_rooms_button: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +33,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setAction("Action", null).show()
         }
 
+        val blueSwitchOnButton: View = findViewById(R.id.blue_switch_on_button)
+        blueSwitchOnButton.setOnClickListener { view ->
+            val switchService = SwitchService()
+            switchService.switch(SwitchCommand(0, 1, true))
+        }
+
+        val blueSwitchOffButton: View = findViewById(R.id.blue_switch_off_button)
+        blueSwitchOffButton.setOnClickListener { view ->
+            val switchService = SwitchService()
+            switchService.switch(SwitchCommand(0, 1, false))
+        }
+
+        val redSwitchOnButton: View = findViewById(R.id.red_switch_on_button)
+        redSwitchOnButton.setOnClickListener { view ->
+            val switchService = SwitchService()
+            switchService.switch(SwitchCommand(0, 0, true))
+        }
+
+        val redSwitchOffButton: View = findViewById(R.id.red_switch_off_button)
+        redSwitchOffButton.setOnClickListener { view ->
+            val switchService = SwitchService()
+            switchService.switch(SwitchCommand(0, 0, false))
+        }
+
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
@@ -34,8 +64,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this, LoginActivity::class.java)
+//        startActivity(intent)
     }
 
     override fun onBackPressed() {

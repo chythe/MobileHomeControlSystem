@@ -1,90 +1,54 @@
 package pl.polsl.mateusz.chudy.mobileapplication.services
 
-import android.app.IntentService
-import android.content.Intent
-import android.content.Context
+import com.github.kittinunf.fuel.core.FuelManager
+import com.github.kittinunf.fuel.core.FuelError
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
+import com.github.kittinunf.result.getAs
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+
 
 /**
- * An [IntentService] subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
  *
- *
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
-class RoomService : IntentService("RoomService") {
+class RoomService {
 
-    override fun onHandleIntent(intent: Intent?) {
-        if (intent != null) {
-            val action = intent.action
-            if (ACTION_FOO == action) {
-                val param1 = intent.getStringExtra(EXTRA_PARAM1)
-                val param2 = intent.getStringExtra(EXTRA_PARAM2)
-                handleActionFoo(param1, param2)
-            } else if (ACTION_BAZ == action) {
-                val param1 = intent.getStringExtra(EXTRA_PARAM1)
-                val param2 = intent.getStringExtra(EXTRA_PARAM2)
-                handleActionBaz(param1, param2)
-            }
+    init {
+        FuelManager.instance.apply {
+            basePath = ServerConnectionConfig.getBasePathURLString()
         }
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private fun handleActionFoo(param1: String, param2: String) {
-        // TODO: Handle action Foo
-        throw UnsupportedOperationException("Not yet implemented")
+    fun getRooms() {
+        "/api/room".httpGet()
+                .responseObject(Room.ListDeserializer()) { _, _, result ->
+                    when (result) {
+                        is Result.Failure -> {
+                            print("MC: Failure " + result.get())
+                            result.get()
+                        }
+                        is Result.Success -> {
+                            val rooms: List<Room> = result.get()
+                            print("MC: Success " + rooms)
+                        }
+                    }
+        }
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private fun handleActionBaz(param1: String, param2: String) {
-        // TODO: Handle action Baz
-        throw UnsupportedOperationException("Not yet implemented")
+    fun getRoom() {
+        TODO()
     }
 
-    companion object {
-        // TODO: Rename actions, choose action names that describe tasks that this
-        // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-        private val ACTION_FOO = "pl.polsl.mateusz.chudy.mobileapplication.services.action.FOO"
-        private val ACTION_BAZ = "pl.polsl.mateusz.chudy.mobileapplication.services.action.BAZ"
+    fun createRoom() {
+        TODO()
+    }
 
-        // TODO: Rename parameters
-        private val EXTRA_PARAM1 = "pl.polsl.mateusz.chudy.mobileapplication.services.extra.PARAM1"
-        private val EXTRA_PARAM2 = "pl.polsl.mateusz.chudy.mobileapplication.services.extra.PARAM2"
+    fun updateRoom() {
+        TODO()
+    }
 
-        /**
-         * Starts this service to perform action Foo with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-        fun startActionFoo(context: Context, param1: String, param2: String) {
-            val intent = Intent(context, RoomService::class.java)
-            intent.action = ACTION_FOO
-            intent.putExtra(EXTRA_PARAM1, param1)
-            intent.putExtra(EXTRA_PARAM2, param2)
-            context.startService(intent)
-        }
-
-        /**
-         * Starts this service to perform action Baz with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-        fun startActionBaz(context: Context, param1: String, param2: String) {
-            val intent = Intent(context, RoomService::class.java)
-            intent.action = ACTION_BAZ
-            intent.putExtra(EXTRA_PARAM1, param1)
-            intent.putExtra(EXTRA_PARAM2, param2)
-            context.startService(intent)
-        }
+    fun deleteRoom() {
+        TODO()
     }
 }
