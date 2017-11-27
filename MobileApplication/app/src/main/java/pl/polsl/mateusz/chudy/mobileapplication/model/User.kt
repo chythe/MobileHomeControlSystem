@@ -3,6 +3,7 @@ package pl.polsl.mateusz.chudy.mobileapplication.model
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.Expose
 import com.google.gson.reflect.TypeToken
 import java.io.Reader
 
@@ -10,10 +11,10 @@ import java.io.Reader
  *
  */
 data class User(
-        @SerializedName("user_id") val userId: Long,
-        @SerializedName("username") val username: String,
-        @SerializedName("password") val password: String,
-        @SerializedName("role") val role: String
+        @SerializedName("user_id") val userId: Long = 0,
+        @Expose @SerializedName("username") val username: String,
+        @Expose @SerializedName("password") val password: String,
+        @Expose @SerializedName("role") val role: String
 ) {
 
     class Deserializer : ResponseDeserializable<User> {

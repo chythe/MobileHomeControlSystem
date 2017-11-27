@@ -11,7 +11,7 @@ module_configuration_service = ModuleConfigurationService()
 @module_configuration_controller.route('/api/module-configuration', methods=['GET'])
 def get_module_configurations():
     try:
-        return jsonify([mc.to_dict() for mc in module_configuration_service.read_modules()])
+        return jsonify([mc.to_dict() for mc in module_configuration_service.read_module_configurations()])
     except (OrmError, RuntimeError):
         abort(404)
 
@@ -36,7 +36,7 @@ def create_module_configuration():
         name = request.json['name']
         return jsonify(module_configuration_service.create_module_configuration(
             module_id, switch_no, room_id, switch_type_id, name).to_dict())
-    except (OrmError, RuntimeError):
+    except (OrmError, RuntimeError, KeyError):
         abort(400)
 
 
@@ -50,7 +50,7 @@ def update_module_configuration():
         name = request.json['name']
         return jsonify(module_configuration_service.update_module_configuration(
             module_id, switch_no, room_id, switch_type_id, name).to_dict())
-    except (OrmError, RuntimeError):
+    except (OrmError, RuntimeError, KeyError):
         abort(400)
 
 

@@ -16,6 +16,7 @@ class SwitchService {
     init {
         FuelManager.instance.apply {
             basePath = ServerConnectionConfig.getBasePathURLString()
+            baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
@@ -25,10 +26,8 @@ class SwitchService {
 
     fun switch(switchCommand: SwitchCommand) {
         val gson = Gson()
-        val json = gson.toJson(switchCommand)
         "/api/switch".httpPost()
-                .header("Content-Type" to "application/json")
-                .body(json.toString())
+                .body(gson.toJson(switchCommand))
                 .responseString { _, _, result ->
                     when (result) {
                         is Result.Failure -> {

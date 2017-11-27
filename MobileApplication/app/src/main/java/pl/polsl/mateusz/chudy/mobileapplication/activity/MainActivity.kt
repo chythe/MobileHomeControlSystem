@@ -14,14 +14,12 @@ import pl.polsl.mateusz.chudy.mobileapplication.R
 import android.content.Intent
 import android.view.View
 import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.model.User
+import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
 import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-//    private val get_rooms_button: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,28 +31,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setAction("Action", null).show()
         }
 
-        val blueSwitchOnButton: View = findViewById(R.id.blue_switch_on_button)
-        blueSwitchOnButton.setOnClickListener { view ->
-            val switchService = SwitchService()
-            switchService.switch(SwitchCommand(0, 1, true))
+        val userService = UserService()
+
+        val getAllButton: View = findViewById(R.id.get_all_button)
+        getAllButton.setOnClickListener { view ->
+            userService.getUsers()
         }
 
-        val blueSwitchOffButton: View = findViewById(R.id.blue_switch_off_button)
-        blueSwitchOffButton.setOnClickListener { view ->
-            val switchService = SwitchService()
-            switchService.switch(SwitchCommand(0, 1, false))
+        val getButton: View = findViewById(R.id.get_button)
+        getButton.setOnClickListener { view ->
+            userService.getUser(3)
         }
 
-        val redSwitchOnButton: View = findViewById(R.id.red_switch_on_button)
-        redSwitchOnButton.setOnClickListener { view ->
-            val switchService = SwitchService()
-            switchService.switch(SwitchCommand(0, 0, true))
+        val createButton: View = findViewById(R.id.create_button)
+        createButton.setOnClickListener { view ->
+            userService.createUser(User(username="Adrian22", password="dstvretbsevdfevw", role="USER"))
         }
 
-        val redSwitchOffButton: View = findViewById(R.id.red_switch_off_button)
-        redSwitchOffButton.setOnClickListener { view ->
-            val switchService = SwitchService()
-            switchService.switch(SwitchCommand(0, 0, false))
+        val updateButton: View = findViewById(R.id.update_button)
+        updateButton.setOnClickListener { view ->
+            userService.updateUser(User(userId = 4, username="Magda", password="wad23q52qdwa1244sd", role="USER"))
+        }
+
+        val deleteButton: View = findViewById(R.id.delete_button)
+        deleteButton.setOnClickListener { view ->
+            userService.deleteUser(6)
         }
 
         val toggle = ActionBarDrawerToggle(

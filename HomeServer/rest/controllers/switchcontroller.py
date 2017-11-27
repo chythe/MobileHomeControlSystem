@@ -24,4 +24,3 @@ def switch():
         abort(400)
     except AttributeError:
         abort(404)
-
