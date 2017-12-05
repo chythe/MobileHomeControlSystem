@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.activity
+package pl.polsl.mateusz.chudy.mobileapplication.view.activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -24,11 +24,9 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.text.InputFilter
-import android.text.Spanned
 
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import java.util.Locale.filter
 
 /**
  * A login screen that offers login via email/password.
@@ -68,7 +66,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                         .matches(Regex("^\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3})?)?)?)?)?)?"))) {
                     charSequence = ""
                 } else {
-                    val splits = resultingTxt.split(".")
+                    val splits = resultingTxt.split("")
                     for (value: String in splits) {
                         if (!value.isEmpty() && Integer.valueOf(value) > 255) {
                             charSequence = ""

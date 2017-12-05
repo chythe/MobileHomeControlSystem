@@ -10,16 +10,16 @@ import java.io.Reader
  *
  */
 data class ModuleConfiguration(
-        @SerializedName("module_id") val moduleId: Long,
-        @SerializedName("switch_no") val switchNo: Short,
-        @SerializedName("room_id") val roomId: Long,
-        @SerializedName("switch_type_id") val switchTypeId: Long,
-        @SerializedName("name") val name: String
-) {
+        val moduleId: Long = 0,
+        val switchNo: Short = 0,
+        val roomId: Long = 0,
+        val switchTypeId: Long = 0,
+        val name: String = ""
+): java.io.Serializable {
 
     class Deserializer : ResponseDeserializable<ModuleConfiguration> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, ModuleConfiguration::class.java)
+        override fun deserialize(reader: Reader) = Gson().fromJson(reader, ModuleConfiguration::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<ModuleConfiguration>> {

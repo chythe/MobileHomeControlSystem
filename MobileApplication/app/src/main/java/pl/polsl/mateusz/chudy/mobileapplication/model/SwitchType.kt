@@ -11,13 +11,13 @@ import java.io.Reader
  *
  */
 data class SwitchType(
-        @SerializedName("switch_type_id") val switchTypeId: Long = 0,
-        @Expose @SerializedName("name") val name: String
-) {
+        val switchTypeId: Long = 0,
+        @Expose val name: String = ""
+): java.io.Serializable {
 
     class Deserializer : ResponseDeserializable<SwitchType> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, SwitchType::class.java)
+        override fun deserialize(reader: Reader) = Gson().fromJson(reader, SwitchType::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<SwitchType>> {

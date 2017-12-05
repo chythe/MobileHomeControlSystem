@@ -10,6 +10,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
+import java.lang.reflect.InvocationTargetException
+import java.net.SocketTimeoutException
 
 /**
  *
@@ -23,6 +25,7 @@ class UserService {
         }
     }
 
+    @Throws(SocketTimeoutException::class)
     fun getUsers() {
         "/api/user".httpGet()
                 .responseObject(User.ListDeserializer()) { _, _, result ->
@@ -34,11 +37,13 @@ class UserService {
                         is Result.Success -> {
                             val us: List<User> = result.get()
                             print("MC: Success " + us)
+//                            return@responseObject us
                         }
                     }
                 }
     }
 
+    @Throws(SocketTimeoutException::class)
     fun getUser(userId: Long) {
         "/api/user/$userId".httpGet()
                 .responseObject(User.Deserializer()) { _, _, result ->
@@ -55,6 +60,7 @@ class UserService {
                 }
     }
 
+    @Throws(SocketTimeoutException::class)
     fun createUser(user: User) {
         val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
         "/api/user".httpPost()
@@ -73,6 +79,7 @@ class UserService {
                 }
     }
 
+    @Throws(SocketTimeoutException::class)
     fun updateUser(user: User) {
         val gson = Gson()
         "/api/user".httpPut()
@@ -91,6 +98,7 @@ class UserService {
                 }
     }
 
+    @Throws(SocketTimeoutException::class)
     fun deleteUser(userId: Long) {
         "/api/user/$userId".httpDelete()
                 .responseString { _, _, result ->

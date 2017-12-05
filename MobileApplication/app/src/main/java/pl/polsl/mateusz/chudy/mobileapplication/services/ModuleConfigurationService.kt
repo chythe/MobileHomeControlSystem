@@ -43,7 +43,7 @@ class ModuleConfigurationService {
     }
 
     fun getModuleConfiguration(moduleId: Long, switchNo: Short) {
-        "/api/module-configuration/module_id=$moduleId&switch_no=$switchNo".httpGet()
+        "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpGet()
                 .responseObject(ModuleConfiguration.Deserializer()) { _, _, result ->
                     when (result) {
                         is Result.Failure -> {
@@ -97,7 +97,7 @@ class ModuleConfigurationService {
     }
 
     fun deleteModuleConfiguration(moduleId: Long, switchNo: Short) {
-        "/api/module-configuration/module_id=$moduleId&switch_no=$switchNo".httpDelete()
+        "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpDelete()
                 .responseString { _, _, result ->
                     when (result) {
                         is Result.Failure -> {

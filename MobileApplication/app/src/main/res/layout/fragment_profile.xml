@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.fragments.ProfileFragment">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/profile_icon_image_view"
+            android:layout_width="152dp"
+            android:layout_height="126dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/username_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="84dp"
+            android:text="@string/prompt_username"
+            app:layout_constraintEnd_toStartOf="@+id/username_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_icon_image_view" />
+
+        <TextView
+            android:id="@+id/role_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="44dp"
+            android:text="@string/prompt_role"
+            app:layout_constraintEnd_toStartOf="@+id/role_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/username_label_text_view" />
+
+        <EditText
+            android:id="@+id/username_edit_text"
+            android:layout_width="265dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_icon_image_view"
+            app:layout_constraintVertical_bias="0.164" />
+
+        <EditText
+            android:id="@+id/role_edit_text"
+            android:layout_width="265dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_edit_text"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <Button
+            android:id="@+id/edit_profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/action_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/role_edit_text"
+            app:layout_constraintVertical_bias="0.419" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

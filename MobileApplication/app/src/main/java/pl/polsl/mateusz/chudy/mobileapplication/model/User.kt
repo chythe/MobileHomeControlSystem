@@ -5,21 +5,22 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 import com.google.gson.reflect.TypeToken
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import java.io.Reader
 
 /**
  *
  */
 data class User(
-        @SerializedName("user_id") val userId: Long = 0,
-        @Expose @SerializedName("username") val username: String,
-        @Expose @SerializedName("password") val password: String,
-        @Expose @SerializedName("role") val role: String
-) {
+        val userId: Long = 0,
+        @Expose val username: String = "",
+        @Expose val password: String = "",
+        @Expose val role: Role = Role.GUEST
+): java.io.Serializable {
 
     class Deserializer : ResponseDeserializable<User> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, User::class.java)
+        override fun deserialize(reader: Reader) = Gson().fromJson(reader, User::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<User>> {

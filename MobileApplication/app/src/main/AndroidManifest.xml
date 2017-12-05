@@ -17,9 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".view.activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,14 +28,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".view.activities.LoginActivity"
             android:label="@string/title_activity_login" />
 
-        <!--<service-->
-            <!--android:name=".services.RoomService"-->
-            <!--android:exported="false" />-->
-
-        <activity android:name=".activity.RegisterActivity"></activity>
+        <activity android:name=".view.activities.RegisterActivity"></activity>
     </application>
 
 </manifest>

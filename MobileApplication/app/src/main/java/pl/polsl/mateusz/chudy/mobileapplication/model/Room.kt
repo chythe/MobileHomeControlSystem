@@ -11,13 +11,13 @@ import java.io.Reader
  *
  */
 data class Room(
-        @SerializedName("room_id") val roomId: Long = 0,
-        @Expose @SerializedName("name") val name: String
-) {
+        val roomId: Long = 0,
+        @Expose val name: String = ""
+): java.io.Serializable {
 
     class Deserializer : ResponseDeserializable<Room> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, Room::class.java)
+        override fun deserialize(reader: Reader) = Gson().fromJson(reader, Room::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<Room>> {

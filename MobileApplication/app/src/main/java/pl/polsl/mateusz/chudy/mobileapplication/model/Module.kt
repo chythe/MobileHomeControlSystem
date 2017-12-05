@@ -11,13 +11,13 @@ import java.io.Reader
  *
  */
 data class Module(
-        @SerializedName("module_id") val moduleId: Long = 0,
-        @Expose @SerializedName("name") val name: String
-) {
+        val moduleId: Long = 0,
+        @Expose val name: String = ""
+): java.io.Serializable {
 
     class Deserializer : ResponseDeserializable<Module> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, Module::class.java)
+        override fun deserialize(reader: Reader) = Gson().fromJson(reader, Module::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<Module>> {
