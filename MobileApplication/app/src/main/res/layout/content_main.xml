@@ -8,4 +8,15 @@
     tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <ImageView
+        android:id="@+id/content_main_image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"/>
+
 </android.support.constraint.ConstraintLayout>

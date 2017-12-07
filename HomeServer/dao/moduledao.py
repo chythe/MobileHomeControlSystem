@@ -4,9 +4,9 @@ from config.databaseconfig import *
 class ModuleDao(object):
 
     @db_session
-    def create_module(self, name):
+    def create_module(self, name, ip_address):
         try:
-            return Module(name=name)
+            return Module(name=name, ip_address=ip_address)
         except ValueError:
             rollback()
 
@@ -19,9 +19,10 @@ class ModuleDao(object):
         return Module[module_id]
 
     @db_session
-    def update_module(self, module_id, name):
+    def update_module(self, module_id, name, ip_address):
         m = Module[module_id]
         m.name = name
+        m.ip_address = ip_address
         return m
 
     @db_session

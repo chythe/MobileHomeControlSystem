@@ -7,7 +7,17 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import kotlinx.android.synthetic.main.fragment_rooms.view.*
+import kotlinx.android.synthetic.main.fragment_search_modules.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import pl.polsl.mateusz.chudy.mobileapplication.model.Module
+import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
 
 
 /**
@@ -20,7 +30,6 @@ import pl.polsl.mateusz.chudy.mobileapplication.R
  */
 class SearchModulesFragment : Fragment() {
 
-    // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
 
@@ -36,11 +45,29 @@ class SearchModulesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_search_modules, container, false)
+        activity.title = resources.getString(R.string.search_modules)
+        val view = inflater!!.inflate(R.layout.fragment_search_modules, container, false)
+        view.search_modules_button.text = activity.title.split(" ")[0]
+        val modules = MobileHomeApplication.databaseConfig?.moduleDao()!!.getModules()
+        view.search_modules_list_view.adapter = ModulesAdapter(modules)
+        registerForContextMenu(view.search_modules_list_view)
+        view.search_modules_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            try {
+                val module = parent.getItemAtPosition(position) as Module
+                val fragment = ModuleManipulationFragment.newInstance(
+                        module, resources.getString(R.string.add_module)) as Fragment
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content_main, fragment)
+                        .addToBackStack(null)
+                        .commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return view
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(uri)
@@ -61,35 +88,16 @@ class SearchModulesFragment : Fragment() {
         mListener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchModulesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): SearchModulesFragment {
             val fragment = SearchModulesFragment()
             val args = Bundle()

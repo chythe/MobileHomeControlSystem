@@ -12,20 +12,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 /**
  *
  */
-class SwitchTypesAdapter: BaseAdapter() {
+class SwitchTypesAdapter(switchTypesList: List<SwitchType>): BaseAdapter() {
 
-    private val switchTypes = arrayListOf<SwitchType>(
-            SwitchType(1, "Light"),
-            SwitchType(2, "Contact"),
-            SwitchType(3, "Blind"),
-            SwitchType(4, "Beating"),
-            SwitchType(5, "Door"),
-            SwitchType(6, "Lock"),
-            SwitchType(7, "Window"),
-            SwitchType(8, "Washing Machine"),
-            SwitchType(9, "Fridge"),
-            SwitchType(10, "TV")
-    )
+    private val switchTypes = switchTypesList
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
 
@@ -58,10 +47,6 @@ class SwitchTypesAdapter: BaseAdapter() {
         return switchTypes.size
     }
 
-    fun remove(position: Int) {
-        switchTypes.removeAt(position)
-    }
-
     private class ViewHolder(val nameTextView: TextView) {
         private var iconType: String = if (nameTextView.text == "Light")
             "ic_switch"
@@ -69,6 +54,5 @@ class SwitchTypesAdapter: BaseAdapter() {
             "ic_play"
         else
             "ic_switch2"
-
     }
 }

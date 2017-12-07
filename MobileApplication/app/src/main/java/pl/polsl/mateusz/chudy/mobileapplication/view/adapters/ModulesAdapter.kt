@@ -12,16 +12,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.Module
 /**
  *
  */
-class ModulesAdapter: BaseAdapter() {
+class ModulesAdapter(modulesList: List<Module>): BaseAdapter() {
 
-    private val modules = arrayListOf<Module>(
-            Module(1, "Bathroom lights next to the door"),
-            Module(2, "Bathroom contact"),
-            Module(3, "Bedroom lights"),
-            Module(4, "Kitchen lights 1"),
-            Module(5, "Kitchen lights 2"),
-            Module(6, "Dining Room Blinds")
-    )
+    private val modules = modulesList
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
 
@@ -52,10 +45,6 @@ class ModulesAdapter: BaseAdapter() {
 
     override fun getCount(): Int {
         return modules.size
-    }
-
-    fun remove(position: Int) {
-        modules.removeAt(position)
     }
 
     private class ViewHolder(val nameTextView: TextView)

@@ -25,7 +25,8 @@ def get_module_configuration():
         module_id = request.args.get('moduleId')
         switch_no = request.args.get('switchNo')
         module_configuration = module_configuration_service.read_module_configuration(module_id, switch_no)
-        module_configuration_dict = change_dict_naming_convention(module_configuration.to_dict(), underscore_to_camel)
+        module_configuration_dict = recursive_to_dict(module_configuration, has_iterated=False, related_objects=True)
+        module_configuration_dict = change_dict_naming_convention(module_configuration_dict, underscore_to_camel)
         return jsonify(module_configuration_dict)
     except (OrmError, RuntimeError, ValueError):
         abort(404)

@@ -34,7 +34,8 @@ def get_module(module_id):
 def create_module():
     try:
         name = request.json['name']
-        module = module_service.create_module(name)
+        ip_address = request.json['ipAddress']
+        module = module_service.create_module(name, ip_address)
         module_dict = change_dict_naming_convention(module.to_dict(), underscore_to_camel)
         return jsonify(module_dict)
     except (OrmError, KeyError, TypeError) as e:
@@ -50,7 +51,8 @@ def update_module():
     try:
         module_id = request.json['moduleId']
         name = request.json['name']
-        module = module_service.update_module(module_id, name)
+        ip_address = request.json['ipAddress']
+        module = module_service.update_module(module_id, name, ip_address)
         module_dict = change_dict_naming_convention(module.to_dict(), underscore_to_camel)
         return jsonify(module_dict)
     except (OrmError, TypeError) as e:

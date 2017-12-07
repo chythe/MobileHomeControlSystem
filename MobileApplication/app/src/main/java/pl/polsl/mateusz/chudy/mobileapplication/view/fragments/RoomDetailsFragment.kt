@@ -7,8 +7,15 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import kotlinx.android.synthetic.main.fragment_room_details.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import pl.polsl.mateusz.chudy.mobileapplication.model.Module
+import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
 
 /**
@@ -36,7 +43,30 @@ class RoomDetailsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.room_details)
         var view = inflater!!.inflate(R.layout.fragment_room_details, container, false)
-
+        view.room_details_name_edit_text.setText(mRoom!!.name)
+        view.room_details_edit_button.setOnClickListener { view ->
+            try {
+                val fragment = RoomManipulationFragment.newInstance(
+                        mRoom!!,
+                        resources.getString(R.string.edit_room)) as Fragment
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content_main, fragment)
+                        .addToBackStack(null)
+                        .commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val moduleConfigurations = MobileHomeApplication.databaseConfig?.moduleConfigurationDao()!!.getModuleConfigurations()
+        view.room_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
+        registerForContextMenu(view.room_details_list_view)
+        view.room_details_list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val adapter = view!!.room_details_list_view.adapter as ModuleConfigurationsAdapter
+            val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
+            moduleConfiguration.state = !moduleConfiguration.state
+            adapter.notifyDataSetChanged()
+        }
         return view
     }
 

@@ -13,18 +13,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.User
 /**
  *
  */
-class UsersAdapter: BaseAdapter() {
+class UsersAdapter(usersList: List<User>): BaseAdapter() {
 
-    private val users = arrayListOf<User>(
-            User(1, "Mati", "s3r32fszdbfASk", Role.ADMIN),
-            User(2, "Ola", "23asdak", Role.USER),
-            User(3, "Zbigniew", "2asd32fszdaASk", Role.USER),
-            User(4, "User322", "asdsafsdwdbfASk", Role.ADMIN),
-            User(5, "Ela", "12323r32fwddbfASk", Role.USER),
-            User(6, "Marian", "wwadddSk", Role.GUEST),
-            User(7, "Edy", "a2waafszdabdawfASk", Role.USER),
-            User(8, "Matt", "23r3dbfASk", Role.GUEST)
-    )
+    private val users = usersList
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
 
@@ -56,10 +47,6 @@ class UsersAdapter: BaseAdapter() {
 
     override fun getCount(): Int {
         return users.size
-    }
-
-    fun remove(position: Int) {
-        users.removeAt(position)
     }
 
     private class ViewHolder(val usernameTextView: TextView, val roleTextView: TextView)

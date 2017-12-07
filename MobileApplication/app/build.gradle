@@ -10,10 +10,11 @@ android {
         applicationId "pl.polsl.mateusz.chudy.mobileapplication"
         minSdkVersion 22
         targetSdkVersion 26
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary true
     }
     sourceSets {
         main {
@@ -48,5 +49,9 @@ dependencies {
     compile 'com.github.kittinunf.fuel:fuel-gson:1.12.0' //for Gson support
     compile 'com.github.kittinunf.fuel:fuel-jackson:1.12.0' //for Jackson support
     compile 'com.github.kittinunf.fuel:fuel-moshi:1.12.0' //for Moshi support
-    compile  'com.github.japgolly:svg-android:2.0.0'
+    compile 'com.github.markushi:circlebutton:1.1'
+    compile 'android.arch.persistence.room:runtime:1.0.0'
+    compile 'android.arch.persistence.room:rxjava2:1.0.0'
+    kapt "android.arch.persistence.room:compiler:1.0.0"
+    compile 'com.android.support:multidex:1.0.2'
 }

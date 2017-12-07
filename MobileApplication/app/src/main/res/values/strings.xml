@@ -13,6 +13,7 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_retype_password">Retype Password</string>
+    <string name="prompt_ip_address">IP Address</string>
     <string name="prompt_role">Role</string>
     <string name="action_edit">Edit</string>
     <string name="action_add">Add</string>
@@ -26,6 +27,8 @@
         completions."
     </string>
 
+    <string name="welcome">Welcome to the mobile home control system!!!</string>
+    <string name="not_defined">Not Defined</string>
     <string name="profile">Your Profile</string>
     <string name="users">Users</string>
     <string name="rooms">Rooms</string>
@@ -35,13 +38,25 @@
     <string name="add_switch_type">Add Switch Type</string>
     <string name="modules">Modules</string>
     <string name="module_configurations">Module Configurations</string>
+    <string name="switch_numbers">Switch Numbers</string>
     <string name="test">Test</string>
     <string name="nodemcu">NodeMCU</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="edit_room">Edit Room</string>
+    <string name="edit_switch_type">Edit Switch Type</string>
     <string name="add_user">Add User</string>
     <string name="add_room">Add Room</string>
     <string name="user_details">User Details</string>
     <string name="room_details">Room Details</string>
+    <string name="switch_type_details">Switch Type Details</string>
     <string name="delete_user">Delete User</string>
+    <string name="delete_switch_type">Delete Switch Type</string>
+    <string name="delete_room">Delete Room</string>
+    <string name="delete_module">Delete Module</string>
+    <string name="search_modules">Search Modules</string>
+    <string name="edit_configuration">Edit Module Configuration</string>
+    <string name="add_configuration">Add Module Configuration</string>
+    <string name="delete_configuration">Delete Module Configuration</string>
+    <string name="switch_number">Switch Number:</string>
 
 </resources>

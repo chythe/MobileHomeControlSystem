@@ -44,12 +44,12 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_profile, container, false)
-        view.username_edit_text.setText(mUser!!.username)
-        view.role_edit_text.setText(mUser!!.role.name)
-        view.edit_profile_button.setOnClickListener { view ->
+        view.profile_username_edit_text.setText(mUser!!.username)
+        view.profile_role_edit_text.setText(mUser!!.role.name)
+        view.profile_edit_button.setOnClickListener { view ->
             try {
                 val fragment = UserManipulationFragment.newInstance(
-                        User(1, "Mati", "we2qdWq", Role.ADMIN),
+                        mUser!!,
                         resources.getString(R.string.edit_profile)) as Fragment
                 fragmentManager
                         .beginTransaction()

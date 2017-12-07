@@ -1,5 +1,6 @@
 package pl.polsl.mateusz.chudy.mobileapplication.services
 
+import android.util.Log
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
@@ -12,6 +13,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import java.lang.reflect.InvocationTargetException
 import java.net.SocketTimeoutException
+import java.util.logging.Logger
 
 /**
  *
@@ -25,20 +27,23 @@ class UserService {
         }
     }
 
-    @Throws(SocketTimeoutException::class)
     fun getUsers() {
         "/api/user".httpGet()
                 .responseObject(User.ListDeserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val us: List<User> = result.get()
-                            print("MC: Success " + us)
+                    try {
+                        when (result) {
+                            is Result.Failure -> {
+                                print("MC: Failure " + result.get())
+                                result.get()
+                            }
+                            is Result.Success -> {
+                                val us: List<User> = result.get()
+                                print("MC: Success " + us)
 //                            return@responseObject us
+                            }
                         }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
     }

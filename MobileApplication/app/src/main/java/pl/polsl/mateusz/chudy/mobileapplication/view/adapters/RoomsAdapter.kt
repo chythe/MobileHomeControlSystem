@@ -12,22 +12,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 /**
  *
  */
-class RoomsAdapter: BaseAdapter() {
+class RoomsAdapter(roomsList: List<Room>): BaseAdapter() {
 
-    private val rooms = arrayListOf<Room>(
-            Room(1, "Bathroom"),
-            Room(2, "Living Room"),
-            Room(3, "Bedroom"),
-            Room(4, "Kitchen"),
-            Room(5, "Wardrobe"),
-            Room(6, "Garage"),
-            Room(7, "Anteroom"),
-            Room(8, "Toilet"),
-            Room(9, "Attic"),
-            Room(10, "Cellar"),
-            Room(11, "Cubby"),
-            Room(12, "Dining Room")
-    )
+    private val rooms = roomsList
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
 
@@ -60,9 +47,9 @@ class RoomsAdapter: BaseAdapter() {
         return rooms.size
     }
 
-    fun remove(position: Int) {
-        rooms.removeAt(position)
-    }
+//    fun remove(position: Int) {
+//        rooms.removeAt(position)
+//    }
 
     private class ViewHolder(val nameTextView: TextView) {
         private var iconType: String = if (nameTextView.text == "Bathroom")

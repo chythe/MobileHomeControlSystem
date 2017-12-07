@@ -5,30 +5,320 @@
     android:layout_height="match_parent"
     tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.fragments.ConfigurationFragment">
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" >-->
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/switch_numbers"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch0_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_zero"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch1_button"
+            android:layout_width="56dip"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_one"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.224"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch2_button"
+            android:layout_width="56dip"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_two"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.403"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch3_button"
+            android:layout_width="56dip"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_tree"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.583"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch4_button"
+            android:layout_width="56dip"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_four"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.769"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/configuration_switch5_button"
+            android:layout_width="56dip"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/ic_five"
+            app:cb_color="@color/colorAccent"
+            app:cb_pressedRingWidth="8dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.948"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/configuration_name_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="344dp"
+            android:layout_marginTop="8dp"
+            android:gravity="bottom|center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.76"
+            tools:layout_editor_absoluteX="0dp">
+
+            <EditText
+                android:id="@+id/configuration_name_edit_text"
+                android:layout_width="308dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:focusable="false"
+                android:hint="@string/prompt_name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/configuration_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/configuration_name_text_input_layout"
+            app:layout_constraintVertical_bias="0.006" />
+
         <ImageView
             android:id="@+id/nodemcu_image_view"
-            android:layout_width="219dp"
-            android:layout_height="344dp"
+            android:layout_width="141dp"
+            android:layout_height="267dp"
+            android:layout_marginBottom="44dp"
             android:contentDescription="@string/nodemcu"
             android:scaleType="centerInside"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.766"
             app:srcCompat="@drawable/ic_nodemcu_color8" />
 
-    </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/configuration_output0_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="260dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
 
-    <!--</ScrollView>-->
+        <ImageView
+            android:id="@+id/configuration_output1_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="248dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_output2_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="236dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_output3_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginBottom="222dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_output4_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="210dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_output5_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="168dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input0_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="156dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input1_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="144dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input2_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="130dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input3_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="116dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input4_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="102dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_arrow_left"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/nodemcu_image_view" />
+
+        <ImageView
+            android:id="@+id/configuration_input5_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="208dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_arrow_right"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nodemcu_image_view"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

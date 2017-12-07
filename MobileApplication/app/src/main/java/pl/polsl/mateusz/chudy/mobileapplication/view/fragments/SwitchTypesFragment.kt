@@ -1,15 +1,16 @@
 package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_switch_types.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.SwitchTypesAdapter
 
@@ -24,7 +25,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.SwitchTypesAdapter
  */
 class SwitchTypesFragment : Fragment() {
 
-    private val MENU_CONTEXT_DELETE_ID: Int = 1
+    private val MENU_CONTEXT_DELETE_SWITCH_TYPE: Int = 0
 
     private var mParam1: String? = null
     private var mParam2: String? = null
@@ -44,7 +45,8 @@ class SwitchTypesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.switch_types)
         val view = inflater!!.inflate(R.layout.fragment_switch_types, container, false)
-        view.switch_types_list_view.adapter = SwitchTypesAdapter()
+        val switchTypes = MobileHomeApplication.databaseConfig?.switchTypeDao()!!.getSwitchTypes()
+        view.switch_types_list_view.adapter = SwitchTypesAdapter(switchTypes)
         registerForContextMenu(view.switch_types_list_view)
         view.switch_types_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         try {
@@ -60,32 +62,31 @@ class SwitchTypesFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-//        view.switch_types_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
-            //            if (view === view.rooms_list_view) {
-//                val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
-//                val room = view.rooms_list_view.adapter.getItem(info.position) as Room
-//                contextMenu.setHeaderTitle(user.username)
-//                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_ID, Menu.NONE,
-//                        resources.getString(R.string.delete_user)!!.split(" ")[0])
-//            }
-//        }
 
-//        view.users_list_view.onContextItemSelected
+        view.switch_types_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+            if (view === view.switch_types_list_view) {
+                val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
+                val switchType = view.switch_types_list_view.adapter.getItem(info.position) as SwitchType
+                contextMenu.setHeaderTitle(switchType.name)
+                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_SWITCH_TYPE, Menu.NONE,
+                        resources.getString(R.string.delete_switch_type)!!.split(" ")[0])
+            }
+        }
 
-//        view.switch_types_list_view.setOnClickListener { view ->
-            //            try {
-//                val fragment = UserManipulationFragment.newInstance(
-//                        User(0, "", "", Role.USER),
-//                        resources.getString(R.string.add_user)) as Fragment
-//                fragmentManager
-//                        .beginTransaction()
-//                        .replace(R.id.content_main, fragment)
-//                        .addToBackStack(null)
-//                        .commit()
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
+        view.switch_types_add_switch_type_button.setOnClickListener { view ->
+            try {
+                val fragment = SwitchTypeManipulationFragment.newInstance(
+                        SwitchType(),
+                        resources.getString(R.string.add_switch_type)) as Fragment
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content_main, fragment)
+                        .addToBackStack(null)
+                        .commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 
@@ -109,35 +110,31 @@ class SwitchTypesFragment : Fragment() {
         mListener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            MENU_CONTEXT_DELETE_SWITCH_TYPE -> {
+                val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+                Log.d(TAG, "removing item pos=" + info.position)
+                val adapter = view!!.switch_types_list_view.adapter as SwitchTypesAdapter
+                val switchType = adapter.getItem(info.position) as SwitchType
+                MobileHomeApplication.databaseConfig?.switchTypeDao()!!.deleteSwitchType(switchType)
+                adapter.notifyDataSetChanged()
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+
+
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SwitchTypesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): SwitchTypesFragment {
             val fragment = SwitchTypesFragment()
             val args = Bundle()

@@ -47,10 +47,10 @@ class UserManipulationFragment: Fragment() {
 //        view.user_manipulation_pass_edit_text
 //        view.user_manipulation_retype_pass_edit_text
         view.user_manipulation_button.text = mType!!.split(" ")[0]
-        val roleSpinner = view.user_manipulation_role_spinner
-        roleSpinner.prompt = "Select user role"
-        roleSpinner.adapter = ArrayAdapter<Role>(this.activity, R.layout.support_simple_spinner_dropdown_item, Role.values())
-        roleSpinner.setSelection(mUser!!.role.ordinal)
+//        val roleSpinner = view.user_manipulation_role_spinner
+//        roleSpinner.prompt = "Select user role"
+//        roleSpinner.adapter = ArrayAdapter<Role>(this.activity, R.layout.support_simple_spinner_dropdown_item, Role.values())
+//        roleSpinner.setSelection(mUser!!.role.ordinal)
         return view
     }
 
@@ -75,7 +75,6 @@ class UserManipulationFragment: Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-
         fun onFragmentInteraction(uri: Uri)
     }
 

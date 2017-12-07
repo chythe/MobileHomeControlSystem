@@ -5,18 +5,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.widget.AdapterView
-import android.widget.TextView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_users.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.UsersAdapter
 import android.widget.AdapterView.AdapterContextMenuInfo
-import android.R.attr.name
 import android.view.*
 import android.content.ContentValues.TAG
 import android.util.Log
+import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 
 
 /**
@@ -29,7 +26,7 @@ import android.util.Log
  */
 class UsersFragment : Fragment() {
 
-    private val MENU_CONTEXT_DELETE_ID: Int = 1
+    private val MENU_CONTEXT_DELETE_USER: Int = 0
 
     private var mParam1: String? = null
     private var mParam2: String? = null
@@ -48,7 +45,8 @@ class UsersFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.users)
         val view = inflater!!.inflate(R.layout.fragment_users, container, false)
-        view.users_list_view.adapter = UsersAdapter()
+        val users = MobileHomeApplication.databaseConfig?.userDao()!!.getUsers()
+        view.users_list_view.adapter = UsersAdapter(users)
         registerForContextMenu(view.users_list_view)
         view.users_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
@@ -69,17 +67,15 @@ class UsersFragment : Fragment() {
                 val info = contextMenuInfo as AdapterContextMenuInfo
                 val user = view.users_list_view.adapter.getItem(info.position) as User
                 contextMenu.setHeaderTitle(user.username)
-                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_ID, Menu.NONE,
+                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_USER, Menu.NONE,
                         resources.getString(R.string.delete_user)!!.split(" ")[0])
             }
         }
 
-//        view.users_list_view.onContextItemSelected
-
         view.users_add_button.setOnClickListener { view ->
             try {
                 val fragment = UserManipulationFragment.newInstance(
-                        User(0, "", "", Role.USER),
+                        User(),
                         resources.getString(R.string.add_user)) as Fragment
                 fragmentManager
                         .beginTransaction()
@@ -115,11 +111,12 @@ class UsersFragment : Fragment() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            MENU_CONTEXT_DELETE_ID -> {
+            MENU_CONTEXT_DELETE_USER -> {
                 val info = item.menuInfo as AdapterContextMenuInfo
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.users_list_view.adapter as UsersAdapter
-                adapter.remove(info.position)
+                val user = adapter.getItem(info.position) as User
+                MobileHomeApplication.databaseConfig?.userDao()!!.deleteUser(user)
                 adapter.notifyDataSetChanged()
                 true
             }

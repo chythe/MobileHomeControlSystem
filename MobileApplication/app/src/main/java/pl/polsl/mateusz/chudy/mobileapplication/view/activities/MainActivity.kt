@@ -1,5 +1,6 @@
 package pl.polsl.mateusz.chudy.mobileapplication.view.activities
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -16,6 +17,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.R
 //import io.reactivex.android.schedulers.AndroidSchedulers
 import android.net.Uri
 import android.support.v4.app.Fragment
+import android.widget.ImageView
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.view.fragments.*
 
@@ -34,7 +36,9 @@ class MainActivity : AppCompatActivity(),
         RoomManipulationFragment.OnFragmentInteractionListener,
         SwitchTypeDetailFragment.OnFragmentInteractionListener,
         SwitchTypeManipulationFragment.OnFragmentInteractionListener,
-        SearchModulesFragment.OnFragmentInteractionListener {
+        SearchModulesFragment.OnFragmentInteractionListener,
+        ModuleManipulationFragment.OnFragmentInteractionListener,
+        ConfigurationManipulationFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +52,20 @@ class MainActivity : AppCompatActivity(),
 
         nav_view.setNavigationItemSelectedListener(this)
 
+        setImageBackground()
+
 //        val intent = Intent(this, LoginActivity::class.java)
 //        startActivity(intent)
+    }
+
+    private fun setImageBackground() {
+        val mainImageView: ImageView = findViewById(R.id.content_main_image_view)
+        val bitMap = BitmapFactory.decodeStream(resources.assets.open("png/house.png"))
+//        val display = windowManager.defaultDisplay
+//        val size = Point()
+//        display.getSize(size)
+//        val scaledBitmap = Bitmap.createScaledBitmap(bitMap, size.x, size.y, true)
+        mainImageView.setImageBitmap(bitMap)
     }
 
     override fun onBackPressed() {

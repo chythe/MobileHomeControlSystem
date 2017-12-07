@@ -25,27 +25,27 @@
             app:srcCompat="@drawable/ic_profile" />
 
         <TextView
-            android:id="@+id/username_label_text_view"
+            android:id="@+id/profile_username_label_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginTop="84dp"
             android:text="@string/prompt_username"
-            app:layout_constraintEnd_toStartOf="@+id/username_edit_text"
+            app:layout_constraintEnd_toStartOf="@+id/profile_username_edit_text"
             app:layout_constraintTop_toBottomOf="@+id/profile_icon_image_view" />
 
         <TextView
-            android:id="@+id/role_label_text_view"
+            android:id="@+id/profile_role_label_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginTop="44dp"
             android:text="@string/prompt_role"
-            app:layout_constraintEnd_toStartOf="@+id/role_edit_text"
-            app:layout_constraintTop_toBottomOf="@+id/username_label_text_view" />
+            app:layout_constraintEnd_toStartOf="@+id/profile_role_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_username_label_text_view" />
 
         <EditText
-            android:id="@+id/username_edit_text"
+            android:id="@+id/profile_username_edit_text"
             android:layout_width="265dp"
             android:layout_height="45dp"
             android:layout_marginEnd="16dp"
@@ -59,7 +59,7 @@
             app:layout_constraintVertical_bias="0.164" />
 
         <EditText
-            android:id="@+id/role_edit_text"
+            android:id="@+id/profile_role_edit_text"
             android:layout_width="265dp"
             android:layout_height="45dp"
             android:layout_marginEnd="16dp"
@@ -69,11 +69,11 @@
             android:inputType="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_username_edit_text"
             app:layout_constraintVertical_bias="0.04" />
 
         <Button
-            android:id="@+id/edit_profile_button"
+            android:id="@+id/profile_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -81,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/role_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/profile_role_edit_text"
             app:layout_constraintVertical_bias="0.419" />
 
     </android.support.constraint.ConstraintLayout>

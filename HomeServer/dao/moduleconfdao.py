@@ -5,7 +5,7 @@ class ModuleConfigurationDao(object):
 
     @db_session
     def create_module_configuration(self, module_id, switch_no, room_id, switch_type_id, name):
-        ModuleConfiguration(
+        return ModuleConfiguration(
             mod=Module[module_id], switch_no=switch_no, room=Room[room_id],
             switch_type=SwitchType[switch_type_id], name=name)
 
