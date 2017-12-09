@@ -11,8 +11,8 @@ import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.fragment_rooms.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
 
 
 /**
@@ -39,9 +39,13 @@ class RoomsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.rooms)
         val view = inflater!!.inflate(R.layout.fragment_rooms, container, false)
-        val rooms = MobileHomeApplication.databaseConfig?.roomDao()?.getRooms()
-        view.rooms_list_view.adapter = RoomsAdapter(rooms!!)
+
+        val rooms = RoomService.getRooms()
+
+        val adapter = RoomsAdapter(rooms)
+        view.rooms_list_view.adapter = adapter
         registerForContextMenu(view.rooms_list_view)
+
         view.rooms_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
                 val room = parent.getItemAtPosition(position) as Room
@@ -110,8 +114,13 @@ class RoomsFragment : Fragment() {
                 val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.rooms_list_view.adapter as RoomsAdapter
-//                adapter.remove(info.position)
-                adapter.notifyDataSetChanged()
+                val room = adapter.getItem(info.position) as Room
+                RoomService.deleteRoom(room.roomId)
+                fragmentManager
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit()
                 true
             }
             else -> super.onContextItemSelected(item)

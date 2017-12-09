@@ -24,3 +24,7 @@ class RoomDao(object):
     @db_session
     def delete_room(self, room_id):
         Room[room_id].delete()
+
+    @db_session
+    def get_room_module_configurations(self, room_id):
+        return list(Room[room_id].module_configurations)

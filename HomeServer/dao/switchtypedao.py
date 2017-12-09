@@ -24,3 +24,7 @@ class SwitchTypeDao(object):
     @db_session
     def delete_switch_type(self, switch_type_id):
         SwitchType[switch_type_id].delete()
+
+    @db_session
+    def get_switch_type_module_configurations(self, switch_type_id):
+        return list(SwitchType[switch_type_id].module_configurations)

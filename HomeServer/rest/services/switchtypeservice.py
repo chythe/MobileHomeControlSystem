@@ -19,4 +19,7 @@ class SwitchTypeService(object):
         return self.__switch_type_dao.update_switch_type(switch_type_id, name)
 
     def delete_switch_type(self, switch_type_id):
-        self.__room_dao.delete_room(switch_type_id)
+        self.__switch_type_dao.delete_switch_type(switch_type_id)
+
+    def get_switch_type_module_configurations(self, switch_type_id):
+        return self.__switch_type_dao.get_switch_type_module_configurations(switch_type_id)

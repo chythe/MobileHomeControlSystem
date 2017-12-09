@@ -8,12 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_configuration_manipulation.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
+import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 
 
 /**
@@ -44,22 +50,68 @@ class ConfigurationManipulationFragment : Fragment() {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_configuration_manipulation, container, false)
         view.configuration_manipulation_switch_no_text_view.text =
-                resources.getString(R.string.switch_number) +
+                resources.getString(R.string.switch_number) + " " +
                         mModuleConfiguration!!.switchNo
         view.configuration_manipulation_name_edit_text.setText(mModuleConfiguration!!.name)
+
         val roomSpinner = view.configuration_manipulation_room_spinner
         roomSpinner.prompt = "Select room"
-        val rooms = MobileHomeApplication.databaseConfig?.roomDao()?.getRooms()
+        val rooms = RoomService.getRooms()
         roomSpinner.adapter = ArrayAdapter<Room>(this.activity,
-                R.layout.support_simple_spinner_dropdown_item, rooms)
+                R.layout.support_simple_spinner_dropdown_item, rooms) as SpinnerAdapter?
         roomSpinner.setSelection(mModuleConfiguration!!.roomId.toInt())
+
+        var selectedRoomPosition = 0
+        if (mModuleConfiguration!!.roomId.toInt() != 0) {
+            val selectedRoom = rooms
+                    .filter { st -> st.roomId == mModuleConfiguration!!.roomId }.single()
+            selectedRoomPosition = rooms.indexOf(selectedRoom)
+        }
+        roomSpinner.setSelection(selectedRoomPosition)
+
         val switchTypesSpinner = view.configuration_manipulation_switch_type_spinner
         switchTypesSpinner.prompt = "Select switch type"
-        val switchTypes = MobileHomeApplication.databaseConfig?.switchTypeDao()?.getSwitchTypes()
+        val switchTypes = SwitchTypeService.getSwitchTypes()
         switchTypesSpinner.adapter = ArrayAdapter<SwitchType>(this.activity,
-                R.layout.support_simple_spinner_dropdown_item, switchTypes)
-        switchTypesSpinner.setSelection(mModuleConfiguration!!.switchTypeId.toInt())
-        view.configuration_manipulation_button.text = mType!!.split(" ")[0]
+                R.layout.support_simple_spinner_dropdown_item, switchTypes) as SpinnerAdapter?
+
+        var selectedSwitchTypePosition = 0
+        if (mModuleConfiguration!!.switchTypeId.toInt() != 0) {
+            val selectedSwitchType = switchTypes
+                    .filter { st -> st.switchTypeId == mModuleConfiguration!!.switchTypeId }.single()
+            selectedSwitchTypePosition = switchTypes.indexOf(selectedSwitchType)
+        }
+        switchTypesSpinner.setSelection(selectedSwitchTypePosition)
+
+        val typeString = mType!!.split(" ")[0]
+        view.configuration_manipulation_button.text = typeString
+        view.configuration_manipulation_button.setOnClickListener { _ ->
+            try {
+                val moduleId = mModuleConfiguration!!.moduleId
+                val switchNo = mModuleConfiguration!!.switchNo
+                val roomId = (roomSpinner.selectedItem as Room).roomId
+                val switchTypeId = (switchTypesSpinner.selectedItem as SwitchType).switchTypeId
+                val name = view.configuration_manipulation_name_edit_text.text.toString()
+                when (typeString.toLowerCase()) {
+                    "edit" -> {
+                        ModuleConfigurationService.updateModuleConfiguration(
+                                ModuleConfiguration(
+                                        moduleId, switchNo, roomId, switchTypeId, name))
+                        fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.configuration_edited), Toast.LENGTH_SHORT).show()
+                    }
+                    "add" -> {
+                        ModuleConfigurationService.createModuleConfiguration(
+                                ModuleConfiguration(
+                                        moduleId, switchNo, roomId, switchTypeId, name))
+                        fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.configuration_added), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 

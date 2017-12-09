@@ -10,8 +10,8 @@ import android.view.*
 import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_modules.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
 
 
@@ -44,7 +44,7 @@ class ModulesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.modules)
         val view = inflater!!.inflate(R.layout.fragment_modules, container, false)
-        val modules = MobileHomeApplication.databaseConfig?.moduleDao()!!.getModules()
+        val modules = ModuleService.getModules()
         view.modules_list_view.adapter = ModulesAdapter(modules)
         registerForContextMenu(view.modules_list_view)
         view.modules_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -114,8 +114,12 @@ class ModulesFragment : Fragment() {
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.modules_list_view.adapter as ModulesAdapter
                 val module = adapter.getItem(info.position) as Module
-                MobileHomeApplication.databaseConfig?.moduleDao()!!.deleteModule(module)
-                adapter.notifyDataSetChanged()
+                ModuleService.deleteModule(module.moduleId)
+                fragmentManager
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit()
                 true
             }
             else -> super.onContextItemSelected(item)

@@ -5,104 +5,67 @@ import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
+import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.result.Result
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
+import io.reactivex.schedulers.Schedulers
+import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
 
 /**
  *
  */
-class ModuleService {
+object ModuleService {
 
     init {
         FuelManager.instance.apply {
-            basePath = ServerConnectionConfig.getBasePathURLString()
+            basePath = ServerConnection.getBasePathURLString()
             baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
-    fun getModules() {
+    fun getModules(): List<Module> =
         "/api/module".httpGet()
-                .responseObject(Module.ListDeserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val ms: List<Module> = result.get()
-                            print("MC: Success " + ms)
-                        }
-                    }
-                }
-    }
+                .rx_object(Module.ListDeserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun getModule(moduleId: Long) {
+    fun getModule(moduleId: Long): Module =
         "/api/module/$moduleId".httpGet()
-                .responseObject(Module.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val m: Module = result.get()
-                            print("MC: Success " + m)
-                        }
-                    }
-                }
-    }
+                .rx_object(Module.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun createModule(module: Module) {
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+    fun createModule(module: Module): Module =
         "/api/module".httpPost()
-                .body(gson.toJson(module))
-                .responseObject(Module.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val m = result.get()
-                            print("MC: Success " + m)
-                        }
-                    }
-                }
-    }
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(module))
+                .rx_object(Module.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun updateModule(module: Module) {
-        val gson = GsonBuilder().create()
+    fun updateModule(module: Module): Module =
         "/api/module".httpPut()
-                .body(gson.toJson(module))
-                .responseObject(Module.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val m = result.get()
-                            print("MC: Success " + m)
-                        }
-                    }
-                }
-    }
+                .body(Gson().toJson(module))
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(module))
+                .rx_object(Module.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun deleteModule(moduleId: Long) {
+    fun deleteModule(moduleId: Long): Boolean =
         "/api/module/$moduleId".httpDelete()
-                .responseString { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val result: String = result.get()
-                            print("MC: Success " + result)
-                        }
-                    }
-                }
-    }
+                .rx_object(AcknowledgeCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get().result }
+                .onErrorReturn { throw it }
+                .blockingGet()
 }

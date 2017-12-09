@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
+
+from model.moduleconf import ModuleConfiguration
 from rest.services.moduleconfservice import ModuleConfigurationService
 from pony.orm import OrmError
 from rest.tools.dictnameconv import *
@@ -14,6 +16,8 @@ def get_module_configurations():
         module_configurations = module_configuration_service.read_module_configurations()
         module_configurations_dict = [change_dict_naming_convention(
             mc.to_dict(), underscore_to_camel) for mc in module_configurations]
+        for mcd in module_configurations_dict:
+            mcd = ModuleConfiguration.change_dict_keys_names(mcd)
         return jsonify(module_configurations_dict)
     except (OrmError, RuntimeError):
         abort(404)
@@ -25,8 +29,8 @@ def get_module_configuration():
         module_id = request.args.get('moduleId')
         switch_no = request.args.get('switchNo')
         module_configuration = module_configuration_service.read_module_configuration(module_id, switch_no)
-        module_configuration_dict = recursive_to_dict(module_configuration, has_iterated=False, related_objects=True)
-        module_configuration_dict = change_dict_naming_convention(module_configuration_dict, underscore_to_camel)
+        module_configuration_dict = change_dict_naming_convention(module_configuration.to_dict(), underscore_to_camel)
+        module_configuration_dict = ModuleConfiguration.change_dict_keys_names(module_configuration_dict)
         return jsonify(module_configuration_dict)
     except (OrmError, RuntimeError, ValueError):
         abort(404)
@@ -43,6 +47,7 @@ def create_module_configuration():
         module_configuration = module_configuration_service.create_module_configuration(
             module_id, switch_no, room_id, switch_type_id, name)
         module_configuration_dict = change_dict_naming_convention(module_configuration.to_dict(), underscore_to_camel)
+        module_configuration_dict = ModuleConfiguration.change_dict_keys_names(module_configuration_dict)
         return jsonify(module_configuration_dict)
     except (OrmError, RuntimeError, KeyError):
         abort(400)
@@ -59,6 +64,7 @@ def update_module_configuration():
         module_configuration = module_configuration_service.update_module_configuration(
             module_id, switch_no, room_id, switch_type_id, name)
         module_configuration_dict = change_dict_naming_convention(module_configuration.to_dict(), underscore_to_camel)
+        module_configuration_dict = ModuleConfiguration.change_dict_keys_names(module_configuration_dict)
         return jsonify(module_configuration_dict)
     except (OrmError, RuntimeError, KeyError):
         abort(400)

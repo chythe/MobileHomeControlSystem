@@ -8,12 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_user_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-
-
+import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
+import java.security.MessageDigest
 
 
 /**
@@ -46,11 +47,53 @@ class UserManipulationFragment: Fragment() {
         view.user_manipulation_username_edit_text.setText(mUser!!.username)
 //        view.user_manipulation_pass_edit_text
 //        view.user_manipulation_retype_pass_edit_text
-        view.user_manipulation_button.text = mType!!.split(" ")[0]
-//        val roleSpinner = view.user_manipulation_role_spinner
-//        roleSpinner.prompt = "Select user role"
-//        roleSpinner.adapter = ArrayAdapter<Role>(this.activity, R.layout.support_simple_spinner_dropdown_item, Role.values())
-//        roleSpinner.setSelection(mUser!!.role.ordinal)
+        val roleSpinner = view.user_manipulation_role_spinner
+        roleSpinner.prompt = "Select user role"
+        roleSpinner.adapter = ArrayAdapter<Role>(this.activity, R.layout.support_simple_spinner_dropdown_item, Role.values())
+        roleSpinner.setSelection(mUser!!.role.ordinal)
+        val typeString = mType!!.split(" ")[0]
+        view.user_manipulation_button.text = typeString
+        view.user_manipulation_button.setOnClickListener { _ ->
+            try {
+                val password = view.user_manipulation_pass_edit_text.text.toString()
+                val retypedPassword = view.user_manipulation_retype_pass_edit_text.text.toString()
+                if (password == retypedPassword) {
+                    val bytes = password.toByteArray()
+                    val md = MessageDigest.getInstance("SHA-256")
+                    val digest = md.digest(bytes)
+                    val cryptPassword = digest.fold("", { str, it -> str + "%02x".format(it) })
+                    val role = roleSpinner.selectedItem as Role
+                    when (typeString.toLowerCase()) {
+                        "edit" -> {
+                            UserService.updateUser(
+                                    User(
+                                            mUser!!.userId,
+                                            view.user_manipulation_username_edit_text.text.toString(),
+                                            cryptPassword,
+                                            role
+                                    ))
+							fragmentManager.popBackStack()
+                            Toast.makeText(activity, resources.getString(R.string.user_edited), Toast.LENGTH_SHORT).show()
+                        }
+                        "add" -> {
+                            UserService.createUser(
+                                    User(
+                                            username = view.user_manipulation_username_edit_text.text.toString(),
+                                            password = cryptPassword,
+                                            role = role
+                                    ))
+							fragmentManager.popBackStack()
+                            Toast.makeText(activity, resources.getString(R.string.user_added), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(activity, resources.getString(R.string.different_passwords), Toast.LENGTH_SHORT).show()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 

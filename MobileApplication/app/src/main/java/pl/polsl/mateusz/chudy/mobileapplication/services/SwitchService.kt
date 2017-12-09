@@ -3,40 +3,39 @@ package pl.polsl.mateusz.chudy.mobileapplication.services
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.result.Result
+import com.github.kittinunf.fuel.rx.rx_object
 import com.google.gson.Gson
+import io.reactivex.schedulers.Schedulers
+import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
 import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
-import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 
 /**
  *
  */
-class SwitchService {
+object SwitchService {
 
     init {
         FuelManager.instance.apply {
-            basePath = ServerConnectionConfig.getBasePathURLString()
+            basePath = ServerConnection.getBasePathURLString()
             baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
-    fun getState() {
-        TODO()
-    }
+    fun getStates(): SwitchCommand =
+        "/api/switch".httpGet()
+                .rx_object(SwitchCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun switch(switchCommand: SwitchCommand) {
-        val gson = Gson()
+    fun switch(switchCommand: SwitchCommand): Boolean =
         "/api/switch".httpPost()
-                .body(gson.toJson(switchCommand))
-                .responseString { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                        }
-                        is Result.Success -> {
-                            print("MC: Success " + result.get())
-                        }
-                    }
-                }
-    }
+                .body(Gson().toJson(switchCommand))
+                .rx_object(AcknowledgeCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get().result }
+                .onErrorReturn { throw it }
+                .blockingGet()
 }

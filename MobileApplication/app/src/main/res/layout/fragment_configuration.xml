@@ -138,17 +138,49 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/configuration_action_button"
+            android:id="@+id/configuration_add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:visibility="invisible"
+            android:text="@string/add_configuration"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/configuration_name_text_input_layout"
-            app:layout_constraintVertical_bias="0.006" />
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/configuration_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/edit_configuration"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/configuration_delete_button"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/configuration_name_text_input_layout"
+            app:layout_constraintVertical_bias="0.157" />
+
+        <Button
+            android:id="@+id/configuration_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/delete_configuration"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/configuration_name_text_input_layout"
+            app:layout_constraintVertical_bias="0.138" />
 
         <ImageView
             android:id="@+id/nodemcu_image_view"

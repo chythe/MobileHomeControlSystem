@@ -21,3 +21,6 @@ class RoomService(object):
     def delete_room(self, room_id):
         self.__room_dao.delete_room(room_id)
 
+    def get_room_module_configurations(self, room_id):
+        return self.__room_dao.get_room_module_configurations(room_id)
+

@@ -13,7 +13,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo
 import android.view.*
 import android.content.ContentValues.TAG
 import android.util.Log
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
+import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
 
 
 /**
@@ -45,7 +45,7 @@ class UsersFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.users)
         val view = inflater!!.inflate(R.layout.fragment_users, container, false)
-        val users = MobileHomeApplication.databaseConfig?.userDao()!!.getUsers()
+        val users = UserService.getUsers()
         view.users_list_view.adapter = UsersAdapter(users)
         registerForContextMenu(view.users_list_view)
         view.users_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -116,8 +116,12 @@ class UsersFragment : Fragment() {
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.users_list_view.adapter as UsersAdapter
                 val user = adapter.getItem(info.position) as User
-                MobileHomeApplication.databaseConfig?.userDao()!!.deleteUser(user)
-                adapter.notifyDataSetChanged()
+                UserService.deleteUser(user.userId)
+                fragmentManager
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit()
                 true
             }
             else -> super.onContextItemSelected(item)

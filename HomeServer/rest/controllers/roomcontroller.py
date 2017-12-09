@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request, abort
+
+from model.moduleconf import ModuleConfiguration
 from rest.services.roomservice import RoomService
-from pony.orm import OrmError, IntegrityError
+from pony.orm import OrmError, IntegrityError, db_session
 from rest.tools.dictnameconv import *
 
 room_controller = Blueprint('room_controller', __name__)
@@ -63,6 +65,20 @@ def delete_room(room_id):
     try:
         room_service.delete_room(room_id)
         return jsonify({'result': True})
+    except (OrmError, RuntimeError) as e:
+        print(str(e))
+        abort(404)
+
+
+@room_controller.route('/api/room/module-configuration/<int:room_id>', methods=['GET'])
+def get_room_module_configurations(room_id):
+    try:
+        module_configurations = room_service.get_room_module_configurations(room_id)
+        module_configurations_dict = [change_dict_naming_convention(
+            mc.to_dict(), underscore_to_camel) for mc in module_configurations]
+        for mcd in module_configurations_dict:
+            mcd = ModuleConfiguration.change_dict_keys_names(mcd)
+        return jsonify(module_configurations_dict)
     except (OrmError, RuntimeError) as e:
         print(str(e))
         abort(404)

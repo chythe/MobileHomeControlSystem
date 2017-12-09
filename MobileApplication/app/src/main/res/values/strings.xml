@@ -1,62 +1,91 @@
 <resources>
-    <string name="app_name">Mobile Home</string>
 
+    <!-- global -->
+    <string name="app_name">Mobile Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="welcome">Welcome to the mobile home control system!!!</string>
+    <string name="test">Test</string>
+    <string name="nodemcu">NodeMCU</string>
 
+    <!-- login / registration -->
+    <string name="prompt_server_ip">Server IP</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sing_out">Sign out</string>
     <string name="title_activity_login">Sign in</string>
-
-    <!-- Strings related to login -->
-    <string name="prompt_server_ip">Server IP</string>
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_name">Name</string>
-    <string name="prompt_retype_password">Retype Password</string>
-    <string name="prompt_ip_address">IP Address</string>
-    <string name="prompt_role">Role</string>
-    <string name="action_edit">Edit</string>
-    <string name="action_add">Add</string>
-    <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
 
-    <string name="welcome">Welcome to the mobile home control system!!!</string>
+    <!-- common -->
+    <string name="action_edit">Edit</string>
+    <string name="action_add">Add</string>
+    <string name="prompt_name">Name</string>
+    <string name="error_field_required">This field is required</string>
     <string name="not_defined">Not Defined</string>
+    <string name="error">Error</string>
+
+    <!-- user -->
     <string name="profile">Your Profile</string>
-    <string name="users">Users</string>
-    <string name="rooms">Rooms</string>
-    <string name="switch_types">Switch Types</string>
-    <string name="configuration">Configuration</string>
-    <string name="add_module">Add Module</string>
-    <string name="add_switch_type">Add Switch Type</string>
-    <string name="modules">Modules</string>
-    <string name="module_configurations">Module Configurations</string>
-    <string name="switch_numbers">Switch Numbers</string>
-    <string name="test">Test</string>
-    <string name="nodemcu">NodeMCU</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="edit_room">Edit Room</string>
-    <string name="edit_switch_type">Edit Switch Type</string>
-    <string name="add_user">Add User</string>
-    <string name="add_room">Add Room</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_retype_password">Retype Password</string>
+    <string name="different_passwords">Different Passwords</string>
+    <string name="prompt_role">Role</string>
+    <string name="users">Users</string>
     <string name="user_details">User Details</string>
-    <string name="room_details">Room Details</string>
-    <string name="switch_type_details">Switch Type Details</string>
+    <string name="add_user">Add User</string>
     <string name="delete_user">Delete User</string>
-    <string name="delete_switch_type">Delete Switch Type</string>
+    <string name="user_added">User Added</string>
+    <string name="user_edited">User Edited</string>
+    <string name="user_deleted">User Deleted</string>
+
+    <!-- room -->
+    <string name="rooms">Rooms</string>
+    <string name="room_details">Room Details</string>
+    <string name="add_room">Add Room</string>
+    <string name="edit_room">Edit Room</string>
     <string name="delete_room">Delete Room</string>
-    <string name="delete_module">Delete Module</string>
-    <string name="search_modules">Search Modules</string>
-    <string name="edit_configuration">Edit Module Configuration</string>
-    <string name="add_configuration">Add Module Configuration</string>
-    <string name="delete_configuration">Delete Module Configuration</string>
+    <string name="room_added">Room Added</string>
+    <string name="room_edited">Room Edited</string>
+    <string name="room_deleted">Room Deleted</string>
+
+    <!-- module configuration -->
+    <string name="configuration">Configuration</string>
+    <string name="module_configurations">Module Configurations</string>
+    <string name="add_configuration">Add Configuration</string>
+    <string name="edit_configuration">Edit Configuration</string>
+    <string name="delete_configuration">Delete Configuration</string>
     <string name="switch_number">Switch Number:</string>
+    <string name="configuration_added">Configuration Added</string>
+    <string name="configuration_edited">Configuration Edited</string>
+    <string name="configuration_deleted">Configuration Deleted</string>
+
+    <!-- module -->
+    <string name="prompt_ip_address">IP Address</string>
+    <string name="modules">Modules</string>
+    <string name="add_module">Add Module</string>
+    <string name="edit_module">Edit Module</string>
+    <string name="delete_module">Delete Module</string>
+    <string name="switch_numbers">Switch Numbers</string>
+    <string name="search_modules">Search Modules</string>
+    <string name="module_added">Module Added</string>
+    <string name="module_edited">Module Edited</string>
+    <string name="module_deleted">Module Deleted</string>
+
+    <!-- switch type -->
+    <string name="switch_types">Switch Types</string>
+    <string name="switch_type_details">Switch Type Details</string>
+    <string name="add_switch_type">Add Switch Type</string>
+    <string name="edit_switch_type">Edit Switch Type</string>
+    <string name="delete_switch_type">Delete Switch Type</string>
+    <string name="switch_type_added">Switch Type Added</string>
+    <string name="switch_type_edited">Switch Type Edited</string>
+    <string name="switch_type_deleted">Switch Type Deleted</string>
 
 </resources>

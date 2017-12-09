@@ -1,112 +1,80 @@
 package pl.polsl.mateusz.chudy.mobileapplication.services
 
 import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
+import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.result.Result
-import com.github.kittinunf.result.getAs
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
+import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
-
 
 /**
  *
  */
-class RoomService {
+object RoomService {
 
     init {
         FuelManager.instance.apply {
-            basePath = ServerConnectionConfig.getBasePathURLString()
+            basePath = ServerConnection.getBasePathURLString()
             baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
-    fun getRooms() {
+    fun getRooms(): List<Room> =
         "/api/room".httpGet()
-                .responseObject(Room.ListDeserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val rs: List<Room> = result.get()
-                            print("MC: Success " + rs)
-                        }
-                    }
-        }
-    }
+                .rx_object(Room.ListDeserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun getRoom(roomId: Long) {
+    fun getRoom(roomId: Long): Room =
         "/api/room/$roomId".httpGet()
-                .responseObject(Room.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val r: Room = result.get()
-                            print("MC: Success " + r)
-                        }
-                    }
-                }
-    }
+                .rx_object(Room.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun createRoom(room: Room) {
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+    fun createRoom(room: Room): Room =
         "/api/room".httpPost()
-                .body(gson.toJson(room))
-                .responseObject(Room.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val r: Room = result.get()
-                            print("MC: Success " + r)
-                        }
-                    }
-                }
-    }
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(room))
+                .rx_object(Room.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun updateRoom(room: Room) {
-        val gson = Gson()
+    fun updateRoom(room: Room): Room =
         "/api/room".httpPut()
-                .body(gson.toJson(room))
-                .responseObject(Room.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val r: Room = result.get()
-                            print("MC: Success " + r)
-                        }
-                    }
-                }
-    }
+                .body(Gson().toJson(room))
+                .rx_object(Room.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun deleteRoom(roomId: Long) {
+    fun deleteRoom(roomId: Long): Boolean =
         "/api/room/$roomId".httpDelete()
-                .responseString { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val result: String = result.get()
-                            print("MC: Success " + result)
-                        }
-                    }
-                }
-    }
+                .rx_object(AcknowledgeCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get().result }
+                .onErrorReturn { throw it }
+                .blockingGet()
+
+    fun getRoomModuleConfigurations(roomId: Long): List<ModuleConfiguration> =
+            "/api/room/module-configuration/$roomId".httpGet()
+                    .rx_object(ModuleConfiguration.ListDeserializer())
+                    .subscribeOn(Schedulers.newThread())
+                    .map { it -> it.get() }
+                    .onErrorReturn { throw it }
+                    .blockingGet()
 }

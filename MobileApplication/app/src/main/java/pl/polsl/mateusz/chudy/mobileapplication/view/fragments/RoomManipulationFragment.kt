@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
 
 
 /**
@@ -40,7 +42,28 @@ class RoomManipulationFragment : Fragment() {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_room_manipulation, container, false)
         view.room_manipulation_name_edit_text.setText(mRoom!!.name)
-        view.room_manipulation_button.text = mType!!.split(" ")[0]
+        val typeString = mType!!.split(" ")[0]
+        view.room_manipulation_button.text = typeString
+        view.room_manipulation_button.setOnClickListener { _ ->
+            try {
+                when (typeString.toLowerCase()) {
+                    "edit" -> {
+                        RoomService.updateRoom(
+                                Room(mRoom!!.roomId, view.room_manipulation_name_edit_text.text.toString()))
+						fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.room_edited), Toast.LENGTH_SHORT).show()
+                    }
+                    "add" -> {
+                        RoomService.createRoom(
+                                Room(name = view.room_manipulation_name_edit_text.text.toString()))
+						fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.room_added), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 

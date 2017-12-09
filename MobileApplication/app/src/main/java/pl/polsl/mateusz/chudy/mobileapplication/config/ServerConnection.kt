@@ -1,9 +1,9 @@
 package pl.polsl.mateusz.chudy.mobileapplication.config
 
 /**
- * Created by chyth on 25.11.2017.
+ *
  */
-class ServerConnectionConfig {
+class ServerConnection {
 
     companion object {
 

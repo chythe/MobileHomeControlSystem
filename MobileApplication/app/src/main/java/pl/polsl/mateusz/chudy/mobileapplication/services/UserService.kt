@@ -1,122 +1,72 @@
 package pl.polsl.mateusz.chudy.mobileapplication.services
 
-import android.util.Log
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
+import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
+import io.reactivex.schedulers.Schedulers
+import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import java.lang.reflect.InvocationTargetException
 import java.net.SocketTimeoutException
-import java.util.logging.Logger
 
 /**
  *
  */
-class UserService {
+object UserService {
 
     init {
         FuelManager.instance.apply {
-            basePath = ServerConnectionConfig.getBasePathURLString()
+            basePath = ServerConnection.getBasePathURLString()
             baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
-    fun getUsers() {
+    fun getUsers(): List<User> =
         "/api/user".httpGet()
-                .responseObject(User.ListDeserializer()) { _, _, result ->
-                    try {
-                        when (result) {
-                            is Result.Failure -> {
-                                print("MC: Failure " + result.get())
-                                result.get()
-                            }
-                            is Result.Success -> {
-                                val us: List<User> = result.get()
-                                print("MC: Success " + us)
-//                            return@responseObject us
-                            }
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-    }
+                .rx_object(User.ListDeserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    @Throws(SocketTimeoutException::class)
-    fun getUser(userId: Long) {
+    fun getUser(userId: Long): User =
         "/api/user/$userId".httpGet()
-                .responseObject(User.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val u: User = result.get()
-                            print("MC: Success " + u)
-                        }
-                    }
-                }
-    }
+                .rx_object(User.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    @Throws(SocketTimeoutException::class)
-    fun createUser(user: User) {
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+    fun createUser(user: User): User =
         "/api/user".httpPost()
-                .body(gson.toJson(user))
-                .responseObject(User.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val u: User = result.get()
-                            print("MC: Success " + u)
-                        }
-                    }
-                }
-    }
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(user))
+                .rx_object(User.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    @Throws(SocketTimeoutException::class)
-    fun updateUser(user: User) {
-        val gson = Gson()
+    fun updateUser(user: User): User =
         "/api/user".httpPut()
-                .body(gson.toJson(user))
-                .responseObject(User.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val u: User = result.get()
-                            print("MC: Success " + u)
-                        }
-                    }
-                }
-    }
+                .body(Gson().toJson(user))
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(user))
+                .rx_object(User.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    @Throws(SocketTimeoutException::class)
-    fun deleteUser(userId: Long) {
+    fun deleteUser(userId: Long): Boolean =
         "/api/user/$userId".httpDelete()
-                .responseString { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val result: String = result.get()
-                            print("MC: Success " + result)
-                        }
-                    }
-                }
-    }
+                .rx_object(AcknowledgeCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get().result }
+                .onErrorReturn { throw it }
+                .blockingGet()
 }

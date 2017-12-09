@@ -7,9 +7,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
 import kotlinx.android.synthetic.main.fragment_switch_type_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 
 
 /**
@@ -40,7 +45,31 @@ class SwitchTypeManipulationFragment : Fragment() {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_switch_type_manipulation, container, false)
         view.switch_type_manipulation_name_edit_text.setText(mSwitchType!!.name)
-        view.switch_type_manipulation_button.text = mType!!.split(" ")[0]
+        val typeString = mType!!.split(" ")[0]
+        view.switch_type_manipulation_button.text = typeString
+
+        view.switch_type_manipulation_button.setOnClickListener { _ ->
+            try {
+                when (typeString.toLowerCase()) {
+                    "edit" -> {
+                        SwitchTypeService.updateSwitchType(
+                                SwitchType(mSwitchType!!.switchTypeId,
+                                        view.switch_type_manipulation_name_edit_text.text.toString()))
+								fragmentManager.popBackStack()
+                                Toast.makeText(activity, resources.getString(R.string.switch_type_edited), Toast.LENGTH_SHORT).show()
+                    }
+                    "add" -> {
+                        SwitchTypeService.createSwitchType(
+                                SwitchType(
+                                        name = view.switch_type_manipulation_name_edit_text.text.toString()))
+								fragmentManager.popBackStack()
+                                Toast.makeText(activity, resources.getString(R.string.switch_type_added), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 

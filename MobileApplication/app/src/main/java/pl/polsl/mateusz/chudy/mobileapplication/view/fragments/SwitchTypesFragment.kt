@@ -10,8 +10,8 @@ import android.view.*
 import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_switch_types.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.SwitchTypesAdapter
 
 
@@ -45,7 +45,7 @@ class SwitchTypesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.switch_types)
         val view = inflater!!.inflate(R.layout.fragment_switch_types, container, false)
-        val switchTypes = MobileHomeApplication.databaseConfig?.switchTypeDao()!!.getSwitchTypes()
+        val switchTypes = SwitchTypeService.getSwitchTypes()
         view.switch_types_list_view.adapter = SwitchTypesAdapter(switchTypes)
         registerForContextMenu(view.switch_types_list_view)
         view.switch_types_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -117,8 +117,12 @@ class SwitchTypesFragment : Fragment() {
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.switch_types_list_view.adapter as SwitchTypesAdapter
                 val switchType = adapter.getItem(info.position) as SwitchType
-                MobileHomeApplication.databaseConfig?.switchTypeDao()!!.deleteSwitchType(switchType)
-                adapter.notifyDataSetChanged()
+                SwitchTypeService.deleteSwitchType(switchType.switchTypeId)
+                fragmentManager
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit()
                 true
             }
             else -> super.onContextItemSelected(item)

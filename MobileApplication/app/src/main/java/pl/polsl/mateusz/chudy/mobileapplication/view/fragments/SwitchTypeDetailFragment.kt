@@ -9,11 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.fragment_switch_type_detail.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.model.Module
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
 
@@ -57,7 +57,7 @@ class SwitchTypeDetailFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        val moduleConfigurations = MobileHomeApplication.databaseConfig?.moduleConfigurationDao()!!.getModuleConfigurations()
+        val moduleConfigurations = SwitchTypeService.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
         view.switch_type_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
         registerForContextMenu(view.switch_type_details_list_view)
         view.switch_type_details_list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->

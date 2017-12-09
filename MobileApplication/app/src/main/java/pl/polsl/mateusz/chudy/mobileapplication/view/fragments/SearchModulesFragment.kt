@@ -8,16 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import kotlinx.android.synthetic.main.fragment_rooms.view.*
 import kotlinx.android.synthetic.main.fragment_search_modules.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.MobileHomeApplication
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
-import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
 
 
 /**
@@ -48,7 +43,7 @@ class SearchModulesFragment : Fragment() {
         activity.title = resources.getString(R.string.search_modules)
         val view = inflater!!.inflate(R.layout.fragment_search_modules, container, false)
         view.search_modules_button.text = activity.title.split(" ")[0]
-        val modules = MobileHomeApplication.databaseConfig?.moduleDao()!!.getModules()
+        val modules = ModuleService.getModules()
         view.search_modules_list_view.adapter = ModulesAdapter(modules)
         registerForContextMenu(view.search_modules_list_view)
         view.search_modules_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->

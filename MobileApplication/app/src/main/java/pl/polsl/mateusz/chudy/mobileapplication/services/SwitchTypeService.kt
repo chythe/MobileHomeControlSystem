@@ -5,108 +5,75 @@ import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
+import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnectionConfig
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import io.reactivex.schedulers.Schedulers
+import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
+import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 
 /**
  *
  */
-class SwitchTypeService {
+object SwitchTypeService {
 
     init {
         FuelManager.instance.apply {
-            basePath = ServerConnectionConfig.getBasePathURLString()
+            basePath = ServerConnection.getBasePathURLString()
             baseHeaders = mapOf("Content-Type" to "application/json")
         }
     }
 
-    fun getSwitchTypes() {
+    fun getSwitchTypes(): List<SwitchType> =
         "/api/switch-type".httpGet()
-                .responseObject(SwitchType.ListDeserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val sts: List<SwitchType> = result.get()
-                            print("MC: Success " + sts)
-                        }
-                    }
-                }
-    }
+                .rx_object(SwitchType.ListDeserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun getSwitchType(switchTypeId: Long) {
+    fun getSwitchType(switchTypeId: Long): SwitchType =
         "/api/switch-type/$switchTypeId".httpGet()
-                .responseObject(SwitchType.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val st: SwitchType = result.get()
-                            print("MC: Success " + st)
-                        }
-                    }
-                }
-    }
+                .rx_object(SwitchType.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun createSwitchType(switchType: SwitchType) {
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-        val json = gson.toJson(switchType)
+    fun createSwitchType(switchType: SwitchType): SwitchType =
         "/api/switch-type".httpPost()
-                .body(json.toString())
-                .responseObject(SwitchType.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val st: SwitchType = result.get()
-                            print("MC: Success " + st)
-                        }
-                    }
-                }
-    }
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(switchType))
+                .rx_object(SwitchType.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun updateSwitchType(switchType: SwitchType) {
-        val gson = Gson()
-        val json = gson.toJson(switchType)
+    fun updateSwitchType(switchType: SwitchType): SwitchType =
         "/api/switch-type".httpPut()
-                .body(json.toString())
-                .responseObject(SwitchType.Deserializer()) { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val st: SwitchType = result.get()
-                            print("MC: Success " + st)
-                        }
-                    }
-                }
-    }
+                .body(Gson().toJson(switchType))
+                .rx_object(SwitchType.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get() }
+                .onErrorReturn { throw it }
+                .blockingGet()
 
-    fun deleteSwitchType(switchTypeId: Long) {
+    fun deleteSwitchType(switchTypeId: Long): Boolean =
         "/api/switch-type/$switchTypeId".httpDelete()
-                .responseString { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("MC: Failure " + result.get())
-                            result.get()
-                        }
-                        is Result.Success -> {
-                            val result: String = result.get()
-                            print("MC: Success " + result)
-                        }
-                    }
-                }
-    }
+                .rx_object(AcknowledgeCommand.Deserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map { it -> it.get().result }
+                .onErrorReturn { throw it }
+                .blockingGet()
+
+    fun getSwitchTypeModuleConfigurations(switchTypeId: Long): List<ModuleConfiguration> =
+            "/api/switch-type/module-configuration/$switchTypeId".httpGet()
+                    .rx_object(ModuleConfiguration.ListDeserializer())
+                    .subscribeOn(Schedulers.newThread())
+                    .map { it -> it.get() }
+                    .onErrorReturn { throw it }
+                    .blockingGet()
 }

@@ -1,7 +1,5 @@
 package pl.polsl.mateusz.chudy.mobileapplication.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
@@ -12,9 +10,8 @@ import java.io.Reader
 /**
  *
  */
-@Entity
 data class User(
-        @PrimaryKey var userId: Long = 0,
+        var userId: Long = 0,
         @Expose var username: String = "",
         @Expose var password: String = "",
         @Expose var role: Role = Role.GUEST

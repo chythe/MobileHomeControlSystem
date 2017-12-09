@@ -1,15 +1,19 @@
 package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
+import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
 import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
 import java.lang.reflect.InvocationTargetException
 import java.net.SocketTimeoutException
@@ -45,14 +49,12 @@ class TestFragment : Fragment() {
 
         val view = inflater!!.inflate(R.layout.fragment_test, container, false)
 
-        val userService = UserService()
-
         val getAllButton: View = view.findViewById(R.id.get_all_button)
         getAllButton.setOnClickListener { view ->
             try {
-                userService.getUsers()
+                val rooms = RoomService.getRooms()
+                Log.d(TAG, rooms.toString())
             } catch (e: Exception) {
-                // TODO
                 print(e.toString())
             }
         }
@@ -60,8 +62,9 @@ class TestFragment : Fragment() {
         val getButton: View = view!!.findViewById(R.id.get_button)
         getButton.setOnClickListener { view ->
             try {
-                userService.getUser(3)
-            } catch (e: InvocationTargetException) {
+                val room = RoomService.getRoom(1)
+                Log.d(TAG, room.toString())
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -69,22 +72,33 @@ class TestFragment : Fragment() {
         val createButton: View = view!!.findViewById(R.id.create_button)
         createButton.setOnClickListener { view ->
             try {
-                userService.createUser(User(username = "AdrianawDA", password = "dwwqdbseDAvw", role = Role.USER))
-            } catch (e: SocketTimeoutException) {
+                val room = RoomService.createRoom(Room(name = "Bathroom"))
+                Log.d(TAG, room.toString())
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
         val updateButton: View = view!!.findViewById(R.id.update_button)
         updateButton.setOnClickListener { view ->
-            userService.updateUser(User(4, "Magda1234", "wadwaDwdawADAdWAWsd", Role.USER))
+            try {
+                val room = RoomService.updateRoom(Room(5, "Sleeping Room"))
+                Log.d(TAG, room.toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         val deleteButton: View = view!!.findViewById(R.id.delete_button)
         deleteButton.setOnClickListener { view ->
-            userService.deleteUser(6)
+            try {
+                val result = RoomService.deleteRoom(10)
+                Log.d(TAG, result.toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-        // Inflate the layout for this fragment
+
         return view
     }
 

@@ -17,10 +17,12 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import android.content.Intent
 import android.graphics.*
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_configuration.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R.mipmap.ic_launcher
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
 
 
 /**
@@ -37,6 +39,8 @@ class ConfigurationFragment : Fragment() {
 
     private var mModule: Module? = null
 
+    private var mSwitchNo: Short? = null
+
     private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,40 +55,52 @@ class ConfigurationFragment : Fragment() {
         activity.title = resources.getString(R.string.module_configurations)
         val view = inflater!!.inflate(R.layout.fragment_configuration, container, false)
 
+        view.configuration_name_edit_text.setText(mModule!!.name)
+
         val nodemcuImageView: ImageView = view.findViewById(R.id.nodemcu_image_view)
         val bitMap = BitmapFactory.decodeStream(resources.assets.open("png/nodemcu.png"))
-
-        view.configuration_name_edit_text.setText(resources.getString(R.string.not_defined))
-        view.configuration_action_button.text = resources.getString(R.string.add_configuration)
         nodemcuImageView.setImageBitmap(bitMap)
 
         setArrowsColor(view)
 
         view.configuration_switch0_button.setOnClickListener { _ ->
-            setArrowsVisible(0, view)
+            mSwitchNo = 0
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
         view.configuration_switch1_button.setOnClickListener { _ ->
-            setArrowsVisible(1, view)
+            mSwitchNo = 1
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
         view.configuration_switch2_button.setOnClickListener { _ ->
-            setArrowsVisible(2, view)
+            mSwitchNo = 2
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
         view.configuration_switch3_button.setOnClickListener { _ ->
-            setArrowsVisible(3, view)
+            mSwitchNo = 3
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
         view.configuration_switch4_button.setOnClickListener { _ ->
-            setArrowsVisible(4, view)
+            mSwitchNo = 4
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
         view.configuration_switch5_button.setOnClickListener { _ ->
-            setArrowsVisible(5, view)
+            mSwitchNo = 5
+            setModuleConfigurationInfo(view, mSwitchNo!!)
+            setArrowsVisible(mSwitchNo!!, view)
         }
 
-        view.configuration_action_button.setOnClickListener { view ->
+        view.configuration_edit_button.setOnClickListener { view ->
             try {
+                val moduleConfiguration = ModuleConfigurationService.getModuleConfiguration(
+                        mModule!!.moduleId, mSwitchNo!!)
                 val fragment = ConfigurationManipulationFragment.newInstance(
-                        ModuleConfiguration(),
-                        resources.getString(R.string.add_configuration)) as Fragment
-//                resources.getString(R.string.edit_configuration)
+                        moduleConfiguration,
+                        resources.getString(R.string.edit_configuration)) as Fragment
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.content_main, fragment)
@@ -95,7 +111,58 @@ class ConfigurationFragment : Fragment() {
             }
         }
 
+        view.configuration_add_button.setOnClickListener { view ->
+            try {
+                val fragment = ConfigurationManipulationFragment.newInstance(
+                        ModuleConfiguration(moduleId = mModule!!.moduleId, switchNo = mSwitchNo!!),
+                        resources.getString(R.string.add_configuration)) as Fragment
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.content_main, fragment)
+                        .addToBackStack(null)
+                        .commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        view.configuration_delete_button.setOnClickListener { view ->
+            try {
+                val done = ModuleConfigurationService.deleteModuleConfiguration(
+                        moduleId = mModule!!.moduleId, switchNo = mSwitchNo!!)
+                if (done) {
+                    fragmentManager
+                            .beginTransaction()
+                            .detach(this)
+                            .attach(this)
+                            .commit()
+                    Toast.makeText(activity, resources.getString(
+                            R.string.configuration_deleted), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(activity, resources.getString(
+                            R.string.error), Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         return view
+    }
+
+    private fun setModuleConfigurationInfo(view: View, switchNo: Short) {
+        try {
+            val moduleConiguration = ModuleConfigurationService.getModuleConfiguration(mModule!!.moduleId, switchNo)
+            view.configuration_name_edit_text.setText(moduleConiguration.name)
+            view.configuration_add_button.visibility = View.INVISIBLE
+            view.configuration_edit_button.visibility = View.VISIBLE
+            view.configuration_delete_button.visibility = View.VISIBLE
+        } catch (e: Exception) {
+            view.configuration_name_edit_text.setText(resources.getString(R.string.not_defined))
+            view.configuration_add_button.visibility = View.VISIBLE
+            view.configuration_edit_button.visibility = View.INVISIBLE
+            view.configuration_delete_button.visibility = View.INVISIBLE
+        }
     }
 
     private fun setArrowsColor(view: View) {
@@ -113,7 +180,7 @@ class ConfigurationFragment : Fragment() {
         view.configuration_input5_icon.setColorFilter(view.resources.getColor(R.color.colorGreen))
     }
 
-    private fun setArrowsVisible(switchNo: Int, view: View) {
+    private fun setArrowsVisible(switchNo: Short, view: View) {
         val ioArrowsArray: Array<ImageView> = arrayOf(
             view.configuration_output0_icon,
             view.configuration_output1_icon,
@@ -129,8 +196,8 @@ class ConfigurationFragment : Fragment() {
             view.configuration_input5_icon
         )
         ioArrowsArray.forEach { v -> v.visibility = View.INVISIBLE }
-        ioArrowsArray[switchNo].visibility = View.VISIBLE
-        ioArrowsArray[switchNo + SWITCH_COUNT].visibility = View.VISIBLE
+        ioArrowsArray[switchNo.toInt()].visibility = View.VISIBLE
+        ioArrowsArray[switchNo.toInt() + SWITCH_COUNT].visibility = View.VISIBLE
     }
 
     fun onButtonPressed(uri: Uri) {
