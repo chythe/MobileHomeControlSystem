@@ -6,6 +6,7 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.fuel.rx.rx_object
+import com.github.kittinunf.fuel.rx.rx_responseObject
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -29,44 +30,63 @@ object UserService {
 
     fun getUsers(): List<User> =
         "/api/user".httpGet()
-                .rx_object(User.ListDeserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(User.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun getUser(userId: Long): User =
         "/api/user/$userId".httpGet()
-                .rx_object(User.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun createUser(user: User): User =
         "/api/user".httpPost()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(user))
-                .rx_object(User.Deserializer())
+                .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun updateUser(user: User): User =
         "/api/user".httpPut()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(Gson().toJson(user))
-                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(user))
-                .rx_object(User.Deserializer())
+                .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun deleteUser(userId: Long): Boolean =
         "/api/user/$userId".httpDelete()
-                .rx_object(AcknowledgeCommand.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get().result }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!.result
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 }

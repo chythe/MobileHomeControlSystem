@@ -1,4 +1,5 @@
 from config.databaseconfig import *
+from model.room import Room
 
 
 class RoomDao(object):

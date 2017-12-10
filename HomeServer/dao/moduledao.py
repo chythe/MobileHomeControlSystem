@@ -1,4 +1,5 @@
 from config.databaseconfig import *
+from model.module import Module
 
 
 class ModuleDao(object):

@@ -1,6 +1,6 @@
 from enums.role import Role
 from config.databaseconfig import *
-import json
+from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 
 class User(db.Entity):
@@ -11,11 +11,8 @@ class User(db.Entity):
     password = Required(str)
     role = Required(Role)
 
-    def to_json(self):
-        return json.dumps(self.to_dict(), cls=EnumEncoder)
+    def to_dict(self):
+        user_dict = change_dict_naming_convention(super(User, self).to_dict(), underscore_to_camel)
+        user_dict.pop('password')
+        return user_dict
 
-    def __dict__(self):
-        return self.to_dict()
-
-    def __str__(self):
-        return self.to_json()

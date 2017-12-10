@@ -1,4 +1,8 @@
 from config.databaseconfig import *
+from model.module import Module
+from model.moduleconf import ModuleConfiguration
+from model.room import Room
+from model.switchtype import SwitchType
 
 
 class ModuleConfigurationDao(object):

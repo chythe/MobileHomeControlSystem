@@ -6,13 +6,6 @@ from enum import Enum
 db = Database()
 
 
-from model.room import Room
-from model.user import User
-from model.module import Module
-from model.switchtype import SwitchType
-from model.moduleconf import ModuleConfiguration
-
-
 def database_connect():
     db.bind(provider='postgres', user='admin', password='pass1234',
             host='localhost', port="5432", database='mobile_home_control_system')

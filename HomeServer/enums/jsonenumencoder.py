@@ -1,4 +1,3 @@
-from config.databaseconfig import *
 from enum import Enum
 import json
 

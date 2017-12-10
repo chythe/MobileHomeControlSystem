@@ -8,9 +8,12 @@ import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
+import android.widget.Toast
+import com.github.kittinunf.fuel.core.HttpException
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_switch_types.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.SwitchTypesAdapter
 
@@ -45,9 +48,17 @@ class SwitchTypesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.switch_types)
         val view = inflater!!.inflate(R.layout.fragment_switch_types, container, false)
-        val switchTypes = SwitchTypeService.getSwitchTypes()
-        view.switch_types_list_view.adapter = SwitchTypesAdapter(switchTypes)
-        registerForContextMenu(view.switch_types_list_view)
+
+        try {
+            val switchTypes = SwitchTypeService.getSwitchTypes()
+            view.switch_types_list_view.adapter = SwitchTypesAdapter(switchTypes)
+            registerForContextMenu(view.switch_types_list_view)
+        } catch (e: Exception) {
+            AuthenticationService.logout()
+            activity.finish()
+            Toast.makeText(activity, resources.getString(R.string.error_session_expired), Toast.LENGTH_SHORT).show()
+        }
+
         view.switch_types_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         try {
                 val switchType = parent.getItemAtPosition(position) as SwitchType

@@ -15,6 +15,8 @@ import android.support.v4.app.FragmentTransaction
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
+import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
+import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
 
 
 /**
@@ -44,6 +46,7 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_profile, container, false)
+
         view.profile_username_edit_text.setText(mUser!!.username)
         view.profile_role_edit_text.setText(mUser!!.role.name)
         view.profile_edit_button.setOnClickListener { view ->

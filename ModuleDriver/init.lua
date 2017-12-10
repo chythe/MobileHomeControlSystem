@@ -91,11 +91,13 @@ local function init_io()
 end
 
 local function init_wifi()
+    --wifi.sta.disconnect()
+    wifi.setmode(wifi.STATION)
+    wifi.sta.autoconnect(0)
     tmr.alarm(1, 1000, 1, function()
         if not wifi.sta.getip() then
-            wifi.setmode(wifi.STATION)
             wifi.sta.config(SSID, PASSWORD)
-            --wifi.sta.connect()
+            wifi.sta.connect()
             print('wifi connecting...')
         else
             tmr.stop(1)
@@ -105,12 +107,14 @@ local function init_wifi()
 end
 
 local function init_connection()
-    tmr.alarm(2, 1000, 1, function()
-        connection = net.createConnection(net.TCP, 0)
-        connection:on("receive", on_receive)
-        connection:on("connection", on_connection)
-        connection:connect(SERVER_PORT, SERVER_IP)
-        print("server connecting...")
+    tmr.alarm(2, 1500, 1, function()
+        if wifi.sta.getip() then
+            connection = net.createConnection(net.TCP, 0)
+            connection:on("receive", on_receive)
+            connection:on("connection", on_connection)
+            connection:connect(SERVER_PORT, SERVER_IP)
+            print("server connecting...")
+        end
     end)
 end
 

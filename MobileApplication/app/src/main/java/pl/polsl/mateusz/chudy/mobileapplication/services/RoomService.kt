@@ -6,6 +6,7 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.fuel.rx.rx_object
+import com.github.kittinunf.fuel.rx.rx_responseObject
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -30,51 +31,75 @@ object RoomService {
 
     fun getRooms(): List<Room> =
         "/api/room".httpGet()
-                .rx_object(Room.ListDeserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(Room.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun getRoom(roomId: Long): Room =
         "/api/room/$roomId".httpGet()
-                .rx_object(Room.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun createRoom(room: Room): Room =
         "/api/room".httpPost()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(room))
-                .rx_object(Room.Deserializer())
+                .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun updateRoom(room: Room): Room =
         "/api/room".httpPut()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(Gson().toJson(room))
-                .rx_object(Room.Deserializer())
+                .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun deleteRoom(roomId: Long): Boolean =
         "/api/room/$roomId".httpDelete()
-                .rx_object(AcknowledgeCommand.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get().result }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!.result
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun getRoomModuleConfigurations(roomId: Long): List<ModuleConfiguration> =
-            "/api/room/module-configuration/$roomId".httpGet()
-                    .rx_object(ModuleConfiguration.ListDeserializer())
-                    .subscribeOn(Schedulers.newThread())
-                    .map { it -> it.get() }
-                    .onErrorReturn { throw it }
-                    .blockingGet()
+        "/api/room/module-configuration/$roomId".httpGet()
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(ModuleConfiguration.ListDeserializer())
+                .subscribeOn(Schedulers.newThread())
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
+                .onErrorReturn { throw it }
+                .blockingGet()
 }

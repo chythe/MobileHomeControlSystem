@@ -15,6 +15,9 @@ class UserService(object):
     def read_user(self, user_id):
         return self.__user_dao.read_user(user_id)
 
+    def read_user_by_username(self, username):
+        return self.__user_dao.read_user_by_username(username)
+
     def update_user(self, user_id, username, password, role):
         return self.__user_dao.update_user(user_id, username, password, role)
 

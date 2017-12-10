@@ -1,4 +1,5 @@
 from config.databaseconfig import *
+from model.switchtype import SwitchType
 
 
 class SwitchTypeDao(object):

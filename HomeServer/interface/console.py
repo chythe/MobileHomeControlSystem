@@ -13,7 +13,7 @@ class Console(Thread):
         while not self.__stopped:
             console_input = input()
             command = JobCommand.parse_command(console_input)
-            tcp_server.services_map.get(0).add_command(command)
+            tcp_server.connected_modules_dict.get('192.168.0.55').service.add_command(command)
 
 
 console = Console()

@@ -8,6 +8,7 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.fuel.rx.rx_object
+import com.github.kittinunf.fuel.rx.rx_responseObject
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
@@ -32,45 +33,65 @@ object ModuleConfigurationService {
 
     fun getModuleConfigurations(): List<ModuleConfiguration> =
         "/api/module-configuration".httpGet()
-                .rx_object(ModuleConfiguration.ListDeserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(ModuleConfiguration.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun getModuleConfiguration(moduleId: Long, switchNo: Short): ModuleConfiguration =
         "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpGet()
-                .rx_object(ModuleConfiguration.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun createModuleConfiguration(moduleConfiguration: ModuleConfiguration): ModuleConfiguration =
         "/api/module-configuration".httpPost()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation()
                         .create().toJson(moduleConfiguration))
-                .rx_object(ModuleConfiguration.Deserializer())
+                .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun updateModuleConfiguration(moduleConfiguration: ModuleConfiguration): ModuleConfiguration =
         "/api/module-configuration".httpPut()
+                .header("Authorization" to AuthenticationService.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation()
                         .create().toJson(moduleConfiguration))
-                .rx_object(ModuleConfiguration.Deserializer())
+                .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get() }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 
     fun deleteModuleConfiguration(moduleId: Long, switchNo: Short): Boolean =
         "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpDelete()
-                .rx_object(AcknowledgeCommand.Deserializer())
+                .header("Authorization" to AuthenticationService.getToken())
+                .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
-                .map { it -> it.get().result }
+                .map {
+                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    it.second.component1()!!.result
+                }
                 .onErrorReturn { throw it }
                 .blockingGet()
 }

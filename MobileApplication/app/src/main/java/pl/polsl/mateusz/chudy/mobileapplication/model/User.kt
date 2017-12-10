@@ -14,7 +14,7 @@ data class User(
         var userId: Long = 0,
         @Expose var username: String = "",
         @Expose var password: String = "",
-        @Expose var role: Role = Role.GUEST
+        @Expose var role: Role = Role.USER
 ): java.io.Serializable {
 
     override fun toString(): String {

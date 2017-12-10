@@ -10,16 +10,14 @@
 
     <!-- login / registration -->
     <string name="prompt_server_ip">Server IP</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sing_out">Sign out</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="action_login">Login</string>
+    <string name="action_logout">Logout</string>
+    <string name="title_activity_login">Login</string>
     <string name="action_register">Register</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_username">This username is too short</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="error_session_expired">The session has expired</string>
 
     <!-- common -->
     <string name="action_edit">Edit</string>
