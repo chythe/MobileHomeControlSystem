@@ -1,4 +1,8 @@
 from dao.moduledao import ModuleDao
+from model.module import Module
+from rest.command.switchcmd import SwitchCommand
+from rest.command.unknownmodcmd import UnknownModuleCommand
+from tcp.tcpserver import tcp_server
 
 
 class ModuleService(object):
@@ -20,3 +24,17 @@ class ModuleService(object):
 
     def delete_module(self, module_id):
         self.__module_dao.delete_module(module_id)
+
+    def search_unknown_modules(self):
+        database_modules = self.__module_dao.read_modules()
+        connected_modules = tcp_server.connected_modules_dict
+        connected_unknown_modules_ips = []
+        for k, cm in connected_modules.items():
+            known = False
+            for dm in database_modules:
+                if dm.ip_address.strip() == k:
+                    known = True
+            if not known:
+                connected_unknown_modules_ips.append(k)
+        connected_unknown_modules = [UnknownModuleCommand(ip_address=ip) for ip in connected_unknown_modules_ips]
+        return connected_unknown_modules

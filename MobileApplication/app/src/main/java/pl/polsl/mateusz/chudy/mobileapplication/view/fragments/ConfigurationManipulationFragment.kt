@@ -55,33 +55,41 @@ class ConfigurationManipulationFragment : Fragment() {
         view.configuration_manipulation_name_edit_text.setText(mModuleConfiguration!!.name)
 
         val roomSpinner = view.configuration_manipulation_room_spinner
-        roomSpinner.prompt = "Select room"
-        val rooms = RoomService.getRooms()
-        roomSpinner.adapter = ArrayAdapter<Room>(this.activity,
-                R.layout.support_simple_spinner_dropdown_item, rooms) as SpinnerAdapter?
-        roomSpinner.setSelection(mModuleConfiguration!!.roomId.toInt())
+        try {
+            roomSpinner.prompt = "Select room"
+            val rooms = RoomService.getRooms()
+            roomSpinner.adapter = ArrayAdapter<Room>(this.activity,
+                    R.layout.support_simple_spinner_dropdown_item, rooms) as SpinnerAdapter?
+            roomSpinner.setSelection(mModuleConfiguration!!.roomId.toInt())
 
-        var selectedRoomPosition = 0
-        if (mModuleConfiguration!!.roomId.toInt() != 0) {
-            val selectedRoom = rooms
-                    .filter { st -> st.roomId == mModuleConfiguration!!.roomId }.single()
-            selectedRoomPosition = rooms.indexOf(selectedRoom)
+            var selectedRoomPosition = 0
+            if (mModuleConfiguration!!.roomId.toInt() != 0) {
+                val selectedRoom = rooms
+                        .filter { st -> st.roomId == mModuleConfiguration!!.roomId }.single()
+                selectedRoomPosition = rooms.indexOf(selectedRoom)
+            }
+            roomSpinner.setSelection(selectedRoomPosition)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        roomSpinner.setSelection(selectedRoomPosition)
 
         val switchTypesSpinner = view.configuration_manipulation_switch_type_spinner
-        switchTypesSpinner.prompt = "Select switch type"
-        val switchTypes = SwitchTypeService.getSwitchTypes()
-        switchTypesSpinner.adapter = ArrayAdapter<SwitchType>(this.activity,
-                R.layout.support_simple_spinner_dropdown_item, switchTypes) as SpinnerAdapter?
-
-        var selectedSwitchTypePosition = 0
-        if (mModuleConfiguration!!.switchTypeId.toInt() != 0) {
-            val selectedSwitchType = switchTypes
-                    .filter { st -> st.switchTypeId == mModuleConfiguration!!.switchTypeId }.single()
-            selectedSwitchTypePosition = switchTypes.indexOf(selectedSwitchType)
+        try {
+            switchTypesSpinner.prompt = "Select switch type"
+            val switchTypes = SwitchTypeService.getSwitchTypes()
+            switchTypesSpinner.adapter = ArrayAdapter<SwitchType>(this.activity,
+                    R.layout.support_simple_spinner_dropdown_item, switchTypes) as SpinnerAdapter?
+            var selectedSwitchTypePosition = 0
+            if (mModuleConfiguration!!.switchTypeId.toInt() != 0) {
+                val selectedSwitchType = switchTypes
+                        .filter { st -> st.switchTypeId == mModuleConfiguration!!.switchTypeId }.single()
+                selectedSwitchTypePosition = switchTypes.indexOf(selectedSwitchType)
+            }
+            switchTypesSpinner.setSelection(selectedSwitchTypePosition)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        switchTypesSpinner.setSelection(selectedSwitchTypePosition)
+
 
         val typeString = mType!!.split(" ")[0]
         view.configuration_manipulation_button.text = typeString

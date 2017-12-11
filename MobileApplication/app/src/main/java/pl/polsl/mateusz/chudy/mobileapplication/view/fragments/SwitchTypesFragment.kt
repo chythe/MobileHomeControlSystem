@@ -60,7 +60,7 @@ class SwitchTypesFragment : Fragment() {
         }
 
         view.switch_types_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                        try {
+            try {
                 val switchType = parent.getItemAtPosition(position) as SwitchType
                 val fragment = SwitchTypeDetailFragment.newInstance(
                         switchType) as Fragment
@@ -124,17 +124,22 @@ class SwitchTypesFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_CONTEXT_DELETE_SWITCH_TYPE -> {
-                val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
-                Log.d(TAG, "removing item pos=" + info.position)
-                val adapter = view!!.switch_types_list_view.adapter as SwitchTypesAdapter
-                val switchType = adapter.getItem(info.position) as SwitchType
-                SwitchTypeService.deleteSwitchType(switchType.switchTypeId)
-                fragmentManager
-                        .beginTransaction()
-                        .detach(this)
-                        .attach(this)
-                        .commit()
-                true
+				try {
+					val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+					Log.d(TAG, "removing item pos=" + info.position)
+					val adapter = view!!.switch_types_list_view.adapter as SwitchTypesAdapter
+					val switchType = adapter.getItem(info.position) as SwitchType
+					SwitchTypeService.deleteSwitchType(switchType.switchTypeId)
+					fragmentManager
+							.beginTransaction()
+							.detach(this)
+							.attach(this)
+							.commit()
+					true
+				} catch (e: Exception) {
+					e.printStackTrace()
+					false
+				}
             }
             else -> super.onContextItemSelected(item)
         }

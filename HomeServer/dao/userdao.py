@@ -18,7 +18,10 @@ class UserDao(object):
 
     @db_session
     def read_user_by_username(self, username):
-        return list(User.select(lambda u: u.username == username))[0]
+        users = list(User.select(lambda u: u.username == username))
+        if len(users) > 0:
+            return users[0]
+        return None
 
     @db_session
     def update_user(self, user_id, username, password, role):

@@ -30,7 +30,11 @@ class ModulesAdapter(modulesList: List<Module>): BaseAdapter() {
         }
 
         val viewHolder = rowModule.tag as ViewHolder
-        viewHolder.nameTextView.text = modules[position].name
+        if (modules[position].name.isEmpty()) {
+            viewHolder.nameTextView.text = modules[position].ipAddress
+        } else {
+            viewHolder.nameTextView.text = modules[position].name
+        }
 
         return rowModule
     }

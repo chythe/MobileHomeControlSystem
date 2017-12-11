@@ -23,10 +23,10 @@ object SwitchService {
         }
     }
 
-    fun getStates(): SwitchCommand =
+    fun getStates(): List<SwitchCommand> =
         "/api/switch".httpGet()
                 .header("Authorization" to AuthenticationService.getToken())
-                .rx_responseObject(SwitchCommand.Deserializer())
+                .rx_responseObject(SwitchCommand.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
                     AuthenticationService.setToken(it.first.headers["Authorization"]!![0])

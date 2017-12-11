@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import kotlinx.android.synthetic.main.fragment_module_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
+import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
 
 
 /**
@@ -40,8 +42,34 @@ class ModuleManipulationFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = mType
         val view = inflater!!.inflate(R.layout.fragment_module_manipulation, container, false)
+        view.module_manipulation_ip_edit_text.setText(mModule!!.ipAddress)
         view.module_manipulation_name_edit_text.setText(mModule!!.name)
-        view.module_manipulation_button.text = mType!!.split(" ")[0]
+
+        val typeString = mType!!.split(" ")[0]
+        view.module_manipulation_button.text = typeString
+        view.module_manipulation_button.setOnClickListener { _ ->
+            try {
+                when (typeString.toLowerCase()) {
+                    "edit" -> {
+                        ModuleService.updateModule(
+                                Module(mModule!!.moduleId,
+                                        view.module_manipulation_name_edit_text.text.toString(),
+                                        mModule!!.ipAddress))
+                        fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.module_edited), Toast.LENGTH_SHORT).show()
+                    }
+                    "add" -> {
+                        ModuleService.createModule(
+                                Module(name=view.module_manipulation_name_edit_text.text.toString(),
+                                        ipAddress=mModule!!.ipAddress))
+                        fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.module_added), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 

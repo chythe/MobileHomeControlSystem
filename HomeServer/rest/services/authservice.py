@@ -31,6 +31,6 @@ class AuthenticationService:
 
     def login_attempt(self, username, password):
         user = self.__user_dao.read_user_by_username(username)
-        if user.password != password:
-            raise LoginFailedException
+        if not user or user.password != password:
+            raise LoginFailedException("Login Failed")
         return user

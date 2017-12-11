@@ -12,8 +12,6 @@ local SERVER_PORT = 8888
 
 local function int0_handle(level, stamp)
     print('int0_handle')
-    --print(level)
-    --print(stamp)
     tmr.delay(100000)
     if gpio.read(0) == 0 then
         gpio.write(0, gpio.HIGH)
@@ -30,8 +28,6 @@ end
 
 local function int1_handle(level, stamp)
     print('int1_handle')
-    --print(level)
-    --print(stamp)
     tmr.delay(100000)
     if gpio.read(1) == 0 then
         gpio.write(1, gpio.HIGH)
@@ -46,17 +42,6 @@ local function int1_handle(level, stamp)
     end
 end
 
------------------------------tools---------------------------
-
-local function count_lrc(buffer)
-    local lrc = 0x00
-    for i = 1, #buffer do
-        local byte = str:sub(i,i)
-        lrc = bit.bxor(lrc, byte)
-    end
-    return lrc
-end
-
 ------------------------connection handlers------------------
 
 local function on_receive(socket, buffer)
@@ -65,6 +50,11 @@ local function on_receive(socket, buffer)
     if buffer == 'off0' then gpio.write(0, gpio.LOW) end
     if buffer == 'on1' then gpio.write(1, gpio.HIGH) end
     if buffer == 'off1' then gpio.write(1, gpio.LOW) end
+    if buffer == 'get' then
+        socket:send(tostring(gpio.read(0)) .. " " .. tostring(gpio.read(0)) .. " 0" .. " 0" .. " 0" .. " 0")
+    else
+        socket:send("ack")
+    end
 end
 
 local function on_connection(socket, buffer)
@@ -73,8 +63,6 @@ local function on_connection(socket, buffer)
     socket:send("NodeMCU connected")
     print('NodeMCU connected')
     global_socket = socket
-    --count_lrc(buffer)
-    --print(lrc)
 end
 
 ---------------------------initialisation--------------------

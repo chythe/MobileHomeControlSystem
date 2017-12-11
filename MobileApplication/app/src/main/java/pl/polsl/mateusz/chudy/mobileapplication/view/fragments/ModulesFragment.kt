@@ -26,6 +26,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
 class ModulesFragment : Fragment() {
 
     private val MENU_CONTEXT_DELETE_MODULE: Int = 0
+    private val MENU_CONTEXT_EDIT_MODULE: Int = 1
 
     private var mParam1: String? = null
     private var mParam2: String? = null
@@ -44,9 +45,13 @@ class ModulesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.modules)
         val view = inflater!!.inflate(R.layout.fragment_modules, container, false)
-        val modules = ModuleService.getModules()
-        view.modules_list_view.adapter = ModulesAdapter(modules)
-        registerForContextMenu(view.modules_list_view)
+		try {
+			val modules = ModuleService.getModules()
+			view.modules_list_view.adapter = ModulesAdapter(modules)
+			registerForContextMenu(view.modules_list_view)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
         view.modules_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
                 val module = parent.getItemAtPosition(position) as Module
@@ -69,6 +74,8 @@ class ModulesFragment : Fragment() {
                 contextMenu.setHeaderTitle(room.name)
                 contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_MODULE, Menu.NONE,
                         resources.getString(R.string.delete_module)!!.split(" ")[0])
+                contextMenu.add(Menu.NONE, MENU_CONTEXT_EDIT_MODULE, Menu.NONE,
+                        resources.getString(R.string.edit_module)!!.split(" ")[0])
             }
         }
 
@@ -110,17 +117,41 @@ class ModulesFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_CONTEXT_DELETE_MODULE -> {
-                val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
-                Log.d(TAG, "removing item pos=" + info.position)
-                val adapter = view!!.modules_list_view.adapter as ModulesAdapter
-                val module = adapter.getItem(info.position) as Module
-                ModuleService.deleteModule(module.moduleId)
-                fragmentManager
-                        .beginTransaction()
-                        .detach(this)
-                        .attach(this)
-                        .commit()
-                true
+                try {
+                    val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+                    Log.d(TAG, "removing item pos=" + info.position)
+                    val adapter = view!!.modules_list_view.adapter as ModulesAdapter
+                    val module = adapter.getItem(info.position) as Module
+                    ModuleService.deleteModule(module.moduleId)
+                    fragmentManager
+                            .beginTransaction()
+                            .detach(this)
+                            .attach(this)
+                            .commit()
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    false
+                }
+            }
+            MENU_CONTEXT_EDIT_MODULE -> {
+                try {
+                    val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+                    Log.d(TAG, "removing item pos=" + info.position)
+                    val adapter = view!!.modules_list_view.adapter as ModulesAdapter
+                    val module = adapter.getItem(info.position) as Module
+                    val fragment = ModuleManipulationFragment.newInstance(
+                            module, resources.getString(R.string.edit_module)) as Fragment
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.content_main, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    false
+                }
             }
             else -> super.onContextItemSelected(item)
         }

@@ -45,9 +45,15 @@ class UsersFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.users)
         val view = inflater!!.inflate(R.layout.fragment_users, container, false)
-        val users = UserService.getUsers()
-        view.users_list_view.adapter = UsersAdapter(users)
-        registerForContextMenu(view.users_list_view)
+		
+		try {
+			val users = UserService.getUsers()
+			view.users_list_view.adapter = UsersAdapter(users)
+			registerForContextMenu(view.users_list_view)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
+		
         view.users_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
                 val user = parent.getItemAtPosition(position) as User
@@ -112,17 +118,22 @@ class UsersFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_CONTEXT_DELETE_USER -> {
-                val info = item.menuInfo as AdapterContextMenuInfo
-                Log.d(TAG, "removing item pos=" + info.position)
-                val adapter = view!!.users_list_view.adapter as UsersAdapter
-                val user = adapter.getItem(info.position) as User
-                UserService.deleteUser(user.userId)
-                fragmentManager
-                        .beginTransaction()
-                        .detach(this)
-                        .attach(this)
-                        .commit()
-                true
+				try {
+					val info = item.menuInfo as AdapterContextMenuInfo
+					Log.d(TAG, "removing item pos=" + info.position)
+					val adapter = view!!.users_list_view.adapter as UsersAdapter
+					val user = adapter.getItem(info.position) as User
+					UserService.deleteUser(user.userId)
+					fragmentManager
+							.beginTransaction()
+							.detach(this)
+							.attach(this)
+							.commit()
+					true
+				} catch (e: Exception) {
+					e.printStackTrace()
+                    false
+				}
             }
             else -> super.onContextItemSelected(item)
         }

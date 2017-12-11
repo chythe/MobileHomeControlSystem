@@ -10,6 +10,7 @@
 
     <!-- login / registration -->
     <string name="prompt_server_ip">Server IP</string>
+    <string name="prompt_server_port">Server Port</string>
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_login">Login</string>

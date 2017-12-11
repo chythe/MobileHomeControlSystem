@@ -88,4 +88,16 @@ object ModuleService {
                 }
                 .onErrorReturn { throw it }
                 .blockingGet()
+
+    fun searchUnknownModules(): List<Module> =
+            "/api/module/search".httpGet()
+                    .header("Authorization" to AuthenticationService.getToken())
+                    .rx_responseObject(Module.ListDeserializer())
+                    .subscribeOn(Schedulers.newThread())
+                    .map {
+                        AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                        it.second.component1()!!
+                    }
+                    .onErrorReturn { throw it }
+                    .blockingGet()
 }

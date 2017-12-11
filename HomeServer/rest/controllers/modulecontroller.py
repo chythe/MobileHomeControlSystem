@@ -38,7 +38,7 @@ def get_module(module_id):
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response
-    except (OrmError, RuntimeError) as e:
+    except (OrmError, RuntimeError, ValueError) as e:
         print(str(e))
         abort(404)
 
@@ -76,7 +76,7 @@ def update_module():
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response
-    except (OrmError, TypeError) as e:
+    except (OrmError, TypeError, ValueError) as e:
         print(str(e))
         abort(400)
 
@@ -90,6 +90,21 @@ def delete_module(module_id):
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response
-    except (OrmError, RuntimeError) as e:
+    except (OrmError, RuntimeError, ValueError) as e:
+        print(str(e))
+        abort(404)
+
+
+@module_controller.route('/api/module/search', methods=['GET'])
+@auth.login_required
+def search_unknown_modules():
+    try:
+        connected_unknown_modules = module_service.search_unknown_modules()
+        connected_unknown_modules_dict = [mod.to_dict() for mod in connected_unknown_modules]
+        response = jsonify(connected_unknown_modules_dict)
+        token = authentication_service.generate_auth_token(g.current_user)
+        response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
+        return response
+    except (OrmError, RuntimeError, ValueError) as e:
         print(str(e))
         abort(404)

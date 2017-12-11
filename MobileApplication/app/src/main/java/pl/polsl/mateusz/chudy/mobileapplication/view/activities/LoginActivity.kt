@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
             }
             charSequence
         }
-        login_server_ip_username_edit_text.filters = arrayOf(ipAddressFilter)
+        login_server_ip_edit_text.filters = arrayOf(ipAddressFilter)
     }
 
     /**
@@ -164,7 +164,6 @@ class LoginActivity : AppCompatActivity() {
                         login_progress.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
-
     }
 
     /**

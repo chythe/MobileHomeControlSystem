@@ -20,16 +20,16 @@
 
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/register_ip_address_text_input_layout"
+            android:id="@+id/register_server_ip_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="32dp"
             android:gravity="bottom|center"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp">
 
             <EditText
-                android:id="@+id/register_ip_address_username_edit_text"
+                android:id="@+id/register_server_ip_username_edit_text"
                 android:layout_width="308dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="8dp"
@@ -41,14 +41,36 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/register_server_port_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="bottom|center"
+            app:layout_constraintTop_toBottomOf="@+id/register_server_ip_text_input_layout"
+            tools:layout_editor_absoluteX="0dp">
+
+            <EditText
+                android:id="@+id/register_server_port_edit_text"
+                android:layout_width="308dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:hint="@string/prompt_server_port"
+                android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_username_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="20dp"
             android:gravity="bottom|center"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_server_port_text_input_layout"
             tools:layout_editor_absoluteX="0dp">
 
             <EditText
@@ -68,7 +90,7 @@
             android:id="@+id/register_pass_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:gravity="bottom|center"
             app:layout_constraintTop_toBottomOf="@+id/register_username_text_input_layout"
             tools:layout_editor_absoluteX="0dp">
@@ -94,7 +116,7 @@
             android:id="@+id/register_retype_pass_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:gravity="bottom|center"
             app:layout_constraintTop_toBottomOf="@+id/register_pass_text_input_layout"
             tools:layout_editor_absoluteX="0dp">
@@ -107,10 +129,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="@string/prompt_retype_password"
-                android:inputType="textPassword"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/prompt_retype_password"
                 android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true" />
 

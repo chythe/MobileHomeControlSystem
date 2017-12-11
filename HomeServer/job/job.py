@@ -10,6 +10,8 @@ class Job(Thread):
     def __init__(self):
         super(Job, self).__init__()
         self._command_queue = Queue()
+        self._job_state = 0x0000
+        self.execute_result = True
 
     @property
     def command_queue(self):
@@ -35,3 +37,11 @@ class Job(Thread):
             return None
         else:
             return self._command_queue.get()
+
+    def get_job_state_flag(self, flag):
+        return self._job_state & flag
+
+    def set_job_state_flag(self, flag, state):
+        if state: self._job_state |= flag
+        else: self._job_state &= ~flag
+

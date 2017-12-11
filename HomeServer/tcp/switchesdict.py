@@ -12,3 +12,6 @@ class SwitchesDict(object):
             self.switch_no = switch_no
             self.defined = defined
             self.state = state
+
+
+switches_dict = SwitchesDict()

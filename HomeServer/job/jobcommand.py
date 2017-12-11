@@ -1,8 +1,9 @@
+from enums.switchcommdtype import SwitchCommandType
 
 
 class JobCommand(object):
 
-    def __init__(self, command_type, arguments):
+    def __init__(self, command_type, arguments=[]):
         self._command_type = command_type
         self._arguments = arguments
 
@@ -25,4 +26,4 @@ class JobCommand(object):
     @staticmethod
     def parse_command(string):
         params = string.split()
-        return JobCommand(params[0], params[1:])
+        return JobCommand(SwitchCommandType(params[0]), params[1:])

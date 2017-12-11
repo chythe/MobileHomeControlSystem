@@ -1,43 +1,34 @@
+import select
+from threading import Thread
+
 from enums.switchcommdtype import SwitchCommandType
-from job.job import Job
+from job.jobcommand import JobCommand
 
 
-class TCPReceiver(Job):
+class TCPReceiver(Thread):
 
     RECEIVE_BUFFER_SIZE = 20
+    TIMEOUT_SEC = 1
 
-    def __init__(self, connection):
+    def __init__(self, socket, ip_address):
         super(TCPReceiver, self).__init__()
-        self.__connection = connection
-        self.stopped = False
+        self.__stopped = False
+        self.__socket = socket
+        self.__ip_address = ip_address
 
     def run(self):
-        while not self.stopped:
-            command = self._receive_command()
-            if command:
-                self.on_action(command)
-        self.__connection.close()
+        from tcp.tcpserver import tcp_server
+        while not self.__stopped:
+            data = self.receive()
+            if data:
+                print("TCPReceiver: " + data + "\n")
+                command = JobCommand(command_type=SwitchCommandType.ACK, arguments=[data])
+                tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
+        self.__socket.close()
 
     def receive(self):
-        data = self.__connection.recv(self.RECEIVE_BUFFER_SIZE)
-        # print("TCPReceiver: " + str(self.__connection.getsockname()) + " : " + str(data) + "\n")
-        return data
-
-    def on_action(self, command):
-        command_type = command.command_type
-        if SwitchCommandType.SWITCH.__eq__(command_type):
-            self.receive_switch_ack()
-        if SwitchCommandType.GET_STATES.__eq__(command_type):
-            self.receive_states()
-
-    def receive_switch_ack(self):
-        data = ''
-        while data != 'ack':
-            data = self.receive()
-        print('switch ack')
-
-    def receive_states(self):
-        data = ''
-        while data == '':
-            data = self.receive()
-        print('receive_states' + data)
+        ready = select.select([self.__socket], [], [], self.TIMEOUT_SEC)
+        if ready[0]:
+            data = self.__socket.recv(self.RECEIVE_BUFFER_SIZE)
+            return data.decode('utf-8')
+        return ""

@@ -10,10 +10,11 @@ import java.io.Reader
  *
  */
 data class SwitchCommand(
-        val moduleId: Long,
-        val switchNo: Short,
-        val state: Boolean
+        val ipAddress: String = "",
+        val switchNo: Short = 0,
+        val state: Boolean = false
 ) {
+
     class Deserializer : ResponseDeserializable<SwitchCommand> {
 
         override fun deserialize(reader: Reader) = Gson().fromJson(reader, SwitchCommand::class.java)!!

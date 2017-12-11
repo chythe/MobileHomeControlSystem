@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.fragment_room_details.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
 import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
 
@@ -57,14 +59,26 @@ class RoomDetailsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        val moduleConfigurations = RoomService.getRoomModuleConfigurations(mRoom!!.roomId)
-        view.room_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
-        registerForContextMenu(view.room_details_list_view)
+		try {
+			val moduleConfigurations = RoomService.getRoomModuleConfigurations(mRoom!!.roomId)
+			view.room_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
+			registerForContextMenu(view.room_details_list_view)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
         view.room_details_list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val adapter = view!!.room_details_list_view.adapter as ModuleConfigurationsAdapter
-            val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
-            moduleConfiguration.state = !moduleConfiguration.state
-            adapter.notifyDataSetChanged()
+            try {
+                val adapter = view!!.room_details_list_view.adapter as ModuleConfigurationsAdapter
+                val moduleConfiguration = adapter.getItem(position) as ModuleConfiguration
+                TODO()
+//                val result = SwitchService.switch(SwitchCommand(
+//                        moduleConfiguration., moduleConfiguration.switchNo, !moduleConfiguration.state))
+//                if (result)
+//                    moduleConfiguration.state = !moduleConfiguration.state
+                adapter.notifyDataSetChanged()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         return view
     }

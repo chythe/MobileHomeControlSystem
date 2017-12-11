@@ -1,5 +1,7 @@
 package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -7,7 +9,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_search_modules.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
@@ -43,9 +47,20 @@ class SearchModulesFragment : Fragment() {
         activity.title = resources.getString(R.string.search_modules)
         val view = inflater!!.inflate(R.layout.fragment_search_modules, container, false)
         view.search_modules_button.text = activity.title.split(" ")[0]
-        val modules = ModuleService.getModules()
-        view.search_modules_list_view.adapter = ModulesAdapter(modules)
-        registerForContextMenu(view.search_modules_list_view)
+
+        view.search_modules_button.setOnClickListener { _ ->
+            try {
+                showProgress(view, true)
+                val modules = ModuleService.searchUnknownModules()
+                view.search_modules_list_view.adapter = ModulesAdapter(modules)
+                registerForContextMenu(view.search_modules_list_view)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                showProgress(view, false)
+            }
+        }
+
         view.search_modules_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
                 val module = parent.getItemAtPosition(position) as Module
@@ -61,6 +76,32 @@ class SearchModulesFragment : Fragment() {
             }
         }
         return view
+    }
+
+    private fun showProgress(view: View, show: Boolean) {
+        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+
+//        if (show) view.search_modules_constraint_layout.visibility = View.GONE else View.VISIBLE
+
+        view.search_modules_progress.visibility = if (show) View.GONE else View.VISIBLE
+        view.search_modules_progress.animate()
+                .setDuration(shortAnimTime)
+                .alpha((if (show) 0 else 1).toFloat())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        view.search_modules_progress.visibility = if (show) View.GONE else View.VISIBLE
+                    }
+                })
+
+        view.search_modules_progress.visibility = if (show) View.VISIBLE else View.GONE
+        view.search_modules_progress.animate()
+                .setDuration(shortAnimTime)
+                .alpha((if (show) 1 else 0).toFloat())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        view.search_modules_progress.visibility = if (show) View.VISIBLE else View.GONE
+                    }
+                })
     }
 
     fun onButtonPressed(uri: Uri) {
@@ -84,7 +125,6 @@ class SearchModulesFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 

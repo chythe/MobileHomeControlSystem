@@ -39,12 +39,15 @@ class RoomsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         activity.title = resources.getString(R.string.rooms)
         val view = inflater!!.inflate(R.layout.fragment_rooms, container, false)
-
-        val rooms = RoomService.getRooms()
-
-        val adapter = RoomsAdapter(rooms)
-        view.rooms_list_view.adapter = adapter
-        registerForContextMenu(view.rooms_list_view)
+		
+		try {
+			val rooms = RoomService.getRooms()
+			val adapter = RoomsAdapter(rooms)
+			view.rooms_list_view.adapter = adapter
+			registerForContextMenu(view.rooms_list_view)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
 
         view.rooms_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
@@ -111,6 +114,7 @@ class RoomsFragment : Fragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_CONTEXT_DELETE_ROOM -> {
+				try {
                 val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.rooms_list_view.adapter as RoomsAdapter
@@ -121,7 +125,12 @@ class RoomsFragment : Fragment() {
                         .detach(this)
                         .attach(this)
                         .commit()
-                true
+				true
+				} catch (e: Exception) {
+					e.printStackTrace()
+					false
+				}
+                
             }
             else -> super.onContextItemSelected(item)
         }

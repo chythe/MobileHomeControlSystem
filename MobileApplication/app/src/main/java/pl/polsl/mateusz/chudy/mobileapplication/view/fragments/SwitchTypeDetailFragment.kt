@@ -57,9 +57,15 @@ class SwitchTypeDetailFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        val moduleConfigurations = SwitchTypeService.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
-        view.switch_type_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
-        registerForContextMenu(view.switch_type_details_list_view)
+		
+		try {
+			val moduleConfigurations = SwitchTypeService.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
+			view.switch_type_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
+			registerForContextMenu(view.switch_type_details_list_view)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
+		
         view.switch_type_details_list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val adapter = view!!.switch_type_details_list_view.adapter as ModuleConfigurationsAdapter
             val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
