@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, abort, g, request, Response, json
 from flask_httpauth import HTTPTokenAuth
 
+from enums.role import Role
 from exception.loginfailexcept import LoginFailedException
 from rest.services.authservice import AuthenticationService
 from pony.orm import OrmError
@@ -49,5 +50,17 @@ def login():
         return response
     except LoginFailedException:
         abort(401)
+    except (OrmError, RuntimeError, ValueError):
+        abort(404)
+
+
+@authentication_controller.route('/api/authentication/register', methods=['POST'])
+def register():
+    from rest.controllers.usercontroller import user_service
+    try:
+        username = request.json['username']
+        password = request.json['password']
+        user = user_service.create_user(username, password, Role.USER)
+        return jsonify(user.to_dict())
     except (OrmError, RuntimeError, ValueError):
         abort(404)

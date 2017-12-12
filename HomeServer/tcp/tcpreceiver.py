@@ -17,13 +17,13 @@ class TCPReceiver(Thread):
         self.__ip_address = ip_address
 
     def run(self):
-        from tcp.tcpserver import tcp_server
         while not self.__stopped:
             data = self.receive()
             if data:
-                print("TCPReceiver: " + data + "\n")
-                command = JobCommand(command_type=SwitchCommandType.ACK, arguments=[data])
-                tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
+                print("TCPReceiver: " + data)
+                done = self.set_state(data)
+                if not done:
+                    self.redirect_data_to_service(data)
         self.__socket.close()
 
     def receive(self):
@@ -32,3 +32,25 @@ class TCPReceiver(Thread):
             data = self.__socket.recv(self.RECEIVE_BUFFER_SIZE)
             return data.decode('utf-8')
         return ""
+
+    def redirect_data_to_service(self, data):
+        from tcp.tcpserver import tcp_server
+        command = JobCommand(command_type=SwitchCommandType.ACK, arguments=[data])
+        tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
+
+    def set_state(self, data):
+        from tcp.tcpserver import tcp_server
+        params = data.split(" ")
+        if len(params) == 2:
+            try:
+                state = False
+                switch_no = int(params[1])
+                if params[0] == 'on': state = True
+                elif params[0] == 'off': state = False
+                tcp_server.connected_modules_dict.get(self.__ip_address).states[switch_no] = state
+                return True
+            except ValueError:
+                print('bad state switch command')
+                return False
+        return False
+

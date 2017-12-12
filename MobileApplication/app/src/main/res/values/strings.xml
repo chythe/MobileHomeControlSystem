@@ -43,6 +43,7 @@
     <string name="user_added">User Added</string>
     <string name="user_edited">User Edited</string>
     <string name="user_deleted">User Deleted</string>
+    <string name="user_registered">User Registered</string>
 
     <!-- room -->
     <string name="rooms">Rooms</string>
@@ -64,6 +65,7 @@
     <string name="configuration_added">Configuration Added</string>
     <string name="configuration_edited">Configuration Edited</string>
     <string name="configuration_deleted">Configuration Deleted</string>
+    <string name="no_access">No access</string>
 
     <!-- module -->
     <string name="prompt_ip_address">IP Address</string>

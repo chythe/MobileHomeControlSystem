@@ -20,6 +20,13 @@ class ModuleDao(object):
         return Module[module_id]
 
     @db_session
+    def read_module_by_ip(self, ip_address):
+        modules = list(Module.select(lambda m: m.ip_address == ip_address))
+        if len(modules) > 0:
+            return modules[0]
+        return None
+
+    @db_session
     def update_module(self, module_id, name, ip_address):
         m = Module[module_id]
         m.name = name

@@ -3,12 +3,12 @@ from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to
 
 class SwitchCommand(object):
 
-    ip_address = 0
+    module_id = 0
     switch_no = 0
     state = False
 
-    def __init__(self, ip_address, switch_no, state):
-        self.ip_address = ip_address
+    def __init__(self, module_id, switch_no, state):
+        self.module_id = module_id
         self.switch_no = switch_no
         self.state = state
 

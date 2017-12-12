@@ -10,7 +10,7 @@ import java.io.Reader
  *
  */
 data class SwitchCommand(
-        val ipAddress: String = "",
+        val moduleId: Long = 0,
         val switchNo: Short = 0,
         val state: Boolean = false
 ) {

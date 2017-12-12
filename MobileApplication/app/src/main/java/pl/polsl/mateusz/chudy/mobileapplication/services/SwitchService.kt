@@ -1,9 +1,9 @@
 package pl.polsl.mateusz.chudy.mobileapplication.services
 
+import android.widget.Switch
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.fuel.rx.rx_responseObject
 import com.google.gson.Gson
 import io.reactivex.schedulers.Schedulers

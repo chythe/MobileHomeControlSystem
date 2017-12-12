@@ -11,7 +11,6 @@ class Job(Thread):
         super(Job, self).__init__()
         self._command_queue = Queue()
         self._job_state = 0x0000
-        self.execute_result = True
 
     @property
     def command_queue(self):

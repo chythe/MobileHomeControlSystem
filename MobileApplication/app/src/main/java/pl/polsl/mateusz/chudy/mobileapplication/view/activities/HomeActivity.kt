@@ -20,7 +20,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.R
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.gson.Gson
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.view.fragments.*
@@ -33,7 +35,6 @@ class HomeActivity : AppCompatActivity(),
         RoomsFragment.OnFragmentInteractionListener,
         SwitchTypesFragment.OnFragmentInteractionListener,
         ConfigurationFragment.OnFragmentInteractionListener,
-        TestFragment.OnFragmentInteractionListener,
         UserManipulationFragment.OnFragmentInteractionListener,
         ModulesFragment.OnFragmentInteractionListener,
         RoomDetailsFragment.OnFragmentInteractionListener,
@@ -100,6 +101,7 @@ class HomeActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         try {
             // Handle navigation view item clicks here.
+            var access = true
             var fragment: Fragment? = null
             when (item.itemId) {
                 R.id.nav_profile -> {
@@ -108,7 +110,9 @@ class HomeActivity : AppCompatActivity(),
                             resources.getString(R.string.profile))
                 }
                 R.id.nav_users -> {
-                    fragment = UsersFragment::class.java.newInstance()
+                    if (AuthenticationService.checkPermissions(Role.ADMIN))
+                        fragment = UsersFragment::class.java.newInstance()
+                    else access = false
                 }
                 R.id.nav_rooms -> {
                     fragment = RoomsFragment::class.java.newInstance()
@@ -117,14 +121,17 @@ class HomeActivity : AppCompatActivity(),
                     fragment = SwitchTypesFragment::class.java.newInstance()
                 }
                 R.id.nav_modules -> {
-                    fragment = ModulesFragment::class.java.newInstance()
-                }
-                R.id.nav_test -> {
-                    fragment = TestFragment::class.java.newInstance()
+                    if (AuthenticationService.checkPermissions(Role.USER))
+                        fragment = ModulesFragment::class.java.newInstance()
+                    else access = false
                 }
             }
-            val fragmentManager = supportFragmentManager
-            fragmentManager.beginTransaction().replace(R.id.content_main, fragment).commit()
+            if (access) {
+                val fragmentManager = supportFragmentManager
+                fragmentManager.beginTransaction().replace(R.id.content_main, fragment).commit()
+            } else {
+                Toast.makeText(this, resources.getString(R.string.no_access), Toast.LENGTH_SHORT).show()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

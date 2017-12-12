@@ -3,6 +3,7 @@ package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.Toast
 import com.github.kittinunf.fuel.core.HttpException
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_switch_types.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
@@ -74,29 +76,34 @@ class SwitchTypesFragment : Fragment() {
             }
         }
 
-        view.switch_types_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
-            if (view === view.switch_types_list_view) {
-                val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
-                val switchType = view.switch_types_list_view.adapter.getItem(info.position) as SwitchType
-                contextMenu.setHeaderTitle(switchType.name)
-                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_SWITCH_TYPE, Menu.NONE,
-                        resources.getString(R.string.delete_switch_type)!!.split(" ")[0])
-            }
-        }
+        if (AuthenticationService.checkPermissions(Role.USER)) {
 
-        view.switch_types_add_switch_type_button.setOnClickListener { view ->
-            try {
-                val fragment = SwitchTypeManipulationFragment.newInstance(
-                        SwitchType(),
-                        resources.getString(R.string.add_switch_type)) as Fragment
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.content_main, fragment)
-                        .addToBackStack(null)
-                        .commit()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            view.switch_types_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+                if (view === view.switch_types_list_view) {
+                    val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
+                    val switchType = view.switch_types_list_view.adapter.getItem(info.position) as SwitchType
+                    contextMenu.setHeaderTitle(switchType.name)
+                    contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_SWITCH_TYPE, Menu.NONE,
+                            resources.getString(R.string.delete_switch_type)!!.split(" ")[0])
+                }
             }
+
+            view.switch_types_add_switch_type_button.setOnClickListener { view ->
+                try {
+                    val fragment = SwitchTypeManipulationFragment.newInstance(
+                            SwitchType(),
+                            resources.getString(R.string.add_switch_type)) as Fragment
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.content_main, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        } else {
+            view.switch_types_add_switch_type_button.visibility = View.INVISIBLE
         }
         return view
     }

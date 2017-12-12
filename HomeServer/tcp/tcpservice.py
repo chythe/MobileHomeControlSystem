@@ -42,31 +42,24 @@ class TCPService(Job):
                 return command
 
     def switch(self, switch_no, state):
-        self.execute_result = False
-        self.set_job_state_flag(TCPService.STATE_FLAGS['SWITCHING'], True)
         print('switch ' + str(switch_no) + ' ' + str(state))
         if 'True' == state or 'true' == state:
-            self.__socket.send(str.encode('on' + str(switch_no)))
+            self.__socket.send(str.encode('on ' + str(switch_no)))
         elif 'False' == state or 'false' == state:
-            self.__socket.send(str.encode('off' + str(switch_no)))
-        command = self.receive_ack_command()
-        if SwitchCommandType.ACK == command.command_type:
-            self.execute_result = True
+            self.__socket.send(str.encode('off ' + str(switch_no)))
         self.set_job_state_flag(TCPService.STATE_FLAGS['SWITCHING'], False)
 
     def get_states(self):
         from tcp.tcpserver import tcp_server
-        self.execute_result = False
-        self.set_job_state_flag(TCPService.STATE_FLAGS['GETTING_STATES'], True)
         print('get state')
         self.__socket.send(str.encode('get'))
         command = self.receive_ack_command()
         if SwitchCommandType.ACK == command.command_type:
             if command.arguments[0]:
                 states = command.arguments[0].split(" ")
-                if len(states) == 6:
-                    for i in range(0, 6):
-                        tcp_server.connected_modules_dict.get(self.__ip_address).states[i] = bool(int(states[i]))
-                    self.execute_result = True
+                if len(states) == 7:
+                    if states[0] == 'states':
+                        for i in range(0, 6):
+                            tcp_server.connected_modules_dict.get(self.__ip_address).states[i] = bool(int(states[i]))
         self.set_job_state_flag(TCPService.STATE_FLAGS['GETTING_STATES'], False)
 

@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder
 import io.reactivex.schedulers.Schedulers
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.view.activities.MainActivity
@@ -51,6 +52,27 @@ object AuthenticationService {
         sharedPreferencesEdit.putString("currentUser", "")
         sharedPreferencesEdit.apply()
         return true
+    }
+
+    fun register(loginCommand: LoginCommand): User =
+            "/api/authentication/register".httpPost()
+                    .body(Gson().toJson(loginCommand))
+                    .rx_object(User.Deserializer())
+                    .subscribeOn(Schedulers.newThread())
+                    .map { it -> it.get() }
+                    .onErrorReturn { throw it }
+                    .blockingGet()
+
+    fun checkPermissions(role: Role): Boolean {
+        val sharedPreferences = MainActivity.getContext()
+                .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        val currentUserJsonString = sharedPreferences.getString("currentUser", "")
+        if (!currentUserJsonString.isEmpty()) {
+            val currentUser = Gson().fromJson(currentUserJsonString, User::class.java)
+            if (role <= currentUser.role)
+                return true
+        }
+        return false
     }
 
     fun getToken(): String {

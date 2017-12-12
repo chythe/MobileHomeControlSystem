@@ -11,7 +11,9 @@ import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.fragment_rooms.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
 
 
@@ -64,29 +66,34 @@ class RoomsFragment : Fragment() {
             }
         }
 
-        view.rooms_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
-            if (view === view.rooms_list_view) {
-                val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
-                val room = view.rooms_list_view.adapter.getItem(info.position) as Room
-                contextMenu.setHeaderTitle(room.name)
-                contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_ROOM, Menu.NONE,
-                        resources.getString(R.string.delete_room)!!.split(" ")[0])
-            }
-        }
+        if (AuthenticationService.checkPermissions(Role.USER)) {
 
-        view.rooms_add_button.setOnClickListener { view ->
-            try {
-                val fragment = RoomManipulationFragment.newInstance(
-                        Room(0),
-                        resources.getString(R.string.add_room)) as Fragment
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.content_main, fragment)
-                        .addToBackStack(null)
-                        .commit()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            view.rooms_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+                if (view === view.rooms_list_view) {
+                    val info = contextMenuInfo as AdapterView.AdapterContextMenuInfo
+                    val room = view.rooms_list_view.adapter.getItem(info.position) as Room
+                    contextMenu.setHeaderTitle(room.name)
+                    contextMenu.add(Menu.NONE, MENU_CONTEXT_DELETE_ROOM, Menu.NONE,
+                            resources.getString(R.string.delete_room)!!.split(" ")[0])
+                }
             }
+
+            view.rooms_add_button.setOnClickListener { view ->
+                try {
+                    val fragment = RoomManipulationFragment.newInstance(
+                            Room(0),
+                            resources.getString(R.string.add_room)) as Fragment
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.content_main, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        } else {
+            view.rooms_add_button.visibility = View.INVISIBLE
         }
         return view
     }

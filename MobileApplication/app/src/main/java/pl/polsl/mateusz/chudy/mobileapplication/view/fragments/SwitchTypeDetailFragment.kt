@@ -10,9 +10,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.fragment_switch_type_detail.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
+import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
+import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
+import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
+import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
 import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
@@ -43,23 +47,36 @@ class SwitchTypeDetailFragment : Fragment() {
         activity.title = resources.getString(R.string.switch_type_details)
         val view = inflater!!.inflate(R.layout.fragment_switch_type_detail, container, false)
         view.switch_type_details_name_edit_text.setText(mSwitchType!!.name)
-        view.switch_type_details_edit_button.setOnClickListener { view ->
-            try {
-                val fragment = SwitchTypeManipulationFragment.newInstance(
-                        mSwitchType!!,
-                        resources.getString(R.string.edit_switch_type)) as Fragment
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.content_main, fragment)
-                        .addToBackStack(null)
-                        .commit()
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+        if (AuthenticationService.checkPermissions(Role.USER)) {
+            view.switch_type_details_edit_button.setOnClickListener { view ->
+                try {
+                    val fragment = SwitchTypeManipulationFragment.newInstance(
+                            mSwitchType!!,
+                            resources.getString(R.string.edit_switch_type)) as Fragment
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.content_main, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
+        } else {
+            view.switch_type_details_edit_button.visibility = View.INVISIBLE
         }
 		
 		try {
 			val moduleConfigurations = SwitchTypeService.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
+            val moduleStates = SwitchService.getStates()
+            for (mc in moduleConfigurations) {
+                for (s in moduleStates) {
+                    if (mc.moduleId == s.moduleId && mc.switchNo == s.switchNo) {
+                        mc.state = s.state
+                    }
+                }
+            }
 			view.switch_type_details_list_view.adapter = ModuleConfigurationsAdapter(moduleConfigurations)
 			registerForContextMenu(view.switch_type_details_list_view)
 		} catch (e: Exception) {
@@ -67,10 +84,17 @@ class SwitchTypeDetailFragment : Fragment() {
 		}
 		
         view.switch_type_details_list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val adapter = view!!.switch_type_details_list_view.adapter as ModuleConfigurationsAdapter
-            val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
-            moduleConfiguration.state = !moduleConfiguration.state
-            adapter.notifyDataSetChanged()
+            try {
+                val adapter = view!!.switch_type_details_list_view.adapter as ModuleConfigurationsAdapter
+                val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
+                val result = SwitchService.switch(SwitchCommand(
+                        moduleConfiguration.moduleId, moduleConfiguration.switchNo, !moduleConfiguration.state))
+                if (result)
+                    moduleConfiguration.state = !moduleConfiguration.state
+                adapter.notifyDataSetChanged()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         return view
     }

@@ -19,6 +19,9 @@ class ModuleService(object):
     def read_module(self, module_id):
         return self.__module_dao.read_module(module_id)
 
+    def read_module_by_ip(self, ip_address):
+        return self.__module_dao.read_module_by_ip(ip_address)
+
     def update_module(self, module_id, name, ip_address):
         return self.__module_dao.update_module(module_id, name, ip_address)
 

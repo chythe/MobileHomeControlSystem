@@ -16,12 +16,12 @@ local function int0_handle(level, stamp)
     if gpio.read(0) == 0 then
         gpio.write(0, gpio.HIGH)
         if connected == true then
-            connection:send("on0")
+            connection:send("on 0")
         end
     else
         gpio.write(0, gpio.LOW)
         if connected == true then
-            connection:send("off0")
+            connection:send("off 0")
         end
     end
 end
@@ -32,12 +32,12 @@ local function int1_handle(level, stamp)
     if gpio.read(1) == 0 then
         gpio.write(1, gpio.HIGH)
         if connected == true then
-            connection:send("on1")
+            connection:send("on 1")
         end
     else
         gpio.write(1, gpio.LOW)
         if connected == true then
-            connection:send("off1")
+            connection:send("off 1")
         end
     end
 end
@@ -46,14 +46,14 @@ end
 
 local function on_receive(socket, buffer)
     print(buffer)
-    if buffer == 'on0' then gpio.write(0, gpio.HIGH) end
-    if buffer == 'off0' then gpio.write(0, gpio.LOW) end
-    if buffer == 'on1' then gpio.write(1, gpio.HIGH) end
-    if buffer == 'off1' then gpio.write(1, gpio.LOW) end
+    if buffer == 'on 0' then gpio.write(0, gpio.HIGH) end
+    if buffer == 'off 0' then gpio.write(0, gpio.LOW) end
+    if buffer == 'on 1' then gpio.write(1, gpio.HIGH) end
+    if buffer == 'off 1' then gpio.write(1, gpio.LOW) end
     if buffer == 'get' then
-        socket:send(tostring(gpio.read(0)) .. " " .. tostring(gpio.read(0)) .. " 0" .. " 0" .. " 0" .. " 0")
+        socket:send("states " .. tostring(gpio.read(0)) .. " " .. tostring(gpio.read(1)) .. " 0" .. " 0" .. " 0" .. " 0")
     else
-        socket:send("ack")
+        socket:send(buffer)
     end
 end
 

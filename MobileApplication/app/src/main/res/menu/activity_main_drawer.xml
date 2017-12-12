@@ -24,10 +24,6 @@
             android:id="@+id/nav_modules"
             android:icon="@drawable/ic_settings"
             android:title="@string/module_configurations" />
-        <item
-            android:id="@+id/nav_test"
-            android:icon="@drawable/ic_simpson"
-            android:title="@string/test" />
     </group>
 
     <!--<item android:title="Communicate">-->

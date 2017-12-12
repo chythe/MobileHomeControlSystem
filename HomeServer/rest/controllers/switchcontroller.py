@@ -31,11 +31,11 @@ def get_state():
 @auth.login_required
 def switch():
     try:
-        ip_address = request.json['ipAddress']
+        module_id = request.json['moduleId']
         switch_no = request.json['switchNo']
         state = request.json['state']
-        switch_service.switch(ip_address, switch_no, state)
-        response = jsonify({'result': True})
+        result = switch_service.switch(module_id, switch_no, state)
+        response = jsonify({'result': result})
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response

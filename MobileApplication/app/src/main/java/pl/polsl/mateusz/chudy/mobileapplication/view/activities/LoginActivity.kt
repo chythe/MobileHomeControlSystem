@@ -16,8 +16,10 @@ import android.text.InputFilter
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.view.inputmethod.InputMethodManager
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
+import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import java.security.MessageDigest
 
@@ -37,13 +39,17 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         login_constraint_layout.visibility = View.VISIBLE
         setIpAddressFilter()
-        user_manipulation_pass_edit_text.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        login_pass_edit_text.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
+        login_register_button.setOnClickListener { _ ->
+            intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         login_button.setOnClickListener { attemptLogin() }
     }
@@ -60,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
                         .matches(Regex("^\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3})?)?)?)?)?)?"))) {
                     charSequence = ""
                 } else {
-                    val splits = resultingTxt.split("")
+                    val splits = resultingTxt.split(".")
                     for (value: String in splits) {
                         if (!value.isEmpty() && Integer.valueOf(value) > 255) {
                             charSequence = ""
@@ -84,20 +90,37 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Reset errors.
+        login_server_ip_edit_text.error = null
+        login_server_port_edit_text.error = null
+        login_pass_edit_text.error = null
         login_username_edit_text.error = null
-        user_manipulation_pass_edit_text.error = null
+        login_pass_edit_text.error = null
 
         // Store values at the time of the login attempt.
+        val serverIpStr = login_server_ip_edit_text.text.toString()
+        val serverPortStr = login_server_port_edit_text.text.toString()
         val usernameStr = login_username_edit_text.text.toString()
-        val passwordStr = user_manipulation_pass_edit_text.text.toString()
+        val passwordStr = login_pass_edit_text.text.toString()
 
         var cancel = false
         var focusView: View? = null
 
+        if (!serverIpStr.isEmpty()) {
+            ServerConnection.SERVER_IP = serverIpStr
+        }
+
+        if (!serverPortStr.isEmpty()) {
+            try {
+                ServerConnection.SERVER_PORT = serverPortStr.toInt()
+            } catch (e: NumberFormatException ) {
+                cancel = true
+            }
+        }
+
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(passwordStr) && !isPasswordValid(passwordStr)) {
-            user_manipulation_pass_edit_text.error = getString(R.string.error_invalid_password)
-            focusView = user_manipulation_pass_edit_text
+            login_pass_edit_text.error = getString(R.string.error_invalid_password)
+            focusView = login_pass_edit_text
             cancel = true
         }
 
@@ -191,8 +214,8 @@ class LoginActivity : AppCompatActivity() {
             if (success!!) {
                 finish()
             } else {
-                user_manipulation_pass_edit_text.error = getString(R.string.error_incorrect_password)
-                user_manipulation_pass_edit_text.requestFocus()
+                login_pass_edit_text.error = getString(R.string.error_incorrect_password)
+                login_pass_edit_text.requestFocus()
             }
         }
 

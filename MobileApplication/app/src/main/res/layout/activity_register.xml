@@ -3,16 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.fragments.UserManipulationFragment">
-
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/register_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+    tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.activities.RegisterActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,13 +20,13 @@
             tools:layout_editor_absoluteX="0dp">
 
             <EditText
-                android:id="@+id/register_server_ip_username_edit_text"
+                android:id="@+id/register_server_ip_edit_text"
                 android:layout_width="308dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:hint="@string/prompt_ip_address"
-                android:inputType="text"
+                android:inputType="phone"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -96,7 +87,7 @@
             tools:layout_editor_absoluteX="0dp">
 
             <EditText
-                android:id="@+id/user_manipulation_pass_edit_text"
+                android:id="@+id/register_pass_edit_text"
                 android:layout_width="308dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="8dp"
