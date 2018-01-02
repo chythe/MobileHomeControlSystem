@@ -2,11 +2,9 @@ package pl.polsl.mateusz.chudy.mobileapplication.view.activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -15,7 +13,6 @@ import android.widget.TextView
 import android.text.InputFilter
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand

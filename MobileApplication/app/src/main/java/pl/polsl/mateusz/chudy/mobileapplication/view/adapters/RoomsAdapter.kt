@@ -47,10 +47,6 @@ class RoomsAdapter(roomsList: List<Room>): BaseAdapter() {
         return rooms.size
     }
 
-//    fun remove(position: Int) {
-//        rooms.removeAt(position)
-//    }
-
     private class ViewHolder(val nameTextView: TextView) {
         private var iconType: String = if (nameTextView.text == "Bathroom")
             "ic_simpson"

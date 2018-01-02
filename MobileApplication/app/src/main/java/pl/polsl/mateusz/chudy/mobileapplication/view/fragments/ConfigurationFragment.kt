@@ -10,17 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
-import android.graphics.drawable.Drawable
-import android.R.raw
-import android.content.res.AssetManager
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import android.content.Intent
 import android.graphics.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_configuration.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.R.mipmap.ic_launcher
-import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
 
@@ -35,7 +27,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationServ
  */
 class ConfigurationFragment : Fragment() {
 
-    private final val SWITCH_COUNT: Int = 6
+    private val SWITCH_COUNT: Int = 6
 
     private var mModule: Module? = null
 

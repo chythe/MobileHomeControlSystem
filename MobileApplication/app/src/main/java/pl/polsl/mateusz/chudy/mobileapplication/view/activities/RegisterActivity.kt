@@ -10,6 +10,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import java.security.MessageDigest
 
+/**
+ *
+ */
 class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

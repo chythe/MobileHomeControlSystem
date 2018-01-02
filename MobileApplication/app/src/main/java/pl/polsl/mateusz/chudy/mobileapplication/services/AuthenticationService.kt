@@ -2,20 +2,14 @@ package pl.polsl.mateusz.chudy.mobileapplication.services
 
 import android.content.Context
 import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.rx.rx_object
-import com.github.kittinunf.fuel.rx.rx_response
 import com.github.kittinunf.fuel.rx.rx_responseObject
-import com.github.kittinunf.fuel.rx.rx_responseString
-import com.github.kittinunf.result.getOrElse
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import io.reactivex.schedulers.Schedulers
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.view.activities.MainActivity
 

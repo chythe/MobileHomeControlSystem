@@ -5,16 +5,13 @@ import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
-import com.github.kittinunf.fuel.rx.rx_object
 import com.github.kittinunf.fuel.rx.rx_responseObject
-import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.schedulers.Schedulers
 import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import java.net.SocketTimeoutException
 
 /**
  *

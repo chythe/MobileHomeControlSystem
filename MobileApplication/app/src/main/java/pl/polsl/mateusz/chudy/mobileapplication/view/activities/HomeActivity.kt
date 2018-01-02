@@ -1,7 +1,5 @@
 package pl.polsl.mateusz.chudy.mobileapplication.view.activities
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -13,21 +11,17 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-//import com.jakewharton.rxbinding2.view.RxView
-//import com.jakewharton.rxbinding2.widget.RxCompoundButton
-//import com.jakewharton.rxbinding2.widget.RxTextView
-//import io.reactivex.android.schedulers.AndroidSchedulers
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.Toast
-import com.google.gson.Gson
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
-import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
 import pl.polsl.mateusz.chudy.mobileapplication.view.fragments.*
 
-
+/**
+ *
+ */
 class HomeActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener,
         ProfileFragment.OnFragmentInteractionListener,
@@ -64,10 +58,6 @@ class HomeActivity : AppCompatActivity(),
     private fun setImageBackground() {
         val mainImageView: ImageView = findViewById(R.id.content_main_image_view)
         val bitMap = BitmapFactory.decodeStream(resources.assets.open("png/house.png"))
-//        val display = windowManager.defaultDisplay
-//        val size = Point()
-//        display.getSize(size)
-//        val scaledBitmap = Bitmap.createScaledBitmap(bitMap, size.x, size.y, true)
         mainImageView.setImageBitmap(bitMap)
     }
 
@@ -80,7 +70,6 @@ class HomeActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -100,7 +89,6 @@ class HomeActivity : AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         try {
-            // Handle navigation view item clicks here.
             var access = true
             var fragment: Fragment? = null
             when (item.itemId) {
@@ -141,6 +129,6 @@ class HomeActivity : AppCompatActivity(),
     }
 
     override fun onFragmentInteraction(uri: Uri) {
-//        public void onFragmentInteraction(Uri uri);
+
     }
 }
