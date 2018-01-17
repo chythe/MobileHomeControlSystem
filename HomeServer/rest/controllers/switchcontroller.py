@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, abort, g
 
 from rest.services.authservice import AuthenticationService
+from rest.services.moduleservice import ModuleService
 from rest.services.switchservice import SwitchService
 from rest.controllers.authcontroller import auth
 
@@ -9,6 +10,7 @@ switch_controller = Blueprint('switch_controller', __name__)
 authentication_service = AuthenticationService()
 
 switch_service = SwitchService()
+module_service = ModuleService()
 
 
 @switch_controller.route('/api/switch', methods=['GET'])

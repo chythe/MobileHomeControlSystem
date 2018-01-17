@@ -7,16 +7,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import android.R.attr.fragment
-import android.support.v4.app.FragmentTransaction
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
 
 
 /**

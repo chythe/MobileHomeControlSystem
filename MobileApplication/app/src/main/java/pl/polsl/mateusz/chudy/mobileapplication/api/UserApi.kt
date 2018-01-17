@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpDelete
@@ -16,7 +16,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.User
 /**
  *
  */
-object UserService {
+object UserApi {
 
     init {
         FuelManager.instance.apply {
@@ -27,11 +27,11 @@ object UserService {
 
     fun getUsers(): List<User> =
         "/api/user".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(User.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -39,11 +39,11 @@ object UserService {
 
     fun getUser(userId: Long): User =
         "/api/user/$userId".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -51,12 +51,12 @@ object UserService {
 
     fun createUser(user: User): User =
         "/api/user".httpPost()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(user))
                 .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -64,12 +64,12 @@ object UserService {
 
     fun updateUser(user: User): User =
         "/api/user".httpPut()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(Gson().toJson(user))
                 .rx_responseObject(User.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -77,11 +77,11 @@ object UserService {
 
     fun deleteUser(userId: Long): Boolean =
         "/api/user/$userId".httpDelete()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!.result
                 }
                 .onErrorReturn { throw it }

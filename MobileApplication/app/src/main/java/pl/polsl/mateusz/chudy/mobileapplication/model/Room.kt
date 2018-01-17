@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.Reader
 
 /**
- *
+ * Model class of room
  */
 data class Room(
         var roomId: Long = 0,

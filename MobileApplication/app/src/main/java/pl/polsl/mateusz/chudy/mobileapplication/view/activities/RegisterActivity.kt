@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_register.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
 import java.security.MessageDigest
 
 /**
@@ -75,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
             val md = MessageDigest.getInstance("SHA-256")
             val digest = md.digest(bytes)
             val cryptPassword = digest.fold("", { str, it -> str + "%02x".format(it) })
-            val user = AuthenticationService.register(LoginCommand(username, cryptPassword))
+            val user = AuthenticationApi.register(LoginCommand(username, cryptPassword))
             finish()
             Toast.makeText(this, user.username + " "
                     + resources.getString(R.string.user_registered), Toast.LENGTH_SHORT).show()

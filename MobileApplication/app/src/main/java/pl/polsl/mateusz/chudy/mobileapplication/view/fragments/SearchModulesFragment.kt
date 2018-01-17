@@ -9,13 +9,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_search_modules.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
+import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
 
 
@@ -51,7 +49,7 @@ class SearchModulesFragment : Fragment() {
         view.search_modules_button.setOnClickListener { _ ->
             try {
                 showProgress(view, true)
-                val modules = ModuleService.searchUnknownModules()
+                val modules = ModuleApi.searchUnknownModules()
                 view.search_modules_list_view.adapter = ModulesAdapter(modules)
                 registerForContextMenu(view.search_modules_list_view)
             } catch (e: Exception) {

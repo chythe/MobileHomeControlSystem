@@ -8,13 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
 import kotlinx.android.synthetic.main.fragment_switch_type_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
+import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
 
 
 /**
@@ -52,14 +49,14 @@ class SwitchTypeManipulationFragment : Fragment() {
             try {
                 when (typeString.toLowerCase()) {
                     "edit" -> {
-                        SwitchTypeService.updateSwitchType(
+                        SwitchTypeApi.updateSwitchType(
                                 SwitchType(mSwitchType!!.switchTypeId,
                                         view.switch_type_manipulation_name_edit_text.text.toString()))
 								fragmentManager.popBackStack()
                                 Toast.makeText(activity, resources.getString(R.string.switch_type_edited), Toast.LENGTH_SHORT).show()
                     }
                     "add" -> {
-                        SwitchTypeService.createSwitchType(
+                        SwitchTypeApi.createSwitchType(
                                 SwitchType(
                                         name = view.switch_type_manipulation_name_edit_text.text.toString()))
 								fragmentManager.popBackStack()

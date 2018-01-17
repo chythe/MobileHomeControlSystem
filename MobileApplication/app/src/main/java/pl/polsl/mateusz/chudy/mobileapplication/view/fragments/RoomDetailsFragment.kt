@@ -14,10 +14,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchApi
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
 
@@ -48,7 +47,7 @@ class RoomDetailsFragment : Fragment() {
         var view = inflater!!.inflate(R.layout.fragment_room_details, container, false)
         view.room_details_name_edit_text.setText(mRoom!!.name)
 
-        if (AuthenticationService.checkPermissions(Role.USER)) {
+        if (AuthenticationApi.checkPermissions(Role.USER)) {
             view.room_details_edit_button.setOnClickListener { view ->
                 try {
                     val fragment = RoomManipulationFragment.newInstance(
@@ -68,8 +67,8 @@ class RoomDetailsFragment : Fragment() {
         }
 
 		try {
-			val moduleConfigurations = RoomService.getRoomModuleConfigurations(mRoom!!.roomId)
-            val moduleStates = SwitchService.getStates()
+			val moduleConfigurations = RoomApi.getRoomModuleConfigurations(mRoom!!.roomId)
+            val moduleStates = SwitchApi.getStates()
             for (mc in moduleConfigurations) {
                 for (s in moduleStates) {
                     if (mc.moduleId == s.moduleId && mc.switchNo == s.switchNo) {
@@ -87,7 +86,7 @@ class RoomDetailsFragment : Fragment() {
             try {
                 val adapter = view!!.room_details_list_view.adapter as ModuleConfigurationsAdapter
                 val moduleConfiguration = adapter.getItem(position) as ModuleConfiguration
-                val result = SwitchService.switch(SwitchCommand(
+                val result = SwitchApi.switch(SwitchCommand(
                         moduleConfiguration.moduleId, moduleConfiguration.switchNo, !moduleConfiguration.state))
                 if (result)
                     moduleConfiguration.state = !moduleConfiguration.state

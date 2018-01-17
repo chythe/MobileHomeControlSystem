@@ -26,6 +26,7 @@ class ModuleService(object):
         return self.__module_dao.update_module(module_id, name, ip_address)
 
     def delete_module(self, module_id):
+        self.close_module_connection(module_id)
         self.__module_dao.delete_module(module_id)
 
     def search_unknown_modules(self):
@@ -41,3 +42,9 @@ class ModuleService(object):
                 connected_unknown_modules_ips.append(k)
         connected_unknown_modules = [UnknownModuleCommand(ip_address=ip) for ip in connected_unknown_modules_ips]
         return connected_unknown_modules
+
+    def close_module_connection(self, module_id):
+        module = self.__module_dao.read_module(module_id)
+        connected_modules = tcp_server.connected_modules_dict.get(module.ip_address, None)
+        if module and connected_modules[module.ip_address]:
+            del module.ip_address

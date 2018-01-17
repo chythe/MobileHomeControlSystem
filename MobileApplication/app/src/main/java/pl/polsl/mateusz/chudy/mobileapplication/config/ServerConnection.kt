@@ -1,7 +1,7 @@
 package pl.polsl.mateusz.chudy.mobileapplication.config
 
 /**
- *
+ * Server connection configuration class
  */
 class ServerConnection {
 
@@ -11,6 +11,9 @@ class ServerConnection {
 
         var SERVER_PORT: Int = 5000
 
+        /**
+         * Gets base server URL address
+         */
         fun getBasePathURLString(): String {
             return "http://" + SERVER_IP + ":" + SERVER_PORT.toString()
         }

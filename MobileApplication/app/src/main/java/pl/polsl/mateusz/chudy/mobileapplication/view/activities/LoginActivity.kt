@@ -17,7 +17,7 @@ import android.content.Intent
 import android.view.inputmethod.InputMethodManager
 import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
 import java.security.MessageDigest
 
 
@@ -198,7 +198,7 @@ class LoginActivity : AppCompatActivity() {
                 val md = MessageDigest.getInstance("SHA-256")
                 val digest = md.digest(bytes)
                 val cryptPassword = digest.fold("", { str, it -> str + "%02x".format(it) })
-                return AuthenticationService.login(LoginCommand(username, cryptPassword))
+                return AuthenticationApi.login(LoginCommand(username, cryptPassword))
             } catch (e: Exception) {
                 return false
             }

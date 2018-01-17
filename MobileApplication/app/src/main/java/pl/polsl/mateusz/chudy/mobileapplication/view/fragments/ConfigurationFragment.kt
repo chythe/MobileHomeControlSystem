@@ -14,7 +14,7 @@ import android.graphics.*
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_configuration.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
+import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleConfigurationApi
 
 
 /**
@@ -88,7 +88,7 @@ class ConfigurationFragment : Fragment() {
 
         view.configuration_edit_button.setOnClickListener { view ->
             try {
-                val moduleConfiguration = ModuleConfigurationService.getModuleConfiguration(
+                val moduleConfiguration = ModuleConfigurationApi.getModuleConfiguration(
                         mModule!!.moduleId, mSwitchNo!!)
                 val fragment = ConfigurationManipulationFragment.newInstance(
                         moduleConfiguration,
@@ -120,7 +120,7 @@ class ConfigurationFragment : Fragment() {
 
         view.configuration_delete_button.setOnClickListener { view ->
             try {
-                val done = ModuleConfigurationService.deleteModuleConfiguration(
+                val done = ModuleConfigurationApi.deleteModuleConfiguration(
                         moduleId = mModule!!.moduleId, switchNo = mSwitchNo!!)
                 if (done) {
                     fragmentManager
@@ -144,7 +144,7 @@ class ConfigurationFragment : Fragment() {
 
     private fun setModuleConfigurationInfo(view: View, switchNo: Short) {
         try {
-            val moduleConiguration = ModuleConfigurationService.getModuleConfiguration(mModule!!.moduleId, switchNo)
+            val moduleConiguration = ModuleConfigurationApi.getModuleConfiguration(mModule!!.moduleId, switchNo)
             view.configuration_name_edit_text.setText(moduleConiguration.name)
             view.configuration_add_button.visibility = View.INVISIBLE
             view.configuration_edit_button.visibility = View.VISIBLE

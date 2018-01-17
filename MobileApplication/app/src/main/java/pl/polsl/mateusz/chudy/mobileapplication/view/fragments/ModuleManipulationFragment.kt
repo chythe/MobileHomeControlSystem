@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import kotlinx.android.synthetic.main.fragment_module_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
+import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
 
 
 /**
@@ -51,7 +50,7 @@ class ModuleManipulationFragment : Fragment() {
             try {
                 when (typeString.toLowerCase()) {
                     "edit" -> {
-                        ModuleService.updateModule(
+                        ModuleApi.updateModule(
                                 Module(mModule!!.moduleId,
                                         view.module_manipulation_name_edit_text.text.toString(),
                                         mModule!!.ipAddress))
@@ -59,7 +58,7 @@ class ModuleManipulationFragment : Fragment() {
                         Toast.makeText(activity, resources.getString(R.string.module_edited), Toast.LENGTH_SHORT).show()
                     }
                     "add" -> {
-                        ModuleService.createModule(
+                        ModuleApi.createModule(
                                 Module(name=view.module_manipulation_name_edit_text.text.toString(),
                                         ipAddress=mModule!!.ipAddress))
                         fragmentManager.popBackStack()

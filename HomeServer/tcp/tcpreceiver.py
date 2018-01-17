@@ -18,13 +18,21 @@ class TCPReceiver(Thread):
 
     def run(self):
         while not self.__stopped:
-            data = self.receive()
-            if data:
-                print("TCPReceiver: " + data)
-                done = self.set_state(data)
-                if not done:
-                    self.redirect_data_to_service(data)
+            try:
+                data = self.receive()
+                if data:
+                    print("TCPReceiver: " + data)
+                    self.parse_response(data)
+            except ConnectionResetError:
+                self.inform_service_error()
+                self.__stopped = True
         self.__socket.close()
+
+    def inform_service_error(self):
+        from tcp.tcpserver import tcp_server
+        connection = tcp_server.connected_modules_dict.get(self.__ip_address)
+        command = JobCommand(command_type=SwitchCommandType.ERROR)
+        connection.service.add_command(command)
 
     def receive(self):
         ready = select.select([self.__socket], [], [], self.TIMEOUT_SEC)
@@ -38,19 +46,30 @@ class TCPReceiver(Thread):
         command = JobCommand(command_type=SwitchCommandType.ACK, arguments=[data])
         tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
 
-    def set_state(self, data):
-        from tcp.tcpserver import tcp_server
+    def parse_response(self, data):
         params = data.split(" ")
+        if params[0] == 'states':
+            self.set_all_states(params)
+        elif params[0] == 'on':
+            self.set_one_state(params, True)
+        elif params[0] == 'off':
+            self.set_one_state(params, False)
+
+    def set_all_states(self, params):
+        from tcp.tcpserver import tcp_server
+        if len(params) == 7:
+            try:
+                for i in range(0, 6):
+                    state = bool(int(params[i + 1]))
+                    tcp_server.connected_modules_dict.get(self.__ip_address).states[i] = state
+            except ValueError:
+                print('bad switch all states response')
+
+    def set_one_state(self, params, state):
+        from tcp.tcpserver import tcp_server
         if len(params) == 2:
             try:
-                state = False
                 switch_no = int(params[1])
-                if params[0] == 'on': state = True
-                elif params[0] == 'off': state = False
                 tcp_server.connected_modules_dict.get(self.__ip_address).states[switch_no] = state
-                return True
             except ValueError:
-                print('bad state switch command')
-                return False
-        return False
-
+                print('bad switch one state response')

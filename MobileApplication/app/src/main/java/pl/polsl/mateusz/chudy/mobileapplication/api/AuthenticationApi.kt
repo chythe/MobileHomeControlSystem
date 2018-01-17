@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import android.content.Context
 import com.github.kittinunf.fuel.core.FuelManager
@@ -14,9 +14,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.User
 import pl.polsl.mateusz.chudy.mobileapplication.view.activities.MainActivity
 
 /**
- *
+ * Object implementing server authentication REST API requests, and useful auth methods
  */
-object AuthenticationService {
+object AuthenticationApi {
 
     init {
         FuelManager.instance.apply {
@@ -25,6 +25,9 @@ object AuthenticationService {
         }
     }
 
+    /**
+     * Login request
+     */
     fun login(loginCommand: LoginCommand): Boolean =
             "/api/authentication/login".httpPost()
                     .body(Gson().toJson(loginCommand))
@@ -38,6 +41,9 @@ object AuthenticationService {
                     .onErrorReturn { throw it }
                     .blockingGet()
 
+    /**
+     * Logout method
+     */
     fun logout(): Boolean {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -48,6 +54,9 @@ object AuthenticationService {
         return true
     }
 
+    /**
+     * Register request
+     */
     fun register(loginCommand: LoginCommand): User =
             "/api/authentication/register".httpPost()
                     .body(Gson().toJson(loginCommand))
@@ -57,6 +66,9 @@ object AuthenticationService {
                     .onErrorReturn { throw it }
                     .blockingGet()
 
+    /**
+     *  Checks permission required by the given role for current user
+     */
     fun checkPermissions(role: Role): Boolean {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -69,6 +81,9 @@ object AuthenticationService {
         return false
     }
 
+    /**
+     * Gets auth token
+     */
     fun getToken(): String {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -76,6 +91,9 @@ object AuthenticationService {
         return token
     }
 
+    /**
+     * Sets auth token
+     */
     fun setToken(token: String) {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -84,6 +102,9 @@ object AuthenticationService {
         sharedPreferencesEdit.apply()
     }
 
+    /**
+     * Gets current user
+     */
     fun getCurrentUser(): User? {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -93,6 +114,9 @@ object AuthenticationService {
         return null
     }
 
+    /**
+     * Sets current user
+     */
     fun setCurrentUser(user: User) {
         val sharedPreferences = MainActivity.getContext()
                 .getSharedPreferences(MainActivity.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)

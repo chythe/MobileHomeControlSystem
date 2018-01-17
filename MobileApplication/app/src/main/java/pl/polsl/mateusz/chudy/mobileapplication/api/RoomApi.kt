@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpDelete
@@ -17,7 +17,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 /**
  *
  */
-object RoomService {
+object RoomApi {
 
     init {
         FuelManager.instance.apply {
@@ -28,11 +28,11 @@ object RoomService {
 
     fun getRooms(): List<Room> =
         "/api/room".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(Room.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -40,11 +40,11 @@ object RoomService {
 
     fun getRoom(roomId: Long): Room =
         "/api/room/$roomId".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -52,12 +52,12 @@ object RoomService {
 
     fun createRoom(room: Room): Room =
         "/api/room".httpPost()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(room))
                 .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -65,12 +65,12 @@ object RoomService {
 
     fun updateRoom(room: Room): Room =
         "/api/room".httpPut()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(Gson().toJson(room))
                 .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -78,11 +78,11 @@ object RoomService {
 
     fun deleteRoom(roomId: Long): Boolean =
         "/api/room/$roomId".httpDelete()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!.result
                 }
                 .onErrorReturn { throw it }
@@ -90,11 +90,11 @@ object RoomService {
 
     fun getRoomModuleConfigurations(roomId: Long): List<ModuleConfiguration> =
         "/api/room/module-configuration/$roomId".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(ModuleConfiguration.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }

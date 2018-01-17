@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpDelete
@@ -17,7 +17,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 /**
  *
  */
-object SwitchTypeService {
+object SwitchTypeApi {
 
     init {
         FuelManager.instance.apply {
@@ -28,7 +28,7 @@ object SwitchTypeService {
 
     fun getSwitchTypes(): List<SwitchType> =
         "/api/switch-type".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(SwitchType.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
@@ -36,7 +36,7 @@ object SwitchTypeService {
                     if (error != null) {
                         throw error
                     } else {
-                        AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                        AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                         it.second.component1()!!
                     }
                 }
@@ -45,11 +45,11 @@ object SwitchTypeService {
 
     fun getSwitchType(switchTypeId: Long): SwitchType =
         "/api/switch-type/$switchTypeId".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(SwitchType.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -57,12 +57,12 @@ object SwitchTypeService {
 
     fun createSwitchType(switchType: SwitchType): SwitchType =
         "/api/switch-type".httpPost()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(switchType))
                 .rx_responseObject(SwitchType.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -70,12 +70,12 @@ object SwitchTypeService {
 
     fun updateSwitchType(switchType: SwitchType): SwitchType =
         "/api/switch-type".httpPut()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(Gson().toJson(switchType))
                 .rx_responseObject(SwitchType.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -83,11 +83,11 @@ object SwitchTypeService {
 
     fun deleteSwitchType(switchTypeId: Long): Boolean =
         "/api/switch-type/$switchTypeId".httpDelete()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!.result
                 }
                 .onErrorReturn { throw it }
@@ -95,11 +95,11 @@ object SwitchTypeService {
 
     fun getSwitchTypeModuleConfigurations(switchTypeId: Long): List<ModuleConfiguration> =
         "/api/switch-type/module-configuration/$switchTypeId".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(ModuleConfiguration.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }

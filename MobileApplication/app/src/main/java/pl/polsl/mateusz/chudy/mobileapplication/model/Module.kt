@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.Reader
 
 /**
- *
+ * Model class of module
  */
 data class Module(
         var moduleId: Long = 0,
@@ -19,11 +19,17 @@ data class Module(
         return name
     }
 
+    /**
+     * Module response JSON deserializer
+     */
     class Deserializer : ResponseDeserializable<Module> {
 
         override fun deserialize(reader: Reader) = Gson().fromJson(reader, Module::class.java)!!
     }
 
+    /**
+     * Module response JSON list deserializer
+     */
     class ListDeserializer : ResponseDeserializable<List<Module>> {
 
         override fun deserialize(reader: Reader): List<Module> {

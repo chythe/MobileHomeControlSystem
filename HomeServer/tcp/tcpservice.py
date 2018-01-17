@@ -1,5 +1,6 @@
 from enum import Enum
 
+from exception.moduleconnexcept import ModuleConnectionException
 from job.job import Job
 from enums.switchcommdtype import SwitchCommandType
 from job.jobcommand import JobCommand
@@ -21,9 +22,12 @@ class TCPService(Job):
 
     def run(self):
         while not self.__stopped:
-            command = self._receive_command()
-            if command:
-                self.on_action(command)
+            try:
+                command = self._receive_command()
+                if command:
+                    self.on_action(command)
+            except ModuleConnectionException:
+                self.__stopped = True
         self.__socket.close()
 
     def on_action(self, command):
@@ -34,6 +38,13 @@ class TCPService(Job):
                     self.switch(command.arguments[0], command.arguments[1])
             elif SwitchCommandType.GET_STATES == command_type:
                 self.get_states()
+            elif SwitchCommandType.ERROR == command_type:
+                raise ModuleConnectionException
+
+    def exit_error(self):
+        from tcp.tcpserver import tcp_server
+        connection = tcp_server.connected_modules_dict.get(self.__ip_address)
+        del connection
 
     def receive_ack_command(self):
         while True:

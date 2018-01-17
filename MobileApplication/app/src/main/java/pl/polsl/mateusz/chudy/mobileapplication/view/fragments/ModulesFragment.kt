@@ -11,7 +11,7 @@ import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_modules.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleService
+import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
 
 
@@ -46,7 +46,7 @@ class ModulesFragment : Fragment() {
         activity.title = resources.getString(R.string.modules)
         val view = inflater!!.inflate(R.layout.fragment_modules, container, false)
 		try {
-			val modules = ModuleService.getModules()
+			val modules = ModuleApi.getModules()
 			view.modules_list_view.adapter = ModulesAdapter(modules)
 			registerForContextMenu(view.modules_list_view)
 		} catch (e: Exception) {
@@ -122,7 +122,7 @@ class ModulesFragment : Fragment() {
                     Log.d(TAG, "removing item pos=" + info.position)
                     val adapter = view!!.modules_list_view.adapter as ModulesAdapter
                     val module = adapter.getItem(info.position) as Module
-                    ModuleService.deleteModule(module.moduleId)
+                    ModuleApi.deleteModule(module.moduleId)
                     fragmentManager
                             .beginTransaction()
                             .detach(this)

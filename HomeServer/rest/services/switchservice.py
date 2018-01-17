@@ -26,7 +26,8 @@ class SwitchService(object):
 
     def switch(self, module_id, switch_no, state):
         module = module_service.read_module(module_id)
-        tcp_connection = tcp_server.connected_modules_dict.get(module.ip_address.strip())
+        connected_modules_dict = tcp_server.connected_modules_dict
+        tcp_connection = connected_modules_dict.get(module.ip_address.strip())
         tcp_connection.service.set_job_state_flag(TCPService.STATE_FLAGS['SWITCHING'], True)
         tcp_connection.service.add_command(JobCommand(SwitchCommandType.SWITCH, [str(switch_no), str(state)]))
         # while tcp_connection.service.get_job_state_flag(TCPService.STATE_FLAGS['SWITCHING']):

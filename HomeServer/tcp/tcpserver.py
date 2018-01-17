@@ -50,6 +50,8 @@ class TCPServer(Thread):
             print('Connection address: ', ip_address)
             tcp_service = TCPService(connected_socket, ip_address)
             tcp_receiver = TCPReceiver(connected_socket, ip_address)
+            # if self.connected_modules_dict[ip_address]:
+            #     del self.connected_modules_dict[ip_address]
             self.connected_modules_dict[ip_address] = TCPServer.ModuleConnection(tcp_service, tcp_receiver, address)
             self.connected_modules_dict.get(ip_address).service.start()
             self.connected_modules_dict.get(ip_address).receiver.start()

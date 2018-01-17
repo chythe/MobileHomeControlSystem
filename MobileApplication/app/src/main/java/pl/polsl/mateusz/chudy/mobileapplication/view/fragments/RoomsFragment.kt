@@ -13,8 +13,8 @@ import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.fragment_rooms.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
 
 
 /**
@@ -43,7 +43,7 @@ class RoomsFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_rooms, container, false)
 		
 		try {
-			val rooms = RoomService.getRooms()
+			val rooms = RoomApi.getRooms()
 			val adapter = RoomsAdapter(rooms)
 			view.rooms_list_view.adapter = adapter
 			registerForContextMenu(view.rooms_list_view)
@@ -66,7 +66,7 @@ class RoomsFragment : Fragment() {
             }
         }
 
-        if (AuthenticationService.checkPermissions(Role.USER)) {
+        if (AuthenticationApi.checkPermissions(Role.USER)) {
 
             view.rooms_list_view.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
                 if (view === view.rooms_list_view) {
@@ -126,7 +126,7 @@ class RoomsFragment : Fragment() {
                 Log.d(TAG, "removing item pos=" + info.position)
                 val adapter = view!!.rooms_list_view.adapter as RoomsAdapter
                 val room = adapter.getItem(info.position) as Room
-                RoomService.deleteRoom(room.roomId)
+                RoomApi.deleteRoom(room.roomId)
                 fragmentManager
                         .beginTransaction()
                         .detach(this)

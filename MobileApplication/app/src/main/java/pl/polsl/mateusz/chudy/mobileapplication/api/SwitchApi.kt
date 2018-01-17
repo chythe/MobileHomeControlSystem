@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
@@ -13,7 +13,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 /**
  *
  */
-object SwitchService {
+object SwitchApi {
 
     init {
         FuelManager.instance.apply {
@@ -24,11 +24,11 @@ object SwitchService {
 
     fun getStates(): List<SwitchCommand> =
         "/api/switch".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(SwitchCommand.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -36,12 +36,12 @@ object SwitchService {
 
     fun switch(switchCommand: SwitchCommand): Boolean =
         "/api/switch".httpPost()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(Gson().toJson(switchCommand))
                 .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!.result
                 }
                 .onErrorReturn { throw it }

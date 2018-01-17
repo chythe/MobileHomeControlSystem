@@ -11,15 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_configuration_manipulation.view.*
-import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
+import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleConfigurationApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
 
 
 /**
@@ -57,7 +55,7 @@ class ConfigurationManipulationFragment : Fragment() {
         val roomSpinner = view.configuration_manipulation_room_spinner
         try {
             roomSpinner.prompt = "Select room"
-            val rooms = RoomService.getRooms()
+            val rooms = RoomApi.getRooms()
             roomSpinner.adapter = ArrayAdapter<Room>(this.activity,
                     R.layout.support_simple_spinner_dropdown_item, rooms) as SpinnerAdapter?
             roomSpinner.setSelection(mModuleConfiguration!!.roomId.toInt())
@@ -76,7 +74,7 @@ class ConfigurationManipulationFragment : Fragment() {
         val switchTypesSpinner = view.configuration_manipulation_switch_type_spinner
         try {
             switchTypesSpinner.prompt = "Select switch type"
-            val switchTypes = SwitchTypeService.getSwitchTypes()
+            val switchTypes = SwitchTypeApi.getSwitchTypes()
             switchTypesSpinner.adapter = ArrayAdapter<SwitchType>(this.activity,
                     R.layout.support_simple_spinner_dropdown_item, switchTypes) as SpinnerAdapter?
             var selectedSwitchTypePosition = 0
@@ -102,14 +100,14 @@ class ConfigurationManipulationFragment : Fragment() {
                 val name = view.configuration_manipulation_name_edit_text.text.toString()
                 when (typeString.toLowerCase()) {
                     "edit" -> {
-                        ModuleConfigurationService.updateModuleConfiguration(
+                        ModuleConfigurationApi.updateModuleConfiguration(
                                 ModuleConfiguration(
                                         moduleId, switchNo, roomId, switchTypeId, name))
                         fragmentManager.popBackStack()
                         Toast.makeText(activity, resources.getString(R.string.configuration_edited), Toast.LENGTH_SHORT).show()
                     }
                     "add" -> {
-                        ModuleConfigurationService.createModuleConfiguration(
+                        ModuleConfigurationApi.createModuleConfiguration(
                                 ModuleConfiguration(
                                         moduleId, switchNo, roomId, switchTypeId, name))
                         fragmentManager.popBackStack()

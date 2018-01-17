@@ -13,7 +13,8 @@ import kotlinx.android.synthetic.main.fragment_user_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.UserApi
 import java.security.MessageDigest
 
 
@@ -57,15 +58,18 @@ class UserManipulationFragment: Fragment() {
             try {
                 val password = view.user_manipulation_pass_edit_text.text.toString()
                 val retypedPassword = view.user_manipulation_retype_pass_edit_text.text.toString()
+                var cryptPassword = ""
                 if (password == retypedPassword) {
-                    val bytes = password.toByteArray()
-                    val md = MessageDigest.getInstance("SHA-256")
-                    val digest = md.digest(bytes)
-                    val cryptPassword = digest.fold("", { str, it -> str + "%02x".format(it) })
+                    if (!password.isEmpty()) {
+                        val bytes = password.toByteArray()
+                        val md = MessageDigest.getInstance("SHA-256")
+                        val digest = md.digest(bytes)
+                        cryptPassword = digest.fold("", { str, it -> str + "%02x".format(it) })
+                    }
                     val role = roleSpinner.selectedItem as Role
                     when (typeString.toLowerCase()) {
                         "edit" -> {
-                            UserService.updateUser(
+                            UserApi.updateUser(
                                     User(
                                             mUser!!.userId,
                                             view.user_manipulation_username_edit_text.text.toString(),
@@ -76,7 +80,7 @@ class UserManipulationFragment: Fragment() {
                             Toast.makeText(activity, resources.getString(R.string.user_edited), Toast.LENGTH_SHORT).show()
                         }
                         "add" -> {
-                            UserService.createUser(
+                            UserApi.createUser(
                                     User(
                                             username = view.user_manipulation_username_edit_text.text.toString(),
                                             password = cryptPassword,
@@ -94,6 +98,8 @@ class UserManipulationFragment: Fragment() {
                 e.printStackTrace()
             }
         }
+        if (!AuthenticationApi.checkPermissions(Role.ADMIN))
+            view.user_manipulation_role_spinner.visibility = View.INVISIBLE
         return view
     }
 

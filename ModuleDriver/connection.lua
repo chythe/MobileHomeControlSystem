@@ -1,5 +1,6 @@
 local connected = false
 local connection = nil
+local timer = nil
 
 local SERVER_IP = "192.168.0.51"
 local SERVER_PORT = 8888
@@ -33,13 +34,14 @@ local function on_receive(socket, buffer)
 end
 
 local function on_connection(socket, buffer)
-    tmr.stop(2)
+    tmr.stop(1)
     connected = true
     local states = "states"
     for i = 0, 5, 1 do
         states = states .. " " .. tostring(gpio.read(i))
     end
     socket:send(states)
+    print(states)
     global_socket = socket
 end
 
@@ -67,8 +69,12 @@ function init_wifi()
 end
 
 function init_connection()
-    tmr.alarm(2, 1500, 1, function()
+    tmr.alarm(1, 1000 * 20, 1, function()
         if wifi.sta.getip() then
+            if connected == true then
+                connection:close()
+                connected = false
+            end
             connection = net.createConnection(net.TCP, 0)
             connection:on("receive", on_receive)
             connection:on("connection", on_connection)

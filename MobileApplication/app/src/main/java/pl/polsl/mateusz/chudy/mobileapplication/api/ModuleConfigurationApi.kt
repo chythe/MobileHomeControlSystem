@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.services
+package pl.polsl.mateusz.chudy.mobileapplication.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
@@ -14,9 +14,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.commands.AcknowledgeCommand
 
 
 /**
- *
+ * Object implementing module configurations manipulation REST API requests
  */
-object ModuleConfigurationService {
+object ModuleConfigurationApi {
 
     init {
         FuelManager.instance.apply {
@@ -27,11 +27,11 @@ object ModuleConfigurationService {
 
     fun getModuleConfigurations(): List<ModuleConfiguration> =
         "/api/module-configuration".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(ModuleConfiguration.ListDeserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -39,11 +39,11 @@ object ModuleConfigurationService {
 
     fun getModuleConfiguration(moduleId: Long, switchNo: Short): ModuleConfiguration =
         "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpGet()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -51,13 +51,13 @@ object ModuleConfigurationService {
 
     fun createModuleConfiguration(moduleConfiguration: ModuleConfiguration): ModuleConfiguration =
         "/api/module-configuration".httpPost()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation()
                         .create().toJson(moduleConfiguration))
                 .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -65,13 +65,13 @@ object ModuleConfigurationService {
 
     fun updateModuleConfiguration(moduleConfiguration: ModuleConfiguration): ModuleConfiguration =
         "/api/module-configuration".httpPut()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation()
                         .create().toJson(moduleConfiguration))
                 .rx_responseObject(ModuleConfiguration.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
@@ -79,11 +79,11 @@ object ModuleConfigurationService {
 
     fun deleteModuleConfiguration(moduleId: Long, switchNo: Short): Boolean =
         "/api/module-configuration/?moduleId=$moduleId&switchNo=$switchNo".httpDelete()
-                .header("Authorization" to AuthenticationService.getToken())
+                .header("Authorization" to AuthenticationApi.getToken())
                 .rx_responseObject(AcknowledgeCommand.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationService.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
                     it.second.component1()!!.result
                 }
                 .onErrorReturn { throw it }

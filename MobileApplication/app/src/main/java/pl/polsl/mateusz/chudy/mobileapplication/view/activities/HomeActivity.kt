@@ -16,7 +16,7 @@ import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
 import pl.polsl.mateusz.chudy.mobileapplication.view.fragments.*
 
 /**
@@ -41,18 +41,18 @@ class HomeActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_home)
-        setSupportActionBar(toolbar)
+        actionBarInit()
+        nav_view.setNavigationItemSelectedListener(this)
+        setImageBackground()
+    }
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+    private fun actionBarInit() {
+        setSupportActionBar(toolbar)
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-
-        nav_view.setNavigationItemSelectedListener(this)
-
-        setImageBackground()
     }
 
     private fun setImageBackground() {
@@ -77,7 +77,7 @@ class HomeActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_logout -> {
-                val result = AuthenticationService.logout()
+                val result = AuthenticationApi.logout()
                 finish()
                 return result
             }
@@ -93,12 +93,12 @@ class HomeActivity : AppCompatActivity(),
             var fragment: Fragment? = null
             when (item.itemId) {
                 R.id.nav_profile -> {
-                    val currentUser = AuthenticationService.getCurrentUser()
+                    val currentUser = AuthenticationApi.getCurrentUser()
                     fragment = ProfileFragment.newInstance(currentUser!!,
                             resources.getString(R.string.profile))
                 }
                 R.id.nav_users -> {
-                    if (AuthenticationService.checkPermissions(Role.ADMIN))
+                    if (AuthenticationApi.checkPermissions(Role.ADMIN))
                         fragment = UsersFragment::class.java.newInstance()
                     else access = false
                 }
@@ -109,7 +109,7 @@ class HomeActivity : AppCompatActivity(),
                     fragment = SwitchTypesFragment::class.java.newInstance()
                 }
                 R.id.nav_modules -> {
-                    if (AuthenticationService.checkPermissions(Role.USER))
+                    if (AuthenticationApi.checkPermissions(Role.USER))
                         fragment = ModulesFragment::class.java.newInstance()
                     else access = false
                 }

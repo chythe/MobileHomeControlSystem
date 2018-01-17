@@ -13,7 +13,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo
 import android.view.*
 import android.content.ContentValues.TAG
 import android.util.Log
-import pl.polsl.mateusz.chudy.mobileapplication.services.UserService
+import pl.polsl.mateusz.chudy.mobileapplication.api.UserApi
 
 
 /**
@@ -47,7 +47,7 @@ class UsersFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_users, container, false)
 		
 		try {
-			val users = UserService.getUsers()
+			val users = UserApi.getUsers()
 			view.users_list_view.adapter = UsersAdapter(users)
 			registerForContextMenu(view.users_list_view)
 		} catch (e: Exception) {
@@ -123,7 +123,7 @@ class UsersFragment : Fragment() {
 					Log.d(TAG, "removing item pos=" + info.position)
 					val adapter = view!!.users_list_view.adapter as UsersAdapter
 					val user = adapter.getItem(info.position) as User
-					UserService.deleteUser(user.userId)
+					UserApi.deleteUser(user.userId)
 					fragmentManager
 							.beginTransaction()
 							.detach(this)

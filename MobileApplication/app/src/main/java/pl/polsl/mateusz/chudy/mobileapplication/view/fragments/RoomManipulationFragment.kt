@@ -11,7 +11,7 @@ import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
-import pl.polsl.mateusz.chudy.mobileapplication.services.RoomService
+import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
 
 
 /**
@@ -48,13 +48,13 @@ class RoomManipulationFragment : Fragment() {
             try {
                 when (typeString.toLowerCase()) {
                     "edit" -> {
-                        RoomService.updateRoom(
+                        RoomApi.updateRoom(
                                 Room(mRoom!!.roomId, view.room_manipulation_name_edit_text.text.toString()))
 						fragmentManager.popBackStack()
                         Toast.makeText(activity, resources.getString(R.string.room_edited), Toast.LENGTH_SHORT).show()
                     }
                     "add" -> {
-                        RoomService.createRoom(
+                        RoomApi.createRoom(
                                 Room(name = view.room_manipulation_name_edit_text.text.toString()))
 						fragmentManager.popBackStack()
                         Toast.makeText(activity, resources.getString(R.string.room_added), Toast.LENGTH_SHORT).show()

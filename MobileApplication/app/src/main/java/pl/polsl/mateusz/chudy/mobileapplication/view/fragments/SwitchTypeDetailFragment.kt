@@ -14,10 +14,9 @@ import pl.polsl.mateusz.chudy.mobileapplication.commands.SwitchCommand
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.ModuleConfiguration
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
-import pl.polsl.mateusz.chudy.mobileapplication.services.AuthenticationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.ModuleConfigurationService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchService
-import pl.polsl.mateusz.chudy.mobileapplication.services.SwitchTypeService
+import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchApi
+import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
 import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
 
 
@@ -48,7 +47,7 @@ class SwitchTypeDetailFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_switch_type_detail, container, false)
         view.switch_type_details_name_edit_text.setText(mSwitchType!!.name)
 
-        if (AuthenticationService.checkPermissions(Role.USER)) {
+        if (AuthenticationApi.checkPermissions(Role.USER)) {
             view.switch_type_details_edit_button.setOnClickListener { view ->
                 try {
                     val fragment = SwitchTypeManipulationFragment.newInstance(
@@ -68,8 +67,8 @@ class SwitchTypeDetailFragment : Fragment() {
         }
 		
 		try {
-			val moduleConfigurations = SwitchTypeService.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
-            val moduleStates = SwitchService.getStates()
+			val moduleConfigurations = SwitchTypeApi.getSwitchTypeModuleConfigurations(mSwitchType!!.switchTypeId)
+            val moduleStates = SwitchApi.getStates()
             for (mc in moduleConfigurations) {
                 for (s in moduleStates) {
                     if (mc.moduleId == s.moduleId && mc.switchNo == s.switchNo) {
@@ -87,7 +86,7 @@ class SwitchTypeDetailFragment : Fragment() {
             try {
                 val adapter = view!!.switch_type_details_list_view.adapter as ModuleConfigurationsAdapter
                 val moduleConfiguration: ModuleConfiguration = adapter.getItem(position) as ModuleConfiguration
-                val result = SwitchService.switch(SwitchCommand(
+                val result = SwitchApi.switch(SwitchCommand(
                         moduleConfiguration.moduleId, moduleConfiguration.switchNo, !moduleConfiguration.state))
                 if (result)
                     moduleConfiguration.state = !moduleConfiguration.state
