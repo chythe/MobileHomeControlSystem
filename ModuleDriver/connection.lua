@@ -1,3 +1,4 @@
+
 local connected = false
 local connection = nil
 local timer = nil
@@ -9,14 +10,15 @@ local SSID = 'WiFi'
 local PASSWORD = '12345678'
 
 local function on_receive(socket, buffer)
+    require("io")
     local switch = false
     print('on_receive ' .. buffer)
     for i = 0, 5, 1 do
         if buffer == ('on ' .. tostring(i)) then
-            gpio.write(i, gpio.HIGH)
+            set_state(i, true)
             switch = true
         elseif buffer == ('off ' .. tostring(i)) then
-            gpio.write(i, gpio.LOW)
+            set_state(i, false)
             switch = true
         end
     end
@@ -45,17 +47,12 @@ local function on_connection(socket, buffer)
     global_socket = socket
 end
 
-function switch(switch_no)
-    tmr.delay(100000)
+function send_switch_info(switch_no, state)
     print('switch ' .. tostring(switch_no))
-    if gpio.read(switch_no) == 0 then
-        gpio.write(switch_no, gpio.HIGH)
-        if connected == true then
+    if connected == true then
+        if state == true then
             connection:send("on " .. tostring(switch_no))
-        end
-    else
-        gpio.write(switch_no, gpio.LOW)
-        if connected == true then
+        else
             connection:send("off " .. tostring(switch_no))
         end
     end
@@ -69,7 +66,7 @@ function init_wifi()
 end
 
 function init_connection()
-    tmr.alarm(1, 1000 * 20, 1, function()
+    tmr.alarm(1, 1000 * 60, 1, function()
         if wifi.sta.getip() then
             if connected == true then
                 connection:close()

@@ -45,6 +45,6 @@ class ModuleService(object):
 
     def close_module_connection(self, module_id):
         module = self.__module_dao.read_module(module_id)
-        connected_modules = tcp_server.connected_modules_dict.get(module.ip_address, None)
-        if module and connected_modules[module.ip_address]:
+        connected_module = tcp_server.connected_modules_dict.get(module.ip_address, None)
+        if module and connected_module:
             del module.ip_address
