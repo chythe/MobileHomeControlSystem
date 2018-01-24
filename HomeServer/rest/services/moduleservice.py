@@ -1,7 +1,7 @@
 from dao.moduledao import ModuleDao
 from model.module import Module
-from rest.command.switchcmd import SwitchCommand
-from rest.command.unknownmodcmd import UnknownModuleCommand
+from rest.commands.switchcmd import SwitchCommand
+from rest.commands.unknownmodcmd import UnknownModuleCommand
 from tcp.tcpserver import tcp_server
 
 

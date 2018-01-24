@@ -1,8 +1,8 @@
-from config.databaseconfig import *
+from database.databaseconfig import *
 from model.module import Module
 from model.room import Room
 from model.switchtype import SwitchType
-from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
+from tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 
 class ModuleConfiguration(db.Entity):

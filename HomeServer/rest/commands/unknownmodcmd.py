@@ -1,4 +1,4 @@
-from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
+from tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 
 class UnknownModuleCommand(object):

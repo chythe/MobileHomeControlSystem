@@ -1,4 +1,4 @@
-from config.databaseconfig import *
+from database.databaseconfig import *
 from model.module import Module
 
 

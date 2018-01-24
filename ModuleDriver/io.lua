@@ -7,6 +7,10 @@ function set_state(switch_no, state)
     end
 end
 
+function get_state(switch_no)
+    return gpio.read(switch_no)
+end
+
 local function switch(switch_no)
     require("connection")
     if gpio.read(switch_no) == 0 then

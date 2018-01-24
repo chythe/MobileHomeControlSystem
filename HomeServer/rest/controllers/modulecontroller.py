@@ -4,7 +4,6 @@ from rest.services.authservice import AuthenticationService
 from rest.services.moduleservice import ModuleService
 from rest.controllers.authcontroller import auth
 from pony.orm import OrmError
-from rest.tools.dictnameconv import *
 
 module_controller = Blueprint('module_controller', __name__)
 

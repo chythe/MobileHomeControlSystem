@@ -1,5 +1,5 @@
-from config.databaseconfig import *
-from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
+from database.databaseconfig import *
+from tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 
 class Room(db.Entity):
@@ -10,4 +10,5 @@ class Room(db.Entity):
     module_configurations = Set("ModuleConfiguration")
 
     def to_dict(self):
-        return change_dict_naming_convention(super(Room, self).to_dict(), underscore_to_camel)
+        return change_dict_naming_convention(
+            super(Room, self).to_dict(), underscore_to_camel)

@@ -1,10 +1,8 @@
 from flask import Blueprint, jsonify, request, abort, g
 from rest.controllers.authcontroller import auth
-from model.moduleconf import ModuleConfiguration
 from rest.services.authservice import AuthenticationService
 from rest.services.switchtypeservice import SwitchTypeService
 from pony.orm import OrmError, IntegrityError
-from rest.tools.dictnameconv import *
 
 switch_type_controller = Blueprint('switch_type_controller', __name__)
 

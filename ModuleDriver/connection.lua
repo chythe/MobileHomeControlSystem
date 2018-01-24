@@ -9,6 +9,15 @@ local SERVER_PORT = 8888
 local SSID = 'WiFi'
 local PASSWORD = '12345678'
 
+local function create_states_response()
+    require("io")
+    local states = "states"
+    for i = 0, 5, 1 do
+        states = states .. "  ".. tostring(get_state(i))
+    end
+    return states
+end
+
 local function on_receive(socket, buffer)
     require("io")
     local switch = false
@@ -24,10 +33,7 @@ local function on_receive(socket, buffer)
     end
     if switch == false then
         if buffer == 'get' then
-            local states = "states"
-            for i = 0, 5, 1 do
-                states = states .. "  ".. tostring(gpio.read(i))
-            end
+            local states = create_states_response()
             socket:send(states)
         end
     else
@@ -38,10 +44,7 @@ end
 local function on_connection(socket, buffer)
     tmr.stop(1)
     connected = true
-    local states = "states"
-    for i = 0, 5, 1 do
-        states = states .. " " .. tostring(gpio.read(i))
-    end
+    local states = create_states_response()
     socket:send(states)
     print(states)
     global_socket = socket
@@ -66,7 +69,7 @@ function init_wifi()
 end
 
 function init_connection()
-    tmr.alarm(1, 1000 * 60, 1, function()
+    tmr.alarm(1, 1000 * 20, 1, function()
         if wifi.sta.getip() then
             if connected == true then
                 connection:close()

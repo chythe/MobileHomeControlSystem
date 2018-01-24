@@ -1,10 +1,8 @@
 from flask import Blueprint, jsonify, request, abort, g
 from rest.controllers.authcontroller import auth
-from model.moduleconf import ModuleConfiguration
 from rest.services.authservice import AuthenticationService
 from rest.services.moduleconfservice import ModuleConfigurationService
 from pony.orm import OrmError
-from rest.tools.dictnameconv import *
 
 module_configuration_controller = Blueprint('module_configuration_controller', __name__)
 

@@ -1,12 +1,10 @@
-from flask import Blueprint, jsonify, abort, g, request, Response, json
+from flask import Blueprint, jsonify, abort, g, request
 from flask_httpauth import HTTPTokenAuth
 
 from enums.role import Role
 from exception.loginfailexcept import LoginFailedException
 from rest.services.authservice import AuthenticationService
 from pony.orm import OrmError
-
-from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 authentication_controller = Blueprint('authentication_controller', __name__)
 

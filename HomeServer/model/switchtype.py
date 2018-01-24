@@ -1,5 +1,5 @@
-from config.databaseconfig import *
-from rest.tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
+from database.databaseconfig import *
+from tools.dictnameconv import change_dict_naming_convention, underscore_to_camel
 
 
 class SwitchType(db.Entity):

@@ -1,6 +1,6 @@
 import time
 
-from rest.command.switchcmd import SwitchCommand
+from rest.commands.switchcmd import SwitchCommand
 from rest.controllers.modulecontroller import module_service
 from tcp.tcpserver import tcp_server
 from enums.switchcommdtype import SwitchCommandType
