@@ -1,7 +1,8 @@
 import select
+import socket
 from threading import Thread
 
-from enums.switchcommdtype import SwitchCommandType
+from enums.tcpcommandtype import TCPCommandType
 from job.jobcommand import JobCommand
 
 
@@ -16,6 +17,14 @@ class TCPReceiver(Thread):
         self.__socket = socket
         self.__ip_address = ip_address
 
+    @property
+    def stopped(self):
+        return self.__stopped
+
+    @stopped.setter
+    def stopped(self, stopped):
+        self.__stopped = stopped
+
     def run(self):
         while not self.__stopped:
             try:
@@ -26,12 +35,13 @@ class TCPReceiver(Thread):
             except ConnectionResetError:
                 self.inform_service_error()
                 self.__stopped = True
+        self.__socket.shutdown(socket.SHUT_RDWR)
         self.__socket.close()
 
     def inform_service_error(self):
         from tcp.tcpserver import tcp_server
         connection = tcp_server.connected_modules_dict.get(self.__ip_address)
-        command = JobCommand(command_type=SwitchCommandType.ERROR)
+        command = JobCommand(command_type=TCPCommandType.ERROR)
         connection.service.add_command(command)
 
     def receive(self):
@@ -43,7 +53,7 @@ class TCPReceiver(Thread):
 
     def redirect_data_to_service(self, data):
         from tcp.tcpserver import tcp_server
-        command = JobCommand(command_type=SwitchCommandType.ACK, arguments=[data])
+        command = JobCommand(command_type=TCPCommandType.ACK, arguments=[data])
         tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
 
     def parse_response(self, data):

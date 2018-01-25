@@ -34,27 +34,42 @@ class TCPServer(Thread):
         self.connected_modules_dict = {}
 
     def run(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind((self.TCP_IP, self.TCP_PORT))
+        print('Server address: ', s.getsockname())
         while not self.stopped:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.bind((self.TCP_IP, self.TCP_PORT))
-            print('Server address: ', s.getsockname())
             s.listen(1)
             connected_socket, address = s.accept()
-            self.start_module_connection(connected_socket, address)
+            ip_address = self.parse_ip_address(address)
+            if ip_address:
+                self.check_presence_connection(ip_address)
+                self.start_module_connection(connected_socket, ip_address)
 
-    def start_module_connection(self, connected_socket, address):
+    def parse_ip_address(self, address):
         found = re.search(self.IP_ADDRESS_REGEX, str(address))
         if found:
-            ip_address = found.group()
-            connected_socket.setblocking(0)
-            print('Connection address: ', ip_address)
-            tcp_service = TCPService(connected_socket, ip_address)
-            tcp_receiver = TCPReceiver(connected_socket, ip_address)
-            # if self.connected_modules_dict[ip_address]:
-            #     del self.connected_modules_dict[ip_address]
-            self.connected_modules_dict[ip_address] = TCPServer.ModuleConnection(tcp_service, tcp_receiver, address)
-            self.connected_modules_dict.get(ip_address).service.start()
-            self.connected_modules_dict.get(ip_address).receiver.start()
+            return found.group()
+        else:
+            return None
+
+    def start_module_connection(self, connected_socket, ip_address):
+        connected_socket.setblocking(0)
+        print('Connection address: ', ip_address)
+        tcp_service = TCPService(connected_socket, ip_address)
+        tcp_receiver = TCPReceiver(connected_socket, ip_address)
+        self.connected_modules_dict[ip_address] = TCPServer.ModuleConnection(tcp_service, tcp_receiver, ip_address)
+        tcp_service.start()
+        tcp_receiver.start()
+
+    def check_presence_connection(self, ip_address):
+        try:
+            connection = self.connected_modules_dict[ip_address]
+            if connection:
+                connection.receiver.stopped = True
+                connection.service.stopped = True
+                del connection
+        except KeyError:
+            pass
 
 
 tcp_server = TCPServer()

@@ -1,4 +1,4 @@
-from enums.switchcommdtype import SwitchCommandType
+from enums.tcpcommandtype import TCPCommandType
 
 
 class JobCommand(object):
@@ -26,4 +26,4 @@ class JobCommand(object):
     @staticmethod
     def parse_command(string):
         params = string.split()
-        return JobCommand(SwitchCommandType(params[0]), params[1:])
+        return JobCommand(TCPCommandType(params[0]), params[1:])

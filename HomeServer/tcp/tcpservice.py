@@ -1,8 +1,6 @@
-from enum import Enum
-
 from exception.moduleconnexcept import ModuleConnectionException
 from job.job import Job
-from enums.switchcommdtype import SwitchCommandType
+from enums.tcpcommandtype import TCPCommandType
 from job.jobcommand import JobCommand
 
 
@@ -20,6 +18,14 @@ class TCPService(Job):
         self.__socket = socket
         self.__ip_address = ip_address
 
+    @property
+    def stopped(self):
+        return self.__stopped
+
+    @stopped.setter
+    def stopped(self, stopped):
+        self.__stopped = stopped
+
     def run(self):
         while not self.__stopped:
             try:
@@ -27,21 +33,21 @@ class TCPService(Job):
                 if command:
                     self.on_action(command)
             except ModuleConnectionException:
+                self.error_exit()
                 self.__stopped = True
-        self.__socket.close()
 
     def on_action(self, command):
         if command and isinstance(command, JobCommand):
             command_type = command.command_type
-            if SwitchCommandType.SWITCH == command_type:
+            if TCPCommandType.SWITCH == command_type:
                 if command.arguments and isinstance(command.arguments, list) and len(command.arguments) == 2:
                     self.switch(command.arguments[0], command.arguments[1])
-            elif SwitchCommandType.GET_STATES == command_type:
+            elif TCPCommandType.GET_STATES == command_type:
                 self.get_states()
-            elif SwitchCommandType.ERROR == command_type:
+            elif TCPCommandType.ERROR == command_type:
                 raise ModuleConnectionException
 
-    def exit_error(self):
+    def error_exit(self):
         from tcp.tcpserver import tcp_server
         connection = tcp_server.connected_modules_dict.get(self.__ip_address)
         del connection
@@ -61,16 +67,7 @@ class TCPService(Job):
         self.set_job_state_flag(TCPService.STATE_FLAGS['SWITCHING'], False)
 
     def get_states(self):
-        from tcp.tcpserver import tcp_server
         print('get state')
         self.__socket.send(str.encode('get'))
-        command = self.receive_ack_command()
-        if SwitchCommandType.ACK == command.command_type:
-            if command.arguments[0]:
-                states = command.arguments[0].split(" ")
-                if len(states) == 7:
-                    if states[0] == 'states':
-                        for i in range(0, 6):
-                            tcp_server.connected_modules_dict.get(self.__ip_address).states[i] = bool(int(states[i]))
         self.set_job_state_flag(TCPService.STATE_FLAGS['GETTING_STATES'], False)
 

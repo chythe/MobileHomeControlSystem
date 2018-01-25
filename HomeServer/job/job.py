@@ -38,9 +38,11 @@ class Job(Thread):
             return self._command_queue.get()
 
     def get_job_state_flag(self, flag):
-        return self._job_state & flag
+        return bool(self._job_state & flag)
 
     def set_job_state_flag(self, flag, state):
-        if state: self._job_state |= flag
-        else: self._job_state &= ~flag
+        if state:
+            self._job_state |= flag
+        else:
+            self._job_state &= ~flag
 

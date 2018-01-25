@@ -47,4 +47,6 @@ class ModuleService(object):
         module = self.__module_dao.read_module(module_id)
         connected_module = tcp_server.connected_modules_dict.get(module.ip_address, None)
         if module and connected_module:
-            del module.ip_address
+            connected_module.receiver.stopped = True
+            connected_module.service.stopped = True
+            del connected_module

@@ -13,7 +13,7 @@ local function create_states_response()
     require("io")
     local states = "states"
     for i = 0, 5, 1 do
-        states = states .. "  ".. tostring(get_state(i))
+        states = states .. " " .. tostring(get_state(i))
     end
     return states
 end
@@ -42,7 +42,7 @@ local function on_receive(socket, buffer)
 end
 
 local function on_connection(socket, buffer)
-    tmr.stop(1)
+    --tmr.stop(1)
     connected = true
     local states = create_states_response()
     socket:send(states)
@@ -69,7 +69,7 @@ function init_wifi()
 end
 
 function init_connection()
-    tmr.alarm(1, 1000 * 20, 1, function()
+    tmr.alarm(1, 1000 * 60, 1, function()
         if wifi.sta.getip() then
             if connected == true then
                 connection:close()
