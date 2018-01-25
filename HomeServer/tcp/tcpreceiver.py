@@ -58,7 +58,7 @@ class TCPReceiver(Thread):
 
     def parse_response(self, data):
         params = data.split(" ")
-        if params[TCP_CMD_ARG_TYPE] == SWITCH_TCP_COMMAND:
+        if params[TCP_CMD_ARG_TYPE] == STATES_TCP_COMMAND:
             self.set_all_states(params)
         elif params[TCP_CMD_ARG_TYPE] == ON_TCP_COMMAND:
             self.set_one_state(params, True)

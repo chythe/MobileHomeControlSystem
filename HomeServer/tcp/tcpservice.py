@@ -51,12 +51,6 @@ class TCPService(Job):
             .connected_modules_dict.get(self.__ip_address)
         del connection
 
-    def receive_ack_command(self):
-        while True:
-            command = self._receive_command()
-            if command:
-                return command
-
     def switch(self, switch_no, state):
         print('switch ' + str(switch_no) + ' ' + str(state))
         if state:

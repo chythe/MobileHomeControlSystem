@@ -9,7 +9,7 @@ TIMEOUT_SEC = 1
 SWITCH_COUNT = 6  # number of switches in one module
 
 # tcp commands
-SWITCH_TCP_COMMAND = 'switch'
+STATES_TCP_COMMAND = 'states'
 ON_TCP_COMMAND = 'on'
 OFF_TCP_COMMAND = 'off'
 GET_TCP_COMMAND = 'get'

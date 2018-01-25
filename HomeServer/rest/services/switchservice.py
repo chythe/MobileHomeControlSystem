@@ -22,7 +22,7 @@ class SwitchService(object):
         tcp_connections = tcp_server.connected_modules_dict
         for addr, conn in tcp_connections.items():
             self.send_get_command(conn)
-            states = self.append_states_connection(conn, states)
+            states = self.append_states(conn, states)
         return states
 
     def send_get_command(self, tcp_connection):
@@ -37,7 +37,7 @@ class SwitchService(object):
             time.sleep(self.WAIT_CHANGE_TIME)
         return False
 
-    def append_states_connection(self, connection, states):
+    def append_states(self, connection, states):
         module = module_service.read_module_by_ip(connection.ip_address)
         if module:
             for k, s in connection.states.items():
