@@ -2,20 +2,15 @@ from exception.moduleconnexcept import ModuleConnectionException
 from job.job import Job
 from enums.tcpcommandtype import TCPCommandType
 from job.jobcommand import JobCommand
+from tcp.tcpconst import *
 
 
 class TCPService(Job):
 
-    STATE_FLAGS = {
-        'FREE': 0x0000,
-        'SWITCHING': 0x0001,
-        'GETTING_STATES': 0x0002
-    }
-
-    def __init__(self, socket, ip_address):
+    def __init__(self, connected_socket, ip_address):
         super(TCPService, self).__init__()
         self.__stopped = False
-        self.__socket = socket
+        self.__socket = connected_socket
         self.__ip_address = ip_address
 
     @property
@@ -40,8 +35,11 @@ class TCPService(Job):
         if command and isinstance(command, JobCommand):
             command_type = command.command_type
             if TCPCommandType.SWITCH == command_type:
-                if command.arguments and isinstance(command.arguments, list) and len(command.arguments) == 2:
-                    self.switch(command.arguments[0], command.arguments[1])
+                if command.arguments and \
+                        isinstance(command.arguments, list) and \
+                        len(command.arguments) == SWITCH_JOB_CMD_ARGS_COUNT:
+                    self.switch(command.arguments[SWITCH_JOB_CMD_ARG_SWITCH_NO],
+                                command.arguments[SWITCH_JOB_CMD_ARG_STATE])
             elif TCPCommandType.GET_STATES == command_type:
                 self.get_states()
             elif TCPCommandType.ERROR == command_type:
@@ -49,7 +47,8 @@ class TCPService(Job):
 
     def error_exit(self):
         from tcp.tcpserver import tcp_server
-        connection = tcp_server.connected_modules_dict.get(self.__ip_address)
+        connection = tcp_server \
+            .connected_modules_dict.get(self.__ip_address)
         del connection
 
     def receive_ack_command(self):
@@ -60,14 +59,17 @@ class TCPService(Job):
 
     def switch(self, switch_no, state):
         print('switch ' + str(switch_no) + ' ' + str(state))
-        if 'True' == state or 'true' == state:
-            self.__socket.send(str.encode('on ' + str(switch_no)))
-        elif 'False' == state or 'false' == state:
-            self.__socket.send(str.encode('off ' + str(switch_no)))
-        self.set_job_state_flag(TCPService.STATE_FLAGS['SWITCHING'], False)
+        if state:
+            self.__socket.send(
+                str.encode(ON_TCP_COMMAND + ' ' + str(switch_no)))
+        else:
+            self.__socket.send(
+                str.encode(OFF_TCP_COMMAND + ' ' + str(switch_no)))
+        self.set_job_state_flag(
+            TCP_SERVICE_STATE_FLAGS['SWITCHING'], False)
 
     def get_states(self):
         print('get state')
-        self.__socket.send(str.encode('get'))
-        self.set_job_state_flag(TCPService.STATE_FLAGS['GETTING_STATES'], False)
-
+        self.__socket.send(str.encode(GET_TCP_COMMAND))
+        self.set_job_state_flag(
+            TCP_SERVICE_STATE_FLAGS['GETTING_STATES'], False)

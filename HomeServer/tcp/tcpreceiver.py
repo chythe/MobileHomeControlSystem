@@ -1,20 +1,17 @@
 import select
 import socket
 from threading import Thread
-
 from enums.tcpcommandtype import TCPCommandType
 from job.jobcommand import JobCommand
+from tcp.tcpconst import *
 
 
 class TCPReceiver(Thread):
 
-    RECEIVE_BUFFER_SIZE = 20
-    TIMEOUT_SEC = 1
-
-    def __init__(self, socket, ip_address):
+    def __init__(self, connected_socket, ip_address):
         super(TCPReceiver, self).__init__()
         self.__stopped = False
-        self.__socket = socket
+        self.__socket = connected_socket
         self.__ip_address = ip_address
 
     @property
@@ -40,46 +37,51 @@ class TCPReceiver(Thread):
 
     def inform_service_error(self):
         from tcp.tcpserver import tcp_server
-        connection = tcp_server.connected_modules_dict.get(self.__ip_address)
+        connection = tcp_server\
+            .connected_modules_dict.get(self.__ip_address)
         command = JobCommand(command_type=TCPCommandType.ERROR)
         connection.service.add_command(command)
 
     def receive(self):
-        ready = select.select([self.__socket], [], [], self.TIMEOUT_SEC)
+        ready = select.select([self.__socket], [], [], TIMEOUT_SEC)
         if ready[0]:
-            data = self.__socket.recv(self.RECEIVE_BUFFER_SIZE)
+            data = self.__socket.recv(RECEIVE_BUFFER_SIZE)
             return data.decode('utf-8')
         return ""
 
     def redirect_data_to_service(self, data):
         from tcp.tcpserver import tcp_server
-        command = JobCommand(command_type=TCPCommandType.ACK, arguments=[data])
-        tcp_server.connected_modules_dict.get(self.__ip_address).service.add_command(command)
+        command = JobCommand(
+            command_type=TCPCommandType.ACK, arguments=[data])
+        tcp_server.connected_modules_dict.get(
+            self.__ip_address).service.add_command(command)
 
     def parse_response(self, data):
         params = data.split(" ")
-        if params[0] == 'states':
+        if params[TCP_CMD_ARG_TYPE] == SWITCH_TCP_COMMAND:
             self.set_all_states(params)
-        elif params[0] == 'on':
+        elif params[TCP_CMD_ARG_TYPE] == ON_TCP_COMMAND:
             self.set_one_state(params, True)
-        elif params[0] == 'off':
+        elif params[TCP_CMD_ARG_TYPE] == OFF_TCP_COMMAND:
             self.set_one_state(params, False)
 
     def set_all_states(self, params):
         from tcp.tcpserver import tcp_server
-        if len(params) == 7:
+        if len(params) == STATES_TCP_CMD_ARGS_COUNT:
             try:
-                for i in range(0, 6):
+                for i in range(0, SWITCH_COUNT):
                     state = bool(int(params[i + 1]))
-                    tcp_server.connected_modules_dict.get(self.__ip_address).states[i] = state
+                    tcp_server.connected_modules_dict\
+                        .get(self.__ip_address).states[i] = state
             except ValueError:
                 print('bad switch all states response')
 
     def set_one_state(self, params, state):
         from tcp.tcpserver import tcp_server
-        if len(params) == 2:
+        if len(params) == ON_OFF_TCP_CMD_ARGS_COUNT:
             try:
-                switch_no = int(params[1])
-                tcp_server.connected_modules_dict.get(self.__ip_address).states[switch_no] = state
+                switch_no = int(params[ON_OFF_TCP_CMD_ARG_STATE])
+                tcp_server.connected_modules_dict.get(
+                    self.__ip_address).states[switch_no] = state
             except ValueError:
                 print('bad switch one state response')

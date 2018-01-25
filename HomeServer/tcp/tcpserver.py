@@ -1,17 +1,15 @@
 import re
 from threading import Thread
 import socket
-
 from tcp.tcpreceiver import TCPReceiver
 from .tcpservice import TCPService
+from tcp.tcpconst import *
 
 
 class TCPServer(Thread):
 
-    TCP_IP = ''
+    TCP_IP = ''  # localhost
     TCP_PORT = 8888
-
-    IP_ADDRESS_REGEX = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}'
 
     class ModuleConnection(object):
 
@@ -46,7 +44,7 @@ class TCPServer(Thread):
                 self.start_module_connection(connected_socket, ip_address)
 
     def parse_ip_address(self, address):
-        found = re.search(self.IP_ADDRESS_REGEX, str(address))
+        found = re.search(IP_ADDRESS_REGEX, str(address))
         if found:
             return found.group()
         else:
@@ -57,7 +55,8 @@ class TCPServer(Thread):
         print('Connection address: ', ip_address)
         tcp_service = TCPService(connected_socket, ip_address)
         tcp_receiver = TCPReceiver(connected_socket, ip_address)
-        self.connected_modules_dict[ip_address] = TCPServer.ModuleConnection(tcp_service, tcp_receiver, ip_address)
+        self.connected_modules_dict[ip_address] = \
+            TCPServer.ModuleConnection(tcp_service, tcp_receiver, ip_address)
         tcp_service.start()
         tcp_receiver.start()
 

@@ -54,7 +54,7 @@ def create_module():
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response
-    except (OrmError, KeyError, TypeError) as e:
+    except (OrmError, KeyError, TypeError, AttributeError) as e:
         print(str(e))
         abort(400)
     except ValueError as e:
@@ -75,7 +75,7 @@ def update_module():
         token = authentication_service.generate_auth_token(g.current_user)
         response.headers['Authorization'] = 'Bearer ' + token.decode('ascii')
         return response
-    except (OrmError, TypeError, ValueError) as e:
+    except (OrmError, TypeError, ValueError, AttributeError) as e:
         print(str(e))
         abort(400)
 
