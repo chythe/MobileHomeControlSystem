@@ -51,7 +51,8 @@ class RoomsFragment : Fragment() {
 			e.printStackTrace()
 		}
 
-        view.rooms_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        view.rooms_list_view.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
             try {
                 val room = parent.getItemAtPosition(position) as Room
                 val fragment = RoomDetailsFragment.newInstance(

@@ -20,7 +20,8 @@ data class Room(
 
     class Deserializer : ResponseDeserializable<Room> {
 
-        override fun deserialize(reader: Reader) = Gson().fromJson(reader, Room::class.java)!!
+        override fun deserialize(reader: Reader) =
+                Gson().fromJson(reader, Room::class.java)!!
     }
 
     class ListDeserializer : ResponseDeserializable<List<Room>> {

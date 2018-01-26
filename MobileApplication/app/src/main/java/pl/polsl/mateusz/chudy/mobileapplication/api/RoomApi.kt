@@ -53,11 +53,13 @@ object RoomApi {
     fun createRoom(room: Room): Room =
         "/api/room".httpPost()
                 .header("Authorization" to AuthenticationApi.getToken())
-                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(room))
+                .body(GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                        .create().toJson(room))
                 .rx_responseObject(Room.Deserializer())
                 .subscribeOn(Schedulers.newThread())
                 .map {
-                    AuthenticationApi.setToken(it.first.headers["Authorization"]!![0])
+                    AuthenticationApi.setToken(
+                            it.first.headers["Authorization"]!![0])
                     it.second.component1()!!
                 }
                 .onErrorReturn { throw it }
