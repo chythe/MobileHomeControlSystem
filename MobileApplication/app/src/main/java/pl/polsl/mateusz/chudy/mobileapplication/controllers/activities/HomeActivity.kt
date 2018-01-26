@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.activities
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -17,7 +17,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
-import pl.polsl.mateusz.chudy.mobileapplication.view.fragments.*
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments.*
 
 /**
  *

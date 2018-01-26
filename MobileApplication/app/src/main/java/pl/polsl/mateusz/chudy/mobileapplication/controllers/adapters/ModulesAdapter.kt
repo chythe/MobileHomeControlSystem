@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.adapters
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters
 
 import android.view.LayoutInflater
 import android.view.View

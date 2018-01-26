@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_search_modules.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
 import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModulesAdapter
 
 
 /**

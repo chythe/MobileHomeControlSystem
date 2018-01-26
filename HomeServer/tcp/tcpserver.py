@@ -10,6 +10,7 @@ class TCPServer(Thread):
 
     TCP_IP = ''  # localhost
     TCP_PORT = 8888
+    TCP_MAX_QUEUED_CONNECTIONS = 1
 
     class ModuleConnection(object):
 
@@ -36,11 +37,11 @@ class TCPServer(Thread):
         s.bind((self.TCP_IP, self.TCP_PORT))
         print('Server address: ', s.getsockname())
         while not self.stopped:
-            s.listen(1)
+            s.listen(self.TCP_MAX_QUEUED_CONNECTIONS)
             connected_socket, address = s.accept()
             ip_address = self.parse_ip_address(address)
             if ip_address:
-                self.check_presence_connection(ip_address)
+                self.check_connection_existence(ip_address)
                 self.start_module_connection(connected_socket, ip_address)
 
     def parse_ip_address(self, address):
@@ -51,7 +52,6 @@ class TCPServer(Thread):
             return None
 
     def start_module_connection(self, connected_socket, ip_address):
-        connected_socket.setblocking(0)
         print('Connection address: ', ip_address)
         tcp_service = TCPService(connected_socket, ip_address)
         tcp_receiver = TCPReceiver(connected_socket, ip_address)
@@ -60,7 +60,7 @@ class TCPServer(Thread):
         tcp_service.start()
         tcp_receiver.start()
 
-    def check_presence_connection(self, ip_address):
+    def check_connection_existence(self, ip_address):
         try:
             connection = self.connected_modules_dict[ip_address]
             if connection:

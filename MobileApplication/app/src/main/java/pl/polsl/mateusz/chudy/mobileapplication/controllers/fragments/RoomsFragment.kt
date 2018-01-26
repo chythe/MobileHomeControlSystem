@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.RoomsAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.fragment_rooms.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.Room

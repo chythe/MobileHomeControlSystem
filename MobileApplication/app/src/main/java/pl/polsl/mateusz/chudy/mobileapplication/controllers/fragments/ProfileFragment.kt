@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.Context
 import android.net.Uri

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.activities.RegisterActivity">
+    tools:context="pl.polsl.mateusz.chudy.mobileapplication.controllers.activities.RegisterActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

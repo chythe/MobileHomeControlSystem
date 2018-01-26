@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -12,7 +12,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.R
 import kotlinx.android.synthetic.main.fragment_modules.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.model.Module
 import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModulesAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModulesAdapter
 
 
 /**

@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -8,7 +8,7 @@ import android.widget.AdapterView
 import kotlinx.android.synthetic.main.fragment_users.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.UsersAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.UsersAdapter
 import android.widget.AdapterView.AdapterContextMenuInfo
 import android.view.*
 import android.content.ContentValues.TAG

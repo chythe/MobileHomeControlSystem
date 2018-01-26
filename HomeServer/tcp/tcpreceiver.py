@@ -47,7 +47,6 @@ class TCPReceiver(Thread):
         if ready[0]:
             data = self.__socket.recv(RECEIVE_BUFFER_SIZE)
             return data.decode('utf-8')
-        return ""
 
     def redirect_data_to_service(self, data):
         from tcp.tcpserver import tcp_server

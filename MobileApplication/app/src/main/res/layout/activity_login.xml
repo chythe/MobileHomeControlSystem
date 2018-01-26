@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.polsl.mateusz.chudy.mobileapplication.view.activities.LoginActivity">
+    tools:context="pl.polsl.mateusz.chudy.mobileapplication.controllers.activities.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/login_progress_constraint_layout"

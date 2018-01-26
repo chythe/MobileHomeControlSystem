@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -17,7 +17,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.Room
 import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
 import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
 import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchApi
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.ModuleConfigurationsAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModuleConfigurationsAdapter
 
 
 /**

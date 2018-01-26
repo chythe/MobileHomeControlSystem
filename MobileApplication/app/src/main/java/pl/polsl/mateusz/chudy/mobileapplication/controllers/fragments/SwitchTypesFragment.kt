@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -15,7 +15,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
 import pl.polsl.mateusz.chudy.mobileapplication.api.AuthenticationApi
 import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
-import pl.polsl.mateusz.chudy.mobileapplication.view.adapters.SwitchTypesAdapter
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.SwitchTypesAdapter
 
 
 /**

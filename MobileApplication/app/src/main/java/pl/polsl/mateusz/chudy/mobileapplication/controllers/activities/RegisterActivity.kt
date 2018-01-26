@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.activities
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

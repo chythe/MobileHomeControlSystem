@@ -1,4 +1,4 @@
-package pl.polsl.mateusz.chudy.mobileapplication.view.fragments
+package pl.polsl.mateusz.chudy.mobileapplication.controllers.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -8,23 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_switch_type_manipulation.view.*
 import pl.polsl.mateusz.chudy.mobileapplication.R
-import pl.polsl.mateusz.chudy.mobileapplication.model.SwitchType
-import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
+import pl.polsl.mateusz.chudy.mobileapplication.model.Room
+import kotlinx.android.synthetic.main.fragment_room_manipulation.view.*
+import pl.polsl.mateusz.chudy.mobileapplication.api.RoomApi
 
 
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [SwitchTypeManipulationFragment.OnFragmentInteractionListener] interface
+ * [RoomManipulationFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [SwitchTypeManipulationFragment.newInstance] factory method to
+ * Use the [RoomManipulationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SwitchTypeManipulationFragment : Fragment() {
+class RoomManipulationFragment : Fragment() {
 
-    private var mSwitchType: SwitchType? = null
+    private var mRoom: Room? = null
     private var mType: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -32,7 +32,7 @@ class SwitchTypeManipulationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mSwitchType = arguments.getSerializable(ARG_SWITCH_TYPE) as SwitchType
+            mRoom = arguments.getSerializable(ARG_ROOM) as Room
             mType = arguments.getString(ARG_TYPE)
         }
     }
@@ -40,27 +40,24 @@ class SwitchTypeManipulationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         activity.title = mType
-        val view = inflater!!.inflate(R.layout.fragment_switch_type_manipulation, container, false)
-        view.switch_type_manipulation_name_edit_text.setText(mSwitchType!!.name)
+        val view = inflater!!.inflate(R.layout.fragment_room_manipulation, container, false)
+        view.room_manipulation_name_edit_text.setText(mRoom!!.name)
         val typeString = mType!!.split(" ")[0]
-        view.switch_type_manipulation_button.text = typeString
-
-        view.switch_type_manipulation_button.setOnClickListener { _ ->
+        view.room_manipulation_button.text = typeString
+        view.room_manipulation_button.setOnClickListener { _ ->
             try {
                 when (typeString.toLowerCase()) {
                     "edit" -> {
-                        SwitchTypeApi.updateSwitchType(
-                                SwitchType(mSwitchType!!.switchTypeId,
-                                        view.switch_type_manipulation_name_edit_text.text.toString()))
-								fragmentManager.popBackStack()
-                                Toast.makeText(activity, resources.getString(R.string.switch_type_edited), Toast.LENGTH_SHORT).show()
+                        RoomApi.updateRoom(
+                                Room(mRoom!!.roomId, view.room_manipulation_name_edit_text.text.toString()))
+						fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.room_edited), Toast.LENGTH_SHORT).show()
                     }
                     "add" -> {
-                        SwitchTypeApi.createSwitchType(
-                                SwitchType(
-                                        name = view.switch_type_manipulation_name_edit_text.text.toString()))
-								fragmentManager.popBackStack()
-                                Toast.makeText(activity, resources.getString(R.string.switch_type_added), Toast.LENGTH_SHORT).show()
+                        RoomApi.createRoom(
+                                Room(name = view.room_manipulation_name_edit_text.text.toString()))
+						fragmentManager.popBackStack()
+                        Toast.makeText(activity, resources.getString(R.string.room_added), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
@@ -96,13 +93,13 @@ class SwitchTypeManipulationFragment : Fragment() {
 
     companion object {
 
-        private val ARG_SWITCH_TYPE = "Switch Type"
+        private val ARG_ROOM = "Room"
         private val ARG_TYPE = "Type"
 
-        fun newInstance(switchType: SwitchType, type: String): SwitchTypeManipulationFragment {
-            val fragment = SwitchTypeManipulationFragment()
+        fun newInstance(room: Room, type: String): RoomManipulationFragment {
+            val fragment = RoomManipulationFragment()
             val args = Bundle()
-            args.putSerializable(ARG_SWITCH_TYPE, switchType)
+            args.putSerializable(ARG_ROOM, room)
             args.putString(ARG_TYPE, type)
             fragment.arguments = args
             return fragment

@@ -11,7 +11,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.commands.LoginCommand
 import pl.polsl.mateusz.chudy.mobileapplication.config.ServerConnection
 import pl.polsl.mateusz.chudy.mobileapplication.enums.Role
 import pl.polsl.mateusz.chudy.mobileapplication.model.User
-import pl.polsl.mateusz.chudy.mobileapplication.view.activities.MainActivity
+import pl.polsl.mateusz.chudy.mobileapplication.controllers.activities.MainActivity
 
 /**
  * Object implementing server authentication REST API requests, and useful auth methods
