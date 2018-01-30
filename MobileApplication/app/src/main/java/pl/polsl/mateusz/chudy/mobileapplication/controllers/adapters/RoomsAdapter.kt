@@ -16,7 +16,8 @@ class RoomsAdapter(roomsList: List<Room>): BaseAdapter() {
 
     private val rooms = roomsList
 
-    override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
+    override fun getView(
+            position: Int, convertView: View?, viewGroup: ViewGroup?): View {
 
         val rowRoom: View
 

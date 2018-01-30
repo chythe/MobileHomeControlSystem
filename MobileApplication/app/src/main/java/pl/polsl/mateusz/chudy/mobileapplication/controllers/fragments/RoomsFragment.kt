@@ -52,7 +52,7 @@ class RoomsFragment : Fragment() {
 		}
 
         view.rooms_list_view.onItemClickListener =
-                AdapterView.OnItemClickListener { parent, view, position, id ->
+                AdapterView.OnItemClickListener { parent, _, position, _ ->
             try {
                 val room = parent.getItemAtPosition(position) as Room
                 val fragment = RoomDetailsFragment.newInstance(
