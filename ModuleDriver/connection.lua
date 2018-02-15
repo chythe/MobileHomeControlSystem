@@ -3,7 +3,7 @@ local connected = false
 local connection = nil
 local timer = nil
 
-local SERVER_IP = "192.168.0.51"
+local SERVER_IP = "192.168.0.53"
 local SERVER_PORT = 8888
 
 local SSID = 'WiFi'
@@ -42,7 +42,6 @@ local function on_receive(socket, buffer)
 end
 
 local function on_connection(socket, buffer)
-    --tmr.stop(1)
     connected = true
     local states = create_states_response()
     socket:send(states)
