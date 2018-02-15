@@ -84,3 +84,12 @@ sudo python3.5 main.py
 
 ## Uruchomienie aplikacji mobilnej
 
+Aplikacja mobilna została stworzona przy pomocy Android Studio 3.0.1
+* [Android Studio](https://developer.android.com/studio/index.html)
+* [Gradle](https://gradle.org/install/)
+
+By zbudować aplikację można posłużyć się skryptem gradle:
+```bash
+gradlew assembleDebug
+```
+lub użyć IDE Android Studio
