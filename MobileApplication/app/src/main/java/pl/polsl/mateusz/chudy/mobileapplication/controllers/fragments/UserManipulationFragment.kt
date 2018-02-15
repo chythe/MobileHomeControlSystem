@@ -19,10 +19,7 @@ import java.security.MessageDigest
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [UserManipulationFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A UserManipulation [Fragment] class.
  * Use the [UserManipulationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

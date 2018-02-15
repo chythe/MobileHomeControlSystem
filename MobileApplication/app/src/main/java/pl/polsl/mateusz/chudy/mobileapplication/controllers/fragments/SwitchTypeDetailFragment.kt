@@ -21,10 +21,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModuleConfi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [SwitchTypeDetailFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A SwitchTypeDetail [Fragment] class.
  * Use the [SwitchTypeDetailFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

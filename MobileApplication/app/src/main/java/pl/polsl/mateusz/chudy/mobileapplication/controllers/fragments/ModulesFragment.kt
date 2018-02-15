@@ -16,10 +16,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModulesAdap
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ModulesFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A Modules [Fragment] class.
  * Use the [ModulesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

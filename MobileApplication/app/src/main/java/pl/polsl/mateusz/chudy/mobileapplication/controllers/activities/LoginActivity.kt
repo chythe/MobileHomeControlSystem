@@ -22,7 +22,7 @@ import java.security.MessageDigest
 
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 class LoginActivity : AppCompatActivity() {
 
@@ -185,7 +185,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous login task used to authenticate
      * the user.
      */
     inner class UserLoginTask internal constructor(private val username: String, private val password: String) : AsyncTask<Void, Void, Boolean>() {

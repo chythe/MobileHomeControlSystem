@@ -19,10 +19,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.SwitchTypes
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [SwitchTypesFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A SwitchTypes [Fragment] class.
  * Use the [SwitchTypesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

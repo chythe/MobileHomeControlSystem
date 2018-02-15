@@ -18,10 +18,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleConfigurationApi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ConfigurationFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A Configuration [Fragment] class.
  * Use the [ConfigurationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

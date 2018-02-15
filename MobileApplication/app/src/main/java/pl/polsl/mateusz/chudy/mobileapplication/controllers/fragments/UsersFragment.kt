@@ -17,10 +17,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.api.UserApi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [UsersFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A Users [Fragment] class.
  * Use the [UsersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

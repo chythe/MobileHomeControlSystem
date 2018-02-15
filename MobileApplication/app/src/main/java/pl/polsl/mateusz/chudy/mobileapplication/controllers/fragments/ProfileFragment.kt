@@ -13,10 +13,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.model.User
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ProfileFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A Profile [Fragment] class.
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

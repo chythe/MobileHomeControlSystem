@@ -21,10 +21,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.controllers.adapters.ModuleConfi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [RoomDetailsFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A RoomDetails [Fragment] class.
  * Use the [RoomDetailsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

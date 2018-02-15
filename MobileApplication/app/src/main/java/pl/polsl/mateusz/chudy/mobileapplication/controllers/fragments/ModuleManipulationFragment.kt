@@ -15,10 +15,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.api.ModuleApi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [RoomManipulationFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A ModuleManipulation [Fragment] class.
  * Use the [RoomManipulationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */

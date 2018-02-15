@@ -21,10 +21,7 @@ import pl.polsl.mateusz.chudy.mobileapplication.api.SwitchTypeApi
 
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ConfigurationManipulationFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
+ * A ConfigurationManipulation[Fragment] class.
  * Use the [ConfigurationManipulationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
