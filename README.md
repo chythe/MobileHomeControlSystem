@@ -18,6 +18,10 @@ Następnie należy wgrać pliki *.lua do pamięci flash modułu:
 
 By uruchomić bazę danych na serwerze należy pobrać i zainstalować PostgreSQL:
 * [PostgreSQL](https://www.postgresql.org/download/)
+lub
+```bash
+sudo apt-get install postgresql-9.6
+```
 
 W folderze `bin`, gdzie zainstalowaliśmy postgresa znajduje się plik `psql.exe`.
 Dodajemy ścieżkę do zmiennej środowiskowej Path lub wykonujemy w tym folderze z konsoli następujące polecenia:
@@ -33,10 +37,36 @@ grant all privileges on database "mobile_home_control_system" to admin;
 \q
 psql.exe -U admin mobile_home_control_system
 ```
-Następnie w uruchomionej konsoli wykonujemy zawartość [skryptu DDL](https://github.com/chythe/MobileHomeControlSystem/blob/master/Database/MobileHomeControlSystem.ddl)
 
+Następnie w uruchomionej konsoli wykonujemy zawartość [skryptu DDL](https://github.com/chythe/MobileHomeControlSystem/blob/master/Database/MobileHomeControlSystem.ddl)
 W tej samej konsoli, dodajemy użytkownika 'admin' z rolą administratora i zaszyfrowanym hasłem 'pass1234':
 ```sql
 insert into users (username, password, role) 
 values ('admin', 'bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f', 'ADMIN');
+```
+
+Należy także zainstalować odpowiednie środowisko Python:
+* [Python 3.5](https://www.python.org/downloads/release/python-350/)
+lub
+```bash
+sudo apt-get install python3=3.5.0*
+```
+
+Konieczne jest także zainstalowanie używanych bibliotek, przechodząc do katalogu gdzie został zainstalowany python lub dodając alias do `python.exe` do zmiennej środowskowej Path:
+```bash
+.\python.exe -m pip install <nazwa_biblioteki>
+```
+lub
+```bash
+sudo python3.5 -m pip install <nazwa_biblioteki>
+```
+Należy zainstalować biblioteki takie jak:
+```
+pony
+pem
+virtualenv
+Flask
+flask-httpauth
+psycopg2
+pyserial
 ```
