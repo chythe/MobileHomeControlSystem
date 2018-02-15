@@ -4,7 +4,7 @@ Przed wgraniem oprogramowania w języku Lua, należy wgrać do modułu firmware,
 * [NodeMCU flashing the firmware](https://nodemcu.readthedocs.io/en/master/en/flash/)
 
 By moduły łączyły się automatycznie z siecią WiFi i serwerem, należy skonfigurować następujące zmienne w pliku [connection.lua](https://github.com/chythe/MobileHomeControlSystem/blob/master/ModuleDriver/connection.lua):
-```bash
+```
 SERVER_IP - Adres IP serwera
 SERVER_PORT - Port serwera TCP
 SSID - Nazwa sieci
