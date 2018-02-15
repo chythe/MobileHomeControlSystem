@@ -8,8 +8,11 @@ Przed wgraniem oprogramowania w języku Lua, należy wgrać do modułu firmware,
 By moduły łączyły się automatycznie z siecią WiFi i serwerem, należy skonfigurować następujące zmienne w pliku [connection.lua](https://github.com/chythe/MobileHomeControlSystem/blob/master/ModuleDriver/connection.lua):
 
 SERVER_IP - Adres IP serwera
+
 SERVER_PORT - Port serwera TCP
+
 SSID - Nazwa sieci
+
 PASSWORD - Hasło dostępu do sieci
 
 
