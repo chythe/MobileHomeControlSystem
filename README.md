@@ -70,3 +70,17 @@ flask-httpauth
 psycopg2
 pyserial
 ```
+
+Konfiguracja serwera HTTP REST znajduje się w pliku [restserver.py](https://github.com/chythe/MobileHomeControlSystem/blob/master/HomeServer/rest/restserver.py), natomiast konfiguracja serwera TCP w pliku [tcpserver.py](https://github.com/chythe/MobileHomeControlSystem/blob/master/HomeServer/tcp/tcpserver.py).
+
+Serwer uruchamiamy z pliku .../MobileHomeControlSystem/HomeServer/main.py:
+```bash
+.\python.exe main.py
+```
+lub
+```bash
+sudo python3.5 main.py
+```
+
+## Uruchomienie aplikacji mobilnej
+
